@@ -3,6 +3,10 @@ class TreeNode(var value : Int) {
     var right: TreeNode? = null
 }
 
+class ListNode(var `val`: Int) {
+    var next: ListNode? = null
+}
+
 class Solution {
 
     // 1554. Strings Differ by One Character
@@ -139,13 +143,82 @@ class Solution {
 
     }
 
+    // 160. Intersection of Two Linked Lists
+    fun getIntersectionNode(headA:ListNode?, headB:ListNode?):ListNode? {
 
+        var findInter = HashSet<ListNode>()
+
+        var auxA = headA
+        while (auxA != null){
+            findInter.add(auxA)
+            auxA = auxA.next
+        }
+
+        var auxB = headB
+        while(auxB != null){
+
+            if (findInter.contains(auxB)){
+                return auxB
+            }
+            auxB = auxB.next
+        }
+
+        return null
+
+    }
+
+    // 1091. Shortest Path in Binary Matrix
+    fun shortestPathBinaryMatrix(grid: Array<IntArray>): Int {
+
+        val n = grid.size-1
+        if (grid[0][0] == 1 || grid[n][n] == 1) return -1
+
+        var visited = HashSet<Pair<Int, Int>>() // to check if there is a visited
+        var directions = ArrayList<Pair<Int, Int>>()
+
+        directions.add(Pair(-1,-1))
+        directions.add(Pair(-1,0))
+        directions.add(Pair(-1,1))
+        directions.add(Pair(0,1))
+        directions.add(Pair(0,-1))
+        directions.add(Pair(1,-1))
+        directions.add(Pair(1,0))
+        directions.add(Pair(1,1))
+
+        var queue = ArrayDeque<Triple<Int, Int, Int>>()
+        queue.add(Triple(0, 0, 1))
+
+        while (queue.isNotEmpty()){
+
+            var current = queue.removeFirst()
+            var auxRow = current.first
+            var auxCol = current.second
+            var distance = current.third
+
+            for (direction in directions){
+
+                val newRow = auxRow + direction.first
+                val newCol = auxCol + direction.second
+
+                if ((newRow == n) && (newCol == n)) return distance
+
+                if (newRow >= 0 && newRow <= n && newCol >= 0 && newCol <= n && grid[newRow][newCol] == 0 && !visited.contains(Pair(newRow,newCol)) ){
+                    queue.add(Triple(newRow, newCol, distance+1))
+                    visited.add(Pair(newRow,newCol))
+                }
+
+            }
+
+        }
+        return -1
+
+    }
 }
 
 fun main(args : Array<String>){
 
     val testClass = Solution()
-    var nums = intArrayOf(0,1,2,3,4,5)
-    println(testClass.singleNumber(nums))
+    var nums = arrayOf(intArrayOf(0,0,0), intArrayOf(1,1,0), intArrayOf(1,1,0))
+    println(testClass.shortestPathBinaryMatrix(nums))
 
 }
