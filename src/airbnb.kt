@@ -213,12 +213,105 @@ class Solution {
         return -1
 
     }
+
+    // 1257. Smallest Common Region
+    fun findSmallestRegion(regions: List<List<String>>, region1: String, region2: String): String {
+
+        val parentsChild = HashMap<String, String>()
+        val onlyParents = HashSet<String>()
+
+        // Here only get parents
+        for (region in regions){
+            onlyParents.add(region[0])
+            for (i in 1 .. region.size-1){
+                parentsChild[region[i]] = region[0]
+            }
+        }
+        var parentsOfRegion1 = ArrayDeque<String>()
+        var parents0fRegion2 = ArrayDeque<String>()
+
+        if (onlyParents.contains(region1)) parentsOfRegion1.addFirst(region1)
+        if (onlyParents.contains(region2)) parents0fRegion2.addFirst(region2)
+
+        println(parentsChild)
+
+        // get Path of region1
+        var auxRegion1 = region1
+        while (!auxRegion1.equals("")){
+            var aux = parentsChild[auxRegion1]
+            if (aux != null){
+                parentsOfRegion1.addFirst(aux)
+                auxRegion1 = aux
+            } else {
+                auxRegion1 = ""
+            }
+
+        }
+
+        // get Path of region2
+        //println(parentsOfRegion1)
+        var auxRegion2 = region2
+        while (!auxRegion2.equals("")){
+
+            var aux2 = parentsChild[auxRegion2]
+            if (aux2 != null){
+                parents0fRegion2.addFirst(aux2)
+                auxRegion2 = aux2
+            } else {
+                auxRegion2 = ""
+            }
+
+        }
+
+        println(parentsOfRegion1)
+        println(parents0fRegion2)
+
+        var i = parentsOfRegion1.size-1
+        var j = parents0fRegion2.size-1
+
+        while (i >= 0 && j >= 0){
+
+            if (parentsOfRegion1[i].equals(parents0fRegion2[j])){
+                return parentsOfRegion1[i]
+            }
+
+            if (i == j){
+                i -= 1
+                j -= 1
+                parentsOfRegion1.removeLast()
+                parents0fRegion2.removeLast()
+
+            } else if (i > j){
+                i -= 1
+                parentsOfRegion1.removeLast()
+            } else {
+                j -= 1
+                parents0fRegion2.removeLast()
+            }
+
+            println("region1: ${parentsOfRegion1}")
+            println("region2: ${parents0fRegion2}")
+
+        }
+
+        return ""
+    }
 }
 
 fun main(args : Array<String>){
 
     val testClass = Solution()
     var nums = arrayOf(intArrayOf(0,0,0), intArrayOf(1,1,0), intArrayOf(1,1,0))
-    println(testClass.shortestPathBinaryMatrix(nums))
+    val regions = arrayListOf(
+        arrayListOf("United States", "California", "Texas"),
+        arrayListOf("California", "Los Angeles", "San Francisco"),
+        arrayListOf("South America", "Brazil", "Argentina"),
+        arrayListOf("North America", "United States", "Canada"),
+        arrayListOf("Earth", "North America", "South America")
+        )
+
+    val region1 = "Los Angeles"
+    val region2 = "Brazil"
+    println(testClass.findSmallestRegion(regions, region1, region2))
 
 }
