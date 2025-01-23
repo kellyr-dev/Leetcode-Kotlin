@@ -296,12 +296,49 @@ class Solution {
 
         return ""
     }
+
+    // 713. Subarray Product Less Than K
+    fun numSubarrayProductLessThanK(nums: IntArray, k: Int): Int {
+
+        var i = 0
+        var result = ArrayList<List<Int>>()
+
+        while (i < nums.size){
+            var j = i
+            var kk = i
+            var product = 1
+
+            while ((j < nums.size) && (product < k)){
+                product *= nums[j]
+                j += 1
+            }
+
+            var aux = ArrayList<Int>()
+            var productReverse = 1
+            while (kk < j){
+
+                productReverse *= nums[kk]
+                if (productReverse < k){
+                    aux.add(nums[kk])
+                    var local = ArrayList<Int>(aux)
+                    println("auxReverse: ${aux}")
+                    result.add(local)
+                }
+                kk += 1
+            }
+            i+=1
+
+            println("result: ${result}")
+        }
+
+        return result.size
+    }
+
 }
 
 fun main(args : Array<String>){
 
     val testClass = Solution()
-    var nums = arrayOf(intArrayOf(0,0,0), intArrayOf(1,1,0), intArrayOf(1,1,0))
     val regions = arrayListOf(
         arrayListOf("United States", "California", "Texas"),
         arrayListOf("California", "Los Angeles", "San Francisco"),
@@ -312,6 +349,53 @@ fun main(args : Array<String>){
 
     val region1 = "Los Angeles"
     val region2 = "Brazil"
-    println(testClass.findSmallestRegion(regions, region1, region2))
+
+    var nums = intArrayOf(1,2,3)
+    var k = 0
+
+    //[1, 2], [3], [4]]
+    val arr = arrayOf(intArrayOf(1,2), intArrayOf(3), intArrayOf(4))
+    val test251 = Vector2D(arr)
+    println(test251.next())
+
+}
+
+//   // 251. Flatten 2D Vector
+class Vector2D(vec: Array<IntArray>) {
+
+    var internalArray = ArrayDeque<Int>()
+    init {
+
+        for (array in vec){
+            for (i in 0 .. array.size-1){
+                internalArray.add(array[i])
+            }
+        }
+
+    }
+
+    fun printingArray(){
+
+        for (i in 0.. internalArray.size-1){
+            println(internalArray[i])
+        }
+    }
+
+    fun next(): Int {
+
+        if (internalArray.size > 0){
+            return internalArray.removeFirst()
+        }
+        return -1
+    }
+
+    fun hasNext(): Boolean {
+
+        if (internalArray.size > 0){
+            return true
+        } else {
+            return false
+        }
+    }
 
 }
