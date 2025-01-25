@@ -1,3 +1,5 @@
+import kotlin.math.ceil
+
 class TreeNode(var value : Int) {
     var left: TreeNode? = null
     var right: TreeNode? = null
@@ -334,6 +336,63 @@ class Solution {
         return result.size
     }
 
+    // 68. Text Justification
+    fun fullJustify(words: Array<String>, maxWidth: Int): List<String> {
+
+        var maxCount = 0
+        for (word in words){
+            println("Word: ${word}")
+            for (i in 0 .. word.length-1){
+                if (word[i].isLetter()){
+                    maxCount += 1
+                }
+            }
+        }
+
+        var row = (ceil(maxCount.toDouble() / maxWidth)).toInt()
+        println("number of Rows: ${row}")
+        println("Counter: ${maxCount}")
+        var rowAux = 1
+
+        var result = ArrayList<String>()
+        var aux = ArrayList<String>()
+        var count = 0
+        for (word in words){
+            println("row: ${rowAux}")
+                if (count + word.length + 1 < maxWidth){
+                    aux.add(word)
+                    count += word.length
+                } else {
+                    println("aux: ${aux}")
+                    var stringResult = aux.removeFirst()
+                    while (aux.size > 1){
+                        stringResult = stringResult + " " + aux.removeFirst()
+                    }
+                    var tempZeros = maxWidth - stringResult.length
+                    var howManyZeros = tempZeros - aux[0].length
+                    var i = 0
+                    while (i < howManyZeros){
+                        stringResult += " "
+                        i += 1
+                    }
+                    stringResult += aux.removeFirst()
+                    result.add(stringResult)
+                    aux.add(word)
+                    count = word.length
+                    rowAux += 1
+                }
+
+            if (rowAux == row){
+
+                
+            }
+
+        }
+
+        return result
+
+    }
+
 }
 
 fun main(args : Array<String>){
@@ -352,11 +411,10 @@ fun main(args : Array<String>){
 
     var nums = intArrayOf(1,2,3)
     var k = 0
+    val words = arrayOf("This", "is", "an", "example", "of", "text", "justification.")
+    val maxWidth = 16
 
-    //[1, 2], [3], [4]]
-    val arr = arrayOf(intArrayOf(1,2), intArrayOf(3), intArrayOf(4))
-    val test251 = Vector2D(arr)
-    println(test251.next())
+    println(testClass.fullJustify(words, maxWidth))
 
 }
 
