@@ -1,3 +1,4 @@
+import java.util.PriorityQueue
 import kotlin.math.ceil
 
 class TreeNode(var value : Int) {
@@ -336,7 +337,64 @@ class Solution {
         return result.size
     }
 
+    // 3076. Shortest Uncommon Substring in an Array
+    fun shortestSubstrings(arr: Array<String>): Array<String> {
 
+        var result = ArrayList<String>()
+        var data = ArrayList<HashSet<String>>()
+
+        for (i in 0 .. arr.size-1) {
+
+            var currentString = arr[i]
+            var currentSet = HashSet<String>()
+
+            var aux = ""
+            for (j in 0..currentString.length - 1) {
+
+                aux += currentString[j]
+                if (!currentSet.contains(aux)) currentSet.add(aux)
+
+                var anotherAux = ""
+                for (k in j downTo 0){
+                    anotherAux = currentString[k] + anotherAux
+                    if (!currentSet.contains(anotherAux)) currentSet.add(anotherAux)
+                }
+            }
+
+            data.add(currentSet)
+
+        }
+
+        for (j in 0 .. data.size-1) {
+            var auxSet = data.removeFirst()
+            var completeSet = HashSet<String>()
+
+            val pairComparator: Comparator<Pair<Int, String>> = compareBy<Pair<Int, String>> { it.first }
+                .thenBy { it.second }
+
+            var currentQueue = PriorityQueue(pairComparator)
+
+            for (set in data) {
+                completeSet.addAll(set)
+            }
+
+            for (word in auxSet) {
+                if (completeSet.contains(word)) {
+                    println("${word} exist in ${completeSet}")
+                    continue
+                }
+                var pair = Pair(word.length, word)
+                currentQueue.add(pair)
+
+            }
+
+            data.add(auxSet)
+            if (currentQueue.size > 0) result.add(currentQueue.poll().second) else result.add("")
+
+        }
+
+        return result.toTypedArray()
+    }
 }
 
 fun main(args : Array<String>){
@@ -352,9 +410,9 @@ fun main(args : Array<String>){
 
     val region1 = "Los Angeles"
     val region2 = "Brazil"
-
-    var nums = intArrayOf(1,2,3)
-    var k = 0
+    val entry = arrayOf("wyamwxxka","psvigdfpolwejwueoh","ecgilythpelf","jfmxhodpr","zcnzaxytzyagp","tvzmobdtowfjkorbn","ceehiyvowilrvdc","cugfoaatoue","yo","y","gavmsmelgljfagem","enhrtjiblhuajxjfnnfr","dcnoo","qhmji","umgycqypfhphterhhz","ilavch","qye","svxfmcfmjpd","qqpmhrkazgmq","dsqxpsltlmpufz","xyzhwzshhpyrghqoj","ycqbbqqex","mfmytfmeffwae","tmriihekvotwfezsmxh","gplhakypjfrjvbfkkwko","btjcpacaluef","sdxqiorsobcayvkvher","isgrgdrxlkhzwkeyqwo","bvoqphfxyetsjm","p","drvq","zivuaujjd","cvyjqisoxuqfpvg","xqdrncfplbqgaqg","jrpovinaliwavqk","lroeefsfisvcpyj","ocxxsjmufmici","dxlgodaatmnfpwfqdqjg","yb","taxjzbzngkqy","wwjejxyhjgohgnov","npetn","ifybg","c","auqslzx","lxu","sdxtkhrrmwr","glirwi","hqlpdagz","qslurgmdevkfrmu","zkrb","rvs","llotpivntrq","juwnbrrndwpsgalj","cx","orikxdsigcnolwtz","yle","vdkgmmilkttmti","gdsd","dtlhdesmvuomhsgti","tlydxtsxa","euamgnvbjtgnkd","bcmkv","jkntrswe","dbqpybgwhfwkprqtsyyr")
+    var result = testClass.shortestSubstrings(entry)
+    result.forEach { println(it) }
 
 }
 
