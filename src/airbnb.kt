@@ -395,6 +395,73 @@ class Solution {
 
         return result.toTypedArray()
     }
+
+    // 76. Minimum Window Substring
+    fun minWindow(s: String, t: String): String {
+
+        if (t.length > s.length){
+            return ""
+        }
+
+        val map = HashMap<Char, Int>()
+
+        for (i in 0 .. t.length-1){
+
+            if (map.containsKey(t.get(i))){
+                map[t.get(i)] = map[t.get(i)]!! + 1
+            } else {
+                map[t.get(i)] = 1
+            }
+        }
+
+        var left = 0
+        var right = 0
+        var minWindows = Int.MAX_VALUE
+        var totalCounts = 0
+        var indexL = 0
+        var indexR = 0
+
+        while (right < s.length){
+
+         //   println("left   -> ${left}")
+         //   println("right  -> ${right}")
+         //   println("HashMap right: ${map}")
+
+            if (map.containsKey(s.get(right))){
+                totalCounts++
+            }
+
+            while (totalCounts == t.length && left < right){
+          //      println("HashMap left: ${map}")
+                if (right - left < minWindows){
+                    minWindows = (right - left)
+                    indexL = left
+                    indexR = right
+                }
+          //      println("minWindows: ${minWindows}")
+
+                if (map.containsKey(s.get(left))){
+                    totalCounts--
+                }
+                left += 1
+            }
+
+            right += 1
+        }
+       // println("tam: ${minWindows}")
+        var result = ""
+        while (indexL <= indexR && (left != 0 && right !=0)){
+
+            if (indexL < s.length){
+                result += s[indexL]
+            }
+            indexL += 1
+        }
+
+        return result
+
+    }
+
 }
 
 fun main(args : Array<String>){
@@ -411,12 +478,16 @@ fun main(args : Array<String>){
     val region1 = "Los Angeles"
     val region2 = "Brazil"
     val entry = arrayOf("wyamwxxka","psvigdfpolwejwueoh","ecgilythpelf","jfmxhodpr","zcnzaxytzyagp","tvzmobdtowfjkorbn","ceehiyvowilrvdc","cugfoaatoue","yo","y","gavmsmelgljfagem","enhrtjiblhuajxjfnnfr","dcnoo","qhmji","umgycqypfhphterhhz","ilavch","qye","svxfmcfmjpd","qqpmhrkazgmq","dsqxpsltlmpufz","xyzhwzshhpyrghqoj","ycqbbqqex","mfmytfmeffwae","tmriihekvotwfezsmxh","gplhakypjfrjvbfkkwko","btjcpacaluef","sdxqiorsobcayvkvher","isgrgdrxlkhzwkeyqwo","bvoqphfxyetsjm","p","drvq","zivuaujjd","cvyjqisoxuqfpvg","xqdrncfplbqgaqg","jrpovinaliwavqk","lroeefsfisvcpyj","ocxxsjmufmici","dxlgodaatmnfpwfqdqjg","yb","taxjzbzngkqy","wwjejxyhjgohgnov","npetn","ifybg","c","auqslzx","lxu","sdxtkhrrmwr","glirwi","hqlpdagz","qslurgmdevkfrmu","zkrb","rvs","llotpivntrq","juwnbrrndwpsgalj","cx","orikxdsigcnolwtz","yle","vdkgmmilkttmti","gdsd","dtlhdesmvuomhsgti","tlydxtsxa","euamgnvbjtgnkd","bcmkv","jkntrswe","dbqpybgwhfwkprqtsyyr")
-    var result = testClass.shortestSubstrings(entry)
-    result.forEach { println(it) }
+    val s = "a"
+    val t = "b"
+    print(testClass.minWindow(s, t))
+
+    // "ADOBECODEBANC",
+    // t = "ABC"
 
 }
 
-//   // 251. Flatten 2D Vector
+    // 251. Flatten 2D Vector
 class Vector2D(vec: Array<IntArray>) {
 
     var internalArray = ArrayDeque<Int>()
