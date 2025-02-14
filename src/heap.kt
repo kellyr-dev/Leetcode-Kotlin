@@ -1,6 +1,6 @@
 import java.util.Collections
-import java.util.Comparator
 import java.util.PriorityQueue
+import kotlin.Comparator
 
 class Heap{
 
@@ -68,8 +68,88 @@ class Heap{
 
     // 767. Reorganize String
     fun reorganizeString(s: String): String {
+        var map = HashMap<Char, Int>()
+        val comparedByFreq : Comparator<Pair<Int,Char>> = compareBy{ it.first }
+        val heap : PriorityQueue<Pair<Int, Char>> = PriorityQueue(comparedByFreq.reversed())
+        val queue = ArrayList<Pair<Int, Char>>()
+        val resultArray = ArrayList<Char>()
 
+        for (i in 0.. s.length-1){
+            map[s[i]] = map.getOrDefault(s[i], 0) + 1
+        }
+
+        for (value in map){
+            var pair = Pair(value.value, value.key)
+            heap.add(pair)
+        }
+
+        while (heap.size > 0){
+
+            var current = heap.poll()
+
+            if (resultArray.isNotEmpty() && current.second == resultArray.last()){
+                queue.add(current)
+                if (heap.size > 0){
+                    var auxiliar = heap.poll()
+
+                    var updated = Pair(auxiliar.first-1, auxiliar.second)
+                    if (updated.first >= 1){
+                        heap.add(updated)
+                    }
+                    resultArray.add(auxiliar.second)
+                    heap.add(queue.removeLast())
+                }else {
+                    return "Empty"
+                }
+            } else {
+
+                resultArray.add(current.second)
+                var updated = Pair(current.first-1, current.second)
+                if (updated.first >= 1){
+                    heap.add(updated)
+                }
+            }
+
+        }
+        return resultArray.toString()
     }
+    // 23. Merge k Sorted Lists
+
+    fun mergeKLists(lists: Array<ListNode?>): ListNode? {
+        val compareByVal : Comparator<ListNode> = compareBy{it.`val`  }
+        var heap : PriorityQueue<Int> = PriorityQueue()
+
+
+        for (list in lists){
+
+            var aux = list
+            while (aux != null){
+                heap.add(aux.`val`)
+                aux = aux.next
+            }
+        }
+
+        if (heap.size <= 0){
+            return null
+        }
+
+        var head = ListNode(heap.poll())
+        var iterator = head
+        while (heap.size > 0){
+            iterator.next = ListNode(heap.poll())
+            iterator = iterator.next!!
+        }
+
+        return head
+    }
+
+    fun printingList(head : ListNode){
+        while(head != null){
+            print("${head.`val`}->")
+        }
+        println()
+    }
+
 }
 
 fun main(args : Array<String>){
@@ -78,12 +158,8 @@ fun main(args : Array<String>){
     val nums = intArrayOf(3,2,1,5,6,4)
     val k = 8
     val matrix = arrayOf(intArrayOf(1,5,9), intArrayOf(10,11,13), intArrayOf(12,13,15))
-    // matrix = [[],[],[]], k = 8
-    println(testClass.kthSmallest(matrix, k))
+    val s = "blflxll"
 
 }
 
-data class Point(
-    val x: Int,
-    val y: Int
-)
+
