@@ -1,10 +1,7 @@
 import java.util.PriorityQueue
 import kotlin.math.ceil
 
-class TreeNode(var value : Int) {
-    var left: TreeNode? = null
-    var right: TreeNode? = null
-}
+
 
 class ListNode(var `val`: Int) {
     var next: ListNode? = null
