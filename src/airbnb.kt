@@ -3,7 +3,7 @@ import kotlin.math.ceil
 
 
 
-class ListNode(var `val`: Int) {
+class ListNode(var value: Int) {
     var next: ListNode? = null
 }
 

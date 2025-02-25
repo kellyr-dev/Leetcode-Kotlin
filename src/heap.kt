@@ -116,7 +116,7 @@ class Heap{
     // 23. Merge k Sorted Lists
 
     fun mergeKLists(lists: Array<ListNode?>): ListNode? {
-        val compareByVal : Comparator<ListNode> = compareBy{it.`val`  }
+        val compareByVal : Comparator<ListNode> = compareBy{it.value  }
         var heap : PriorityQueue<Int> = PriorityQueue()
 
 
@@ -124,7 +124,7 @@ class Heap{
 
             var aux = list
             while (aux != null){
-                heap.add(aux.`val`)
+                heap.add(aux.value)
                 aux = aux.next
             }
         }
@@ -145,7 +145,7 @@ class Heap{
 
     fun printingList(head : ListNode){
         while(head != null){
-            print("${head.`val`}->")
+            print("${head.value}->")
         }
         println()
     }

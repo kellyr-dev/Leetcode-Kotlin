@@ -64,27 +64,49 @@ class TreeLeetcode {
 
     }
 
+    // 98. Validate Binary Search Tree
+    fun isValidBST(root: TreeNode?): Boolean {
+
+        if ((root?.left == null) && (root?.right == null)){
+            return true
+        }
+
+        fun helper(root: TreeNode?, minValue: Double, maxValue: Double) : Boolean{
+
+            if (root == null){
+                return true
+            }
+
+            if (!( (root.value > minValue) && (root.value < maxValue)) ){
+                return false
+            }
+
+            return helper(root.left, minValue, root.value.toDouble()) && helper(root.right, root.value.toDouble(), maxValue)
+
+        }
+
+        return helper(root, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)
+
+    }
+
 }
 
 fun main(args : Array<String>){
 
     val testClass = TreeLeetcode()
 
-    var root = TreeNode(1)
-    root.left = TreeNode(2)
-    root.right = TreeNode(2)
-    root.left!!.left = TreeNode(3)
-    root.left!!.right = TreeNode(3)
-    root.left!!.left!!.left = TreeNode(4)
-    root.left!!.left!!.right = TreeNode(4)
+    var root = TreeNode(5)
+    root.left = TreeNode(4)
+    root.right = TreeNode(6)
+    root.left!!.left = null
+    root.left!!.right = null
+    root.right!!.left = TreeNode(3)
+    root.right!!.right = TreeNode(7)
 
-//    var root = TreeNode(1)
-//    root.left = null
-//    root.right = TreeNode(3)
-//    root.right!!.left = TreeNode(2)
+    // [5,4,6,null,null,3,7]
 
     testClass.printingTre(root)
     println()
-    println(testClass.isBalanced(root))
+    println(testClass.isValidBST(root))
 
 }

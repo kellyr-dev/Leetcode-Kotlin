@@ -77,6 +77,8 @@ class Capital {
 
         return ans
     }
+
+    
 }
 
 fun main(args : Array<String>){
