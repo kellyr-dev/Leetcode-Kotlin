@@ -176,7 +176,6 @@ class SlidingWindows {
         return prodRight
     }
 
-    
 
 }
 
