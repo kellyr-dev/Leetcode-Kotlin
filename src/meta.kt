@@ -77,16 +77,11 @@ class Meta {
         val originalArray = IntArray(numToString.length)
 
         for (i in 0 .. numToString.length-1){
-            if (i == 0){
-                var pair = Pair(-numToString[i].digitToInt(), i)
-                minHeap.add(pair)
-            }
-            else {
-                var pair = Pair(-numToString[i].digitToInt(), i)
-                minHeap.add(pair)
-            }
 
+            var pair = Pair(-numToString[i].digitToInt(), i)
+            minHeap.add(pair)
             originalArray[i] = numToString[i].digitToInt()
+
         }
 
         var i = 0
@@ -111,7 +106,6 @@ class Meta {
         }
 
         return result.toInt()
-
     }
 
 }
