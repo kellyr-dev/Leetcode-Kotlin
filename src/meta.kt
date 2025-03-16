@@ -1,3 +1,5 @@
+import java.util.PriorityQueue
+import kotlin.math.min
 
 class Meta {
 
@@ -66,7 +68,52 @@ class Meta {
         return -1
     }
 
-    // 
+    // 670. Maximum Swap
+    fun maximumSwap(num: Int): Int {
+
+        val compareByNum : Comparator<Pair<Int, Int>> = compareBy<Pair<Int, Int>> { it.first }.thenBy { it.second }
+        val minHeap : PriorityQueue<Pair<Int, Int>> = PriorityQueue(compareByNum)
+        val numToString = num.toString()
+        val originalArray = IntArray(numToString.length)
+
+        for (i in 0 .. numToString.length-1){
+            if (i == 0){
+                var pair = Pair(-numToString[i].digitToInt(), i)
+                minHeap.add(pair)
+            }
+            else {
+                var pair = Pair(-numToString[i].digitToInt(), i)
+                minHeap.add(pair)
+            }
+
+            originalArray[i] = numToString[i].digitToInt()
+        }
+
+        var i = 0
+        while (i < originalArray.size){
+
+            var maxPair = minHeap.poll()
+            var maxIndex = maxPair.second
+            var maxValue = maxPair.first * -1
+            if (maxIndex != i){
+                var valueToSwap = originalArray[i]
+                originalArray[i] = maxValue
+                originalArray[maxIndex] = valueToSwap
+                break
+            }
+            i += 1
+
+        }
+
+        var result = ""
+        for (i in 0 until originalArray.size){
+            result += originalArray[i].digitToChar()
+        }
+
+        return result.toInt()
+
+    }
+
 }
 
 fun main(){
@@ -74,6 +121,8 @@ fun main(){
     val testClass = Meta()
     var nums = intArrayOf(5,7,7,8,8,10)
     var target = 8
-    val result = testClass.searchRangeBS(nums, target).forEach { print("[${it}]->") }
+    var num = 98368
 
+    println(testClass.maximumSwap(num))
+    //val result = testClass.searchRangeBS(nums, target).forEach { print("[${it}]->") }
 }
