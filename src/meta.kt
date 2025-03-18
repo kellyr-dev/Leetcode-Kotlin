@@ -68,7 +68,7 @@ class Meta {
         return -1
     }
 
-    // 670. Maximum Swap
+    // 670. Maximum Swap (not tested)
     fun maximumSwap(num: Int): Int {
 
         val compareByNum : Comparator<Pair<Int, Int>> = compareBy<Pair<Int, Int>> { it.first }.thenBy { it.second }
@@ -81,8 +81,9 @@ class Meta {
             var pair = Pair(-numToString[i].digitToInt(), i)
             minHeap.add(pair)
             originalArray[i] = numToString[i].digitToInt()
-
         }
+
+        println("minHeap: ${minHeap}")
 
         var i = 0
         while (i < originalArray.size){
@@ -90,6 +91,10 @@ class Meta {
             var maxPair = minHeap.poll()
             var maxIndex = maxPair.second
             var maxValue = maxPair.first * -1
+
+            println("maxIndex: ${maxIndex}")
+            println("maxValue: ${maxValue}")
+
             if (maxIndex != i){
                 var valueToSwap = originalArray[i]
                 originalArray[i] = maxValue
@@ -115,8 +120,42 @@ fun main(){
     val testClass = Meta()
     var nums = intArrayOf(5,7,7,8,8,10)
     var target = 8
-    var num = 98368
+    var num = 1993
+    var size = 3
+    val testClass346 = MovingAverage(3)
+    println(testClass346.next(1))
+    println(testClass346.next(10))
+    println(testClass346.next(3))
+    println(testClass346.next(5))
 
     println(testClass.maximumSwap(num))
-    //val result = testClass.searchRangeBS(nums, target).forEach { print("[${it}]->") }
+
+}
+
+
+// 346. Moving Average from Data Stream
+class MovingAverage(size: Int) {
+
+    var suma = 0
+    var queue = ArrayDeque<Int>()
+    var avg = 0.0
+    var windows = size
+    // [10,3,5]
+
+    fun next(`val`: Int): Double {
+
+        if (queue.size < windows){
+            queue.add(`val`)
+            suma+= `val`
+            avg = suma / (queue.size).toDouble()
+            return avg
+        } else {
+            // fill my entire windows which is "size"
+            suma -= queue.removeFirst()
+            suma += `val`
+            queue.add(`val`)
+            avg = suma / (queue.size).toDouble()
+            return avg
+        }
+    }
 }
