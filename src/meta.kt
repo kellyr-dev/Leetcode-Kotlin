@@ -81,6 +81,8 @@ class Meta {
             var pair = Pair(-numToString[i].digitToInt(), i)
             minHeap.add(pair)
             originalArray[i] = numToString[i].digitToInt()
+
+
         }
 
         println("minHeap: ${minHeap}")
@@ -113,22 +115,52 @@ class Meta {
         return result.toInt()
     }
 
+    // 408. Valid Word Abbreviation
+    fun validWordAbbreviation(word: String, abbr: String): Boolean {
+        if (abbr.length > word.length){
+            return false
+        }
+        var i = 0
+        var j = 0
+
+        while (i < word.length && j < abbr.length){
+
+            if (word[i] == abbr[j]){
+                i+= 1
+                j+= 1
+                continue
+            }
+
+            if (abbr[j] == '0'){
+                return false
+            }
+
+            var aux = ""
+            while (j < abbr.length && abbr[j].isDigit()){
+                aux += abbr[j]
+                j+=1
+            }
+
+            if (aux.isNotEmpty()){
+                var moveI = aux.toInt()
+                i += moveI
+            } else {
+                return false
+            }
+        }
+        return i == word.length && j == abbr.length
+    }
+
 }
 
 fun main(){
 
     val testClass = Meta()
     var nums = intArrayOf(5,7,7,8,8,10)
-    var target = 8
-    var num = 1993
-    var size = 3
-    val testClass346 = MovingAverage(3)
-    println(testClass346.next(1))
-    println(testClass346.next(10))
-    println(testClass346.next(3))
-    println(testClass346.next(5))
 
-    println(testClass.maximumSwap(num))
+    var word = "apple"
+    var abbr = "a2e"
+    println(testClass.validWordAbbreviation(word, abbr))
 
 }
 
