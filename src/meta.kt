@@ -151,6 +151,37 @@ class Meta {
         return i == word.length && j == abbr.length
     }
 
+    // 392. Is Subsequence
+    fun isSubsequence(s: String, t: String): Boolean {
+
+        if (s.length > t.length){
+            return false
+        }
+
+        if (s.length == t.length){
+            return s == t
+        }
+
+        var i= 0
+        var j =0
+        while (i < s.length && j < t.length){
+
+            if (s[i] == t[j]){
+                i += 1
+                j += 1
+            } else {
+                j += 1
+            }
+
+        }
+
+        return i == s.length
+
+    }
+
+
+    // 523. Continuous Subarray Sum
+    
 }
 
 fun main(){
