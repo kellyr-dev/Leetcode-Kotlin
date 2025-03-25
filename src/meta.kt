@@ -218,22 +218,19 @@ class Meta {
         return result
     }
 
-    //
+    // 163. Missing Ranges
     fun findMissingRanges(nums: IntArray, lower: Int, upper: Int): List<List<Int>> {
 
-        if (nums.isEmpty()){
+        if (nums.size == 0){
             return arrayListOf(arrayListOf(lower, upper))
         }
 
         var left = 0
-        var right = 0
+        var right = 1
         var result = ArrayList<List<Int>>()
 
         if (lower < nums[0]){
-            println("I am not less")
-            result.add(arrayListOf(left, nums[0]-1))
-            left = 0
-            right = 1
+            result.add(arrayListOf(lower, nums[0]-1))
         }
 
         while (right < nums.size){
@@ -254,7 +251,7 @@ class Meta {
 
         }
 
-        if (left > 1 && left <= nums.size-1 && nums[left]+1 <= upper){
+        if (left >= 0 && left < nums.size && nums[left]+1 <= upper){
             result.add(arrayListOf(nums[left]+1, upper))
         }
 
@@ -262,6 +259,7 @@ class Meta {
 
     }
 
+    
 
 }
 
