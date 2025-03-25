@@ -179,19 +179,100 @@ class Meta {
 
     }
 
-
     // 523. Continuous Subarray Sum
-    
+
+
+    // 118. Pascal's Triangle
+    fun generate(numRows: Int): List<List<Int>> {
+
+        if (numRows == 0){
+            return emptyList()
+        }
+
+        val result = ArrayList<List<Int>>()
+        result.add( arrayListOf(1) ) // i = 0
+
+        for ( i in 1 until numRows){
+
+            var aux = ArrayList<Int>()
+            var current = result.last()
+            var acum = 0
+
+
+            for ( j in 0 .. current.size){
+
+                if ( (j == 0) || (j == current.size)){ //  j=0 (value=1) | j=1 (value=2) | j=2 (value=1)
+                    aux.add(1)
+                    acum = 1
+
+                } else {
+                    acum = current[j] + current[j-1]
+                    aux.add(acum)
+                }
+            }
+
+            result.add(aux)
+
+        }
+
+        return result
+    }
+
+    //
+    fun findMissingRanges(nums: IntArray, lower: Int, upper: Int): List<List<Int>> {
+
+        if (nums.isEmpty()){
+            return arrayListOf(arrayListOf(lower, upper))
+        }
+
+        var left = 0
+        var right = 0
+        var result = ArrayList<List<Int>>()
+
+        if (lower < nums[0]){
+            println("I am not less")
+            result.add(arrayListOf(left, nums[0]-1))
+            left = 0
+            right = 1
+        }
+
+        while (right < nums.size){
+
+            if (Math.abs((nums[left]+1 - nums[right]-1)) >= 2){
+                var aux = ArrayList<Int>()
+                aux.add(nums[left]+1)
+                aux.add(nums[right]-1)
+
+                result.add(aux)
+                left = right
+                right+= 1
+            } else {
+                left = right
+                right += 1
+            }
+
+
+        }
+
+        if (left > 1 && left <= nums.size-1 && nums[left]+1 <= upper){
+            result.add(arrayListOf(nums[left]+1, upper))
+        }
+
+        return result
+
+    }
+
+
 }
 
 fun main(){
 
     val testClass = Meta()
-    var nums = intArrayOf(5,7,7,8,8,10)
 
-    var word = "apple"
-    var abbr = "a2e"
-    println(testClass.validWordAbbreviation(word, abbr))
+    var nums = intArrayOf(-1)
+    var lower = -1
+    var upper = 0
+    println(testClass.findMissingRanges(nums, lower, upper))
 
 }
 
