@@ -179,9 +179,6 @@ class Meta {
 
     }
 
-    // 523. Continuous Subarray Sum
-
-
     // 118. Pascal's Triangle
     fun generate(numRows: Int): List<List<Int>> {
 
@@ -247,19 +244,140 @@ class Meta {
                 left = right
                 right += 1
             }
-
-
         }
 
         if (left >= 0 && left < nums.size && nums[left]+1 <= upper){
             result.add(arrayListOf(nums[left]+1, upper))
         }
-
         return result
+    }
+
+    // 1047. Remove All Adjacent Duplicates In String
+    fun removeDuplicates(s: String): String {
+
+        val result = StringBuilder()
+
+        for (char in s){ // loop by Char at i in String "s"
+            if (result.isNotEmpty() && result.last() == char){
+                result.deleteAt(result.length-1)
+            } else {
+                result.append(char)
+            }
+        }
+
+        return result.toString()
+    }
+
+    // 824. Goat Latin
+    fun toGoatLatin(sentence: String): String {
+
+        val vowels = hashSetOf('a', 'e', 'i', 'o', 'u')
+        val sentenceArray = sentence.split(" ")
+        val result = ArrayList<String>()
+        var factor = "ma"
+
+        for ( word in sentenceArray ){
+
+            factor += "a"
+
+            if ( vowels.contains(word[0]) ){
+                var updatedWord = word + factor
+                result.add(updatedWord)
+
+            } else {
+
+                var noFirst = ""
+                for (i in 1 .. word.length-1){
+                    noFirst += word[i]
+                }
+
+                var updatedWord = noFirst + word[0] + factor
+                result.add(updatedWord)
+            }
+        }
+
+        var resultString = StringBuilder()
+
+        for (i in 0 until result.size){
+            resultString.append(result[i])
+            if (i != result.size-1){
+                resultString.append(" ")
+            }
+
+        }
+        return resultString.toString()
 
     }
 
-    
+    // 523. Continuous Subarray Sum
+    fun checkSubarraySum(nums: IntArray, k: Int): Boolean {
+
+        if (nums.size == 1) return false
+
+        val prefix = IntArray(nums.size+1)
+        var occurs = HashMap<Int, Int>()
+        var suma = 0
+
+        for (i in 1 until prefix.size){
+            prefix[i] = prefix[i-1] + nums[i-1]
+        }
+
+        for (j in 0 until prefix.size){
+
+            var aux = prefix[j] % k
+
+            if (occurs.containsKey(aux)){
+
+                var index = occurs[aux]!!
+
+                if ((j - index) >= 2){
+                    return true
+                }
+            } else {
+                occurs[aux] = j
+            }
+
+        }
+        return false
+
+    }
+
+    // 525. Contiguous Array
+    fun findMaxLength(nums: IntArray): Int {
+
+        if (nums.size < 2){
+            return 0
+        }
+        if (nums.size == 2){
+            if ( nums.sum() == 1 ){
+                return 1
+            } else {
+                return 0
+            }
+        }
+
+        var prefix = IntArray(nums.size+1)
+        var count = HashMap<Int, Int>()
+        prefix[0] = 0
+
+        for (i in 1 .. nums.size){
+            prefix[i] = prefix[i-1] + nums[i-1]
+
+            if ( count.containsKey(prefix[i]) ){
+                count[prefix[i]] = count[prefix[i]]!! + 1
+            } else {
+                count[prefix[i]] = 1
+            }
+
+        }
+        println(count)
+
+        var maxCount = count.maxOf { it.value } - 1
+
+        if (maxCount >= 1) return maxCount*2 else return 2
+
+
+    }
 
 }
 
@@ -267,10 +385,11 @@ fun main(){
 
     val testClass = Meta()
 
-    var nums = intArrayOf(-1)
+    var nums = intArrayOf(0,1,1) //nums = [0,1,1]
     var lower = -1
     var upper = 0
-    println(testClass.findMissingRanges(nums, lower, upper))
+    var sentence = "I speak Goat Latin"
+    println(testClass.findMaxLength(nums))
 
 }
 
