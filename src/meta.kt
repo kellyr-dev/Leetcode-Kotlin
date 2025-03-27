@@ -348,34 +348,139 @@ class Meta {
         if (nums.size < 2){
             return 0
         }
+
         if (nums.size == 2){
-            if ( nums.sum() == 1 ){
-                return 1
+            if ( nums.sum() == 1){
+                return 2
             } else {
                 return 0
             }
         }
 
-        var prefix = IntArray(nums.size+1)
-        var count = HashMap<Int, Int>()
-        prefix[0] = 0
+        val prefix = IntArray(nums.size)
+        val table = HashMap<Int, Int>()
+        var maxLength = 0
+        var suma = 0
 
-        for (i in 1 .. nums.size){
-            prefix[i] = prefix[i-1] + nums[i-1]
+        for (i in 0 until nums.size){
 
-            if ( count.containsKey(prefix[i]) ){
-                count[prefix[i]] = count[prefix[i]]!! + 1
+            if (nums[i] == 1){
+                suma += 1
             } else {
-                count[prefix[i]] = 1
+                suma -= 1
+            }
+
+            prefix[i] = suma
+
+            if (suma == 0) {
+                maxLength = Math.max(maxLength, i+1)
+            }
+
+            if ( table.containsKey(suma) ){
+
+                val mapIndex = table[suma]!!
+                maxLength = Math.max(maxLength, i-mapIndex)
+            } else {
+
+                table[suma] = i
+            }
+        }
+        return maxLength
+    }
+
+    // 325. Maximum Size Subarray Sum Equals k
+    fun maxSubArrayLen(nums: IntArray, k: Int): Int {
+
+        var prefix = IntArray(nums.size)
+        var map = HashMap<Int, Int>()
+        var maxLen = 0
+        var suma = 0
+
+        for (i in 0 until nums.size){
+
+            println("map: ${map}")
+            prefix.forEach { print("${it}->") }
+            println()
+
+            suma += nums[i]
+
+            if (suma == k) {
+                maxLen = Math.max(maxLen, i+1)
+            }
+
+            prefix[i] = suma
+            var factor = prefix[i] - k
+
+            if ( map.containsKey(factor) ){
+                maxLen = Math.max(maxLen, i-map[factor]!!)
+            } else {
+                map[prefix[i]] = i
             }
 
         }
-        println(count)
 
-        var maxCount = count.maxOf { it.value } - 1
+        return maxLen
+    }
 
-        if (maxCount >= 1) return maxCount*2 else return 2
+    // 560. Subarray Sum Equals K
+    fun subarraySum(nums: IntArray, k: Int): Int {
 
+        var prefix = IntArray(nums.size)
+        var map = HashMap<Int, Int>()
+        var suma = 0
+        var count = 0
+        map[0] = 1
+
+        for (i in 0 until nums.size){
+
+            suma += nums[i]
+
+            if (map.containsKey(suma - k)){
+                count+= map[suma - k]!!
+            }
+
+            if ((map.containsKey(suma))){
+                map[suma] = map[suma]!! + 1
+            } else {
+                map[suma] = 1
+            }
+
+        }
+        return count
+
+    }
+
+    // 713. Subarray Product Less Than K (will solve using prefix_sum)
+    fun numSubarrayProductLessThanK(nums: IntArray, k: Int): Int {
+
+        var i = 0
+        var count = 0
+
+        while (i < nums.size){
+
+            var j = i
+            var kk = i
+            var product = 1
+
+            while ((j < nums.size) && (product < k) ){
+
+                product *= nums[j]
+                j += 1
+            }
+
+            var productReverse = 1
+            while (kk < j){
+
+                productReverse *= nums[kk]
+                if (productReverse < k){
+                    count += 1
+                }
+                kk += 1
+            }
+            i += 1
+        }
+
+        return count
 
     }
 
@@ -384,12 +489,13 @@ class Meta {
 fun main(){
 
     val testClass = Meta()
-
-    var nums = intArrayOf(0,1,1) //nums = [0,1,1]
     var lower = -1
     var upper = 0
     var sentence = "I speak Goat Latin"
-    println(testClass.findMaxLength(nums))
+
+    var nums = intArrayOf(1,2,3) //nums = [0,1,1]
+    var k = 3
+    println(testClass.subarraySum(nums, k))
 
 }
 
