@@ -450,40 +450,28 @@ class Meta {
 
     }
 
-    // 713. Subarray Product Less Than K (will solve using prefix_sum)
+    // 713. Subarray Product Less Than K
     fun numSubarrayProductLessThanK(nums: IntArray, k: Int): Int {
 
-        var i = 0
         var count = 0
+        var product = 1
+        var r = 0
+        var l = 0
 
-        while (i < nums.size){
+        for ( r in 0 until  nums.size){
+            product *= nums[r]
 
-            var j = i
-            var kk = i
-            var product = 1
-
-            while ((j < nums.size) && (product < k) ){
-
-                product *= nums[j]
-                j += 1
+            while (l <= r && product >= k){
+                product /= nums[l]
+                l +=1
             }
-
-            var productReverse = 1
-            while (kk < j){
-
-                productReverse *= nums[kk]
-                if (productReverse < k){
-                    count += 1
-                }
-                kk += 1
-            }
-            i += 1
+            count += (r - l + 1)
         }
 
         return count
-
     }
 
+    
 }
 
 fun main(){
@@ -493,9 +481,9 @@ fun main(){
     var upper = 0
     var sentence = "I speak Goat Latin"
 
-    var nums = intArrayOf(1,2,3) //nums = [0,1,1]
-    var k = 3
-    println(testClass.subarraySum(nums, k))
+    var nums = intArrayOf(10,5,2,6) //nums = [0,1,1]
+    var k = 100
+    println(testClass.numSubarrayProductLessThanK(nums, k))
 
 }
 
