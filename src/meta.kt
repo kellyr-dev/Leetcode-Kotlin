@@ -471,6 +471,37 @@ class Meta {
         return count
     }
 
+    // 724. Find Pivot Index
+    fun pivotIndex(nums: IntArray): Int {
+
+        var prefix = IntArray(nums.size)
+        prefix[0] = nums[0]
+
+        for (i in 1 until nums.size){
+            prefix[i] = nums[i] + prefix[i-1]
+        }
+
+        var result = -1
+        var n = prefix[nums.size-1]
+        var suma = 0
+
+        for (i in 0 until prefix.size){
+
+            if (i == 0){
+                if (n - prefix[i] == 0){
+                    return i
+                }
+            } else {
+                if (n - prefix[i] == prefix[i-1]){
+                    return i
+                }
+            }
+        }
+
+        return result
+
+    }
+
     
 }
 
@@ -481,9 +512,9 @@ fun main(){
     var upper = 0
     var sentence = "I speak Goat Latin"
 
-    var nums = intArrayOf(10,5,2,6) //nums = [0,1,1]
+    var nums = intArrayOf(1,7,3,6,5,6) //nums = [0,1,1]
     var k = 100
-    println(testClass.numSubarrayProductLessThanK(nums, k))
+    println(testClass.pivotIndex(nums))
 
 }
 
