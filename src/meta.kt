@@ -1,5 +1,12 @@
-import java.util.PriorityQueue
+import java.util.*
+import kotlin.Comparator
+import kotlin.collections.ArrayDeque
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.math.min
+import kotlin.properties.Delegates
+
+
 
 class Meta {
 
@@ -502,19 +509,113 @@ class Meta {
 
     }
 
-    
+    // 791. Custom Sort String
+    fun customSortString(order: String, s: String): String {
+
+        if (s.length == 0){
+            return ""
+        }
+
+        if (order.length == 0){
+            return s
+        }
+
+        val comparator : Comparator<Structure> = compareBy<Structure> { it.priority}.thenBy { it.index }.thenBy { it.char }
+        var minHeap : PriorityQueue<Structure> = PriorityQueue(comparator)
+        var hashTable = HashMap<Char, Int>()
+
+        for (i in 0 until order.length){
+            if (!(hashTable.containsKey(order[i]))){
+                hashTable[order[i]] = i
+            }
+        }
+
+        for (j in 0 until s.length){
+
+            if (hashTable.containsKey(s[j])){
+
+                var keyStructure = Structure(hashTable[s[j]]!!, j, s[j])
+                minHeap.add(keyStructure)
+
+            } else {
+                var auxStructure = Structure(Int.MAX_VALUE, Int.MAX_VALUE, s[j])
+            }
+        }
+
+        var result = StringBuilder()
+
+        while (minHeap.isNotEmpty()){
+            result.append(minHeap.poll().char)
+        }
+        return result.toString()
+
+    }
+
+    //
+    fun removeNthFromEnd(head: ListNode?, n: Int): ListNode? {
+
+        var stack = ArrayDeque<ListNode>()
+        var auxHead = head
+
+        while (auxHead != null){
+            stack.add(auxHead)
+            auxHead = auxHead.next
+        }
+
+        var auxStack = ArrayList<ListNode>()
+        var i = 1
+
+        while (stack.isNotEmpty()){
+            if (i != n){
+                auxStack.add(0, stack.removeLast())
+            }
+        }
+
+        auxHead = auxStack.removeFirst()
+        while (auxStack.isNotEmpty()){
+            auxHead = auxStack.removeFirst()
+            auxHead.next = auxStack.removeFirst()
+
+        }
+
+
+        println(stack)
+        // [1,2,3,4,5]
+        // [1,2,3,5]
+
+        return head
+
+    }
+
 }
+
+data class Structure(var priority : Int, var index: Int, var char: Char )
 
 fun main(){
 
-    val testClass = Meta()
+
     var lower = -1
     var upper = 0
     var sentence = "I speak Goat Latin"
 
-    var nums = intArrayOf(1,7,3,6,5,6) //nums = [0,1,1]
-    var k = 100
-    println(testClass.pivotIndex(nums))
+    var nums = intArrayOf(1,2,4) //nums = [0,1,1]
+    var k = 2
+    val testClass = Meta()
+
+    //head = [1,2,3,4,5], n = 2
+    var head = ListNode(1)
+    head.next = ListNode(2)
+    head.next!!.next = ListNode(3)
+    head.next!!.next!!.next = ListNode(4)
+    head.next!!.next!!.next!!.next = ListNode(5)
+
+    var result = testClass.removeNthFromEnd(head, k)
+
+    while (result != null){
+        print("${result.value}->")
+        result = result.next
+    }
+    println()
 
 }
 
@@ -544,4 +645,34 @@ class MovingAverage(size: Int) {
             return avg
         }
     }
+}
+
+// 528. Random Pick with Weight
+class RandomPickWeight(w: IntArray) {
+
+    var prefix = IntArray(w.size)
+    var totalSum = 0
+
+    init {
+        var suma = 0
+
+        for (i in 0 until w.size){
+            suma += w[i]
+            prefix[i] = suma
+        }
+        totalSum = suma
+    }
+
+    fun pickIndex(): Int {
+
+        var target = totalSum * Math.random() // [1,3,7] || target = 4
+        var i = 0
+
+        for (i in 0 until prefix.size){
+            if (target < prefix[i])
+                return i
+        }
+        return i - 1
+    }
+
 }
