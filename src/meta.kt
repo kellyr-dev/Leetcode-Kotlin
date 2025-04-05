@@ -75,53 +75,6 @@ class Meta {
         return -1
     }
 
-    // 670. Maximum Swap (not tested)
-    fun maximumSwap(num: Int): Int {
-
-        val compareByNum : Comparator<Pair<Int, Int>> = compareBy<Pair<Int, Int>> { it.first }.thenBy { it.second }
-        val minHeap : PriorityQueue<Pair<Int, Int>> = PriorityQueue(compareByNum)
-        val numToString = num.toString()
-        val originalArray = IntArray(numToString.length)
-
-        for (i in 0 .. numToString.length-1){
-
-            var pair = Pair(-numToString[i].digitToInt(), i)
-            minHeap.add(pair)
-            originalArray[i] = numToString[i].digitToInt()
-
-
-        }
-
-        println("minHeap: ${minHeap}")
-
-        var i = 0
-        while (i < originalArray.size){
-
-            var maxPair = minHeap.poll()
-            var maxIndex = maxPair.second
-            var maxValue = maxPair.first * -1
-
-            println("maxIndex: ${maxIndex}")
-            println("maxValue: ${maxValue}")
-
-            if (maxIndex != i){
-                var valueToSwap = originalArray[i]
-                originalArray[i] = maxValue
-                originalArray[maxIndex] = valueToSwap
-                break
-            }
-            i += 1
-
-        }
-
-        var result = ""
-        for (i in 0 until originalArray.size){
-            result += originalArray[i].digitToChar()
-        }
-
-        return result.toInt()
-    }
-
     // 408. Valid Word Abbreviation
     fun validWordAbbreviation(word: String, abbr: String): Boolean {
         if (abbr.length > word.length){
@@ -512,6 +465,8 @@ class Meta {
     // 791. Custom Sort String
     fun customSortString(order: String, s: String): String {
 
+        var stringsad = "asdadasd"
+
         if (s.length == 0){
             return ""
         }
@@ -551,42 +506,134 @@ class Meta {
 
     }
 
-    //
-    fun removeNthFromEnd(head: ListNode?, n: Int): ListNode? {
+    // 249. Group Shifted Strings (pass 25/26)
+    fun groupStrings(strings: Array<String>): List<List<String>> {
 
-        var stack = ArrayDeque<ListNode>()
-        var auxHead = head
+        var res = ArrayList<List<String>>()
+        var strs = HashMap<String, Int>()
 
-        while (auxHead != null){
-            stack.add(auxHead)
-            auxHead = auxHead.next
+        for (words in strings){ //asuming unique values a set will be ok // asuming different values a Map will be the solution
+            if (strs.containsKey(words)){
+                strs[words] = strs[words]!! +1
+            } else {
+                strs[words] = 1
+            }
         }
+        println("map: ${strs}")
 
-        var auxStack = ArrayList<ListNode>()
-        var i = 1
+        for (word in strings){
 
-        while (stack.isNotEmpty()){
-            if (i != n){
-                auxStack.add(0, stack.removeLast())
+            if (strs.isEmpty()) {
+                break
+            }
+
+            var aux = ArrayList<String>()
+            if (strs.contains(word)){
+                strs.remove(word)
+                aux.add(word)
+            }
+
+            var strBld = word
+            // shift right (26 call function)
+            // for each shift check if the string is in the map
+
+            println("for word: ${word}")
+            for (i in 0 until 25){
+
+                var newString = ""
+                for (j in 0 until strBld.length){
+
+                    var newChar = strBld[j].toInt()+1
+                    if (newChar > 122){
+                        newString += "a"
+                    } else {
+                        newString += newChar.toChar()
+                    }
+                    // check each letter in the position j at strBld
+                    // get the ascii code and add +1 to get the right Shift for each letter
+                    //
+                }
+                println("combination ${i} -> ${newString}")
+
+                if (strs.isNotEmpty()){
+
+                    if (strs.contains(newString)){
+                        aux.add(newString)
+                        strs.remove(newString)
+                    }
+
+                } else {
+                    break
+                }
+
+                strBld = newString
+
+            }
+
+
+            // shift left (26 call function)
+            // for each shift check if the string is in the map
+
+            if (aux.isNotEmpty()){
+                res.add(aux)
             }
         }
 
-        auxHead = auxStack.removeFirst()
-        while (auxStack.isNotEmpty()){
-            auxHead = auxStack.removeFirst()
-            auxHead.next = auxStack.removeFirst()
-
-        }
-
-
-        println(stack)
-        // [1,2,3,4,5]
-        // [1,2,3,5]
-
-        return head
+        return res
 
     }
 
+    // 670. Maximum Swap
+    fun maximumSwap(num: Int): Int {
+
+        val aux = num.toString()
+        val stringArray = ArrayList<Int>()
+
+        for (i in 0 until aux.length){
+            stringArray.add(aux[i].digitToInt())
+        }
+
+        var max_value = -1
+        var max_valueIndex = -1
+        var index_left = -1
+        var index_right = -1
+
+        for ( i in stringArray.size-1 downTo 0){
+
+            if (stringArray[i] == max_value){
+                continue
+            }
+
+            if (stringArray[i] > max_value){
+                max_value = stringArray[i]
+                max_valueIndex = i
+            }
+
+            if (stringArray[i] < max_value){
+                index_left = i
+                index_right = max_valueIndex
+            }
+        }
+
+        if (index_left != -1){
+
+            val valueAux = stringArray[index_left]
+            stringArray[index_left] = stringArray[index_right]
+            stringArray[index_right] = valueAux
+
+        }
+
+        var result = ""
+
+        for (i in 0 until stringArray.size){
+            result += stringArray[i].digitToChar()
+        }
+
+        return result.toInt()
+
+    }
+
+    
 }
 
 data class Structure(var priority : Int, var index: Int, var char: Char )
@@ -594,28 +641,13 @@ data class Structure(var priority : Int, var index: Int, var char: Char )
 fun main(){
 
 
+    val testClass = Meta()
     var lower = -1
     var upper = 0
     var sentence = "I speak Goat Latin"
-
-    var nums = intArrayOf(1,2,4) //nums = [0,1,1]
     var k = 2
-    val testClass = Meta()
-
-    //head = [1,2,3,4,5], n = 2
-    var head = ListNode(1)
-    head.next = ListNode(2)
-    head.next!!.next = ListNode(3)
-    head.next!!.next!!.next = ListNode(4)
-    head.next!!.next!!.next!!.next = ListNode(5)
-
-    var result = testClass.removeNthFromEnd(head, k)
-
-    while (result != null){
-        print("${result.value}->")
-        result = result.next
-    }
-    println()
+    var num = 98368
+    println(testClass.maximumSwap(num))
 
 }
 
