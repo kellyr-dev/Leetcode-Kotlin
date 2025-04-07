@@ -633,7 +633,32 @@ class Meta {
 
     }
 
-    
+    // 1762. Buildings With an Ocean View
+    fun findBuildings(heights: IntArray): IntArray {
+
+        val tam = heights.size-1
+        var maxHeight = heights[tam]
+        val result = ArrayList<Int>()
+        result.add(tam)
+        for ( i in tam-1 downTo 0){
+
+            if (heights[i] > maxHeight){
+                result.add(i)
+                maxHeight = heights[i]
+            }
+
+        }
+
+        var res = IntArray(result.size)
+        var j = 0
+        for (i in result.size downTo  0){
+            res[j] = result[i]
+        }
+
+        return res
+    }
+
+
 }
 
 data class Structure(var priority : Int, var index: Int, var char: Char )
