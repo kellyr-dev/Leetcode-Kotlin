@@ -696,7 +696,25 @@ class Meta {
         return result
     }
 
-    
+    // 339. Nested List Weight Sum
+    fun depthSum(nestedList: List<NestedInteger>): Int {
+
+        var result = 0
+        fun returnSumDepth(nestedList: List<NestedInteger>, depthIn: Int) {
+
+            for (value in nestedList){
+                if (value.isInteger()){
+                    result += value.getInteger() * depthIn
+                } else {
+                    returnSumDepth(value.getList(), depthIn+1)
+                }
+            }
+        }
+
+        returnSumDepth(nestedList, 1)
+        return result
+
+    }
 }
 
 data class Structure(var priority : Int, var index: Int, var char: Char )
@@ -769,6 +787,35 @@ class RandomPickWeight(w: IntArray) {
                 return i
         }
         return i - 1
+    }
+
+}
+
+
+class NestedInteger(val single: Int?, val nestedList: List<NestedInteger>){
+
+    fun isInteger(): Boolean {
+
+        if (this.single != null && this.nestedList.isEmpty()){
+            return true
+        } else {
+            return false
+        }
+    }
+
+    fun getInteger() : Int? {
+        if (this.nestedList.isEmpty() && this.single != null){
+            return this.single
+        }
+        return null
+    }
+
+    fun getList() : List<NestedInteger>? {
+
+        if (this.single == null && this.nestedList.isNotEmpty()){
+            return this.nestedList
+        }
+        return null
     }
 
 }
