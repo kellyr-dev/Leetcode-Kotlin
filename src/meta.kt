@@ -658,7 +658,45 @@ class Meta {
         return res
     }
 
+    // 636. Exclusive Time of Functions
+    fun exclusiveTime(n: Int, logs: List<String>): IntArray {
 
+        val stack = ArrayDeque<Int>()
+        var prevTime = 0
+        var result = IntArray(n)
+
+        for (log in logs) {
+
+            var comp = log.split(":")
+            var index = comp[0].toInt()
+            var mode = comp[1]
+            var timeStamp = comp[2].toInt()
+
+            if (mode == "start") {
+
+                // time to push
+                if (stack.size >= 1){
+                    var lastIndex = stack.last()
+                    result[lastIndex] +=  timeStamp - prevTime
+                }
+                stack.add(index)
+                prevTime = timeStamp
+
+            } else {
+                // time to pop
+                if (stack.size >= 1){
+                    var lastIndex = stack.removeLast()
+                    result[lastIndex] += (timeStamp - prevTime + 1)
+                    prevTime = timeStamp + 1
+                }
+
+            }
+        }
+
+        return result
+    }
+
+    
 }
 
 data class Structure(var priority : Int, var index: Int, var char: Char )
@@ -670,9 +708,10 @@ fun main(){
     var lower = -1
     var upper = 0
     var sentence = "I speak Goat Latin"
-    var k = 2
-    var num = 98368
-    println(testClass.maximumSwap(num))
+    var n = 2
+    var logs = arrayListOf("0:start:0","0:start:2","0:end:5","1:start:6","1:end:6","0:end:7")
+    testClass.exclusiveTime(n, logs).forEach { print("${it}->") }
+    
 
 }
 
