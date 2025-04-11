@@ -724,27 +724,36 @@ class Meta {
         var exp = n
         var nega = false
 
-        println("exp: -2147483648")
-        println("What is the Int.MAX_VALUE: ${Int.MIN_VALUE}")
-
         if (exp == 0){
             return 1.0
         }
 
+        if (base in 0.0 .. 0.00001){ //0.00001
+            return 0.0
+        }
+
         if (exp == Int.MIN_VALUE ){
-            return 0.0
+
+            if (base == 1.0) {
+                return 1.0
+            } else if (base == -1.0){
+                return 1.0
+            } else {
+                return 0.0
+            }
         }
 
-        if (exp == Int.MAX_VALUE){
-            return Int.MAX_VALUE.toDouble()
-        }
+        if (exp == Int.MAX_VALUE) {
 
-        if (base > 0 && base < 0.01){
-            return 0.0
-        }
-
-        if (base == 1.0){
-            return 1.0
+            if (base == 1.0) {
+                return 1.0
+            } else if (base == -1.0){
+                return -1.0
+            } else if ( base == 0.0) {
+                return 0.0
+            } else {
+                return Int.MAX_VALUE.toDouble()
+            }
         }
 
         if (exp < 0){
