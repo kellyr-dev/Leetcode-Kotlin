@@ -704,9 +704,9 @@ class Meta {
 
             for (value in nestedList){
                 if (value.isInteger()){
-                    result += value.getInteger() * depthIn
+                    result += value.getInteger()!! * depthIn
                 } else {
-                    returnSumDepth(value.getList(), depthIn+1)
+                    returnSumDepth(value.getList()!!, depthIn+1)
                 }
             }
         }
@@ -715,6 +715,55 @@ class Meta {
         return result
 
     }
+
+    // 50. Pow(x, n)
+    fun myPow(x: Double, n: Int): Double {
+
+        var powi = 1.0
+        val base = x
+        var exp = n
+        var nega = false
+
+        println("exp: -2147483648")
+        println("What is the Int.MAX_VALUE: ${Int.MIN_VALUE}")
+
+        if (exp == 0){
+            return 1.0
+        }
+
+        if (exp == Int.MIN_VALUE ){
+            return 0.0
+        }
+
+        if (exp == Int.MAX_VALUE){
+            return Int.MAX_VALUE.toDouble()
+        }
+
+        if (base > 0 && base < 0.01){
+            return 0.0
+        }
+
+        if (base == 1.0){
+            return 1.0
+        }
+
+        if (exp < 0){
+            nega = true
+            exp = exp * -1
+        }
+
+        for (i in 0 until exp){
+            powi = powi * base
+        }
+
+        if (nega){
+            return 1/powi
+        }  else {
+            return powi
+        }
+
+    }
+
 }
 
 data class Structure(var priority : Int, var index: Int, var char: Char )
@@ -726,9 +775,11 @@ fun main(){
     var lower = -1
     var upper = 0
     var sentence = "I speak Goat Latin"
-    var n = 2
     var logs = arrayListOf("0:start:0","0:start:2","0:end:5","1:start:6","1:end:6","0:end:7")
-    testClass.exclusiveTime(n, logs).forEach { print("${it}->") }
+    var x = 0.00001
+    var n = 2147483647
+    var result = testClass.myPow(x, n)
+    println("result: ${result}")
     
 
 }
