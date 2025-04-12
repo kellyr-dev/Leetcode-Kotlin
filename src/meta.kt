@@ -719,60 +719,108 @@ class Meta {
     // 50. Pow(x, n)
     fun myPow(x: Double, n: Int): Double {
 
-        var powi = 1.0
-        val base = x
+        var result = 1.0
+        var base = x
         var exp = n
-        var nega = false
 
         if (exp == 0){
             return 1.0
         }
 
-        if (base in 0.0 .. 0.00001){ //0.00001
-            return 0.0
-        }
+        if (exp == Int.MIN_VALUE){
 
-        if (exp == Int.MIN_VALUE ){
-
-            if (base == 1.0) {
-                return 1.0
-            } else if (base == -1.0){
+            if (base == 1.0 || base == -1.0){
                 return 1.0
             } else {
                 return 0.0
-            }
-        }
-
-        if (exp == Int.MAX_VALUE) {
-
-            if (base == 1.0) {
-                return 1.0
-            } else if (base == -1.0){
-                return -1.0
-            } else if ( base == 0.0) {
-                return 0.0
-            } else {
-                return Int.MAX_VALUE.toDouble()
             }
         }
 
         if (exp < 0){
-            nega = true
-            exp = exp * -1
+            base = 1/x
+            exp *= -1
         }
 
-        for (i in 0 until exp){
-            powi = powi * base
+        var product = base
+
+        while (exp > 0){
+
+            if (exp % 2 != 0){
+                result = result * product
+            }
+
+            product *= product
+            exp = exp/2
         }
 
-        if (nega){
-            return 1/powi
-        }  else {
-            return powi
-        }
+        return result
 
     }
 
+    // 498. Diagonal Traverse
+    fun findDiagonalOrder(mat: Array<IntArray>): IntArray {
+
+        // i+= 0 && j+= 1 (derecha)
+        // i+= 1 && j+= 0 (down)
+
+        // i-= 1 && j+= 1 (diagonal arriba) until i >=0 && j <= maxCol
+        // i+= 1 && j-= 1 (diagonal abajo) until i <= maxRow && j >= 0
+
+        var i = 0
+        var j = 0
+        val maxRow = mat.size
+        val maxCol = mat[0].size
+        val maxTam = maxRow * maxCol
+        var index = 0
+
+        //val res = IntArray(maxRow * maxCol)
+        val res = IntArray(maxTam)
+        var dirUp = true
+
+        while (index < maxTam){
+            if (dirUp) {
+
+                while (i >= 0 && j < maxCol){
+                    res[index] = mat[i][j]
+                    j += 1
+                    i -= 1
+                    index += 1
+                }
+                dirUp = false
+                // two cases if we get both boundaries
+                if (j == maxCol) { // means we reach both boundaries because direction is UP
+                    i += 2
+                    j -= 1
+                } else { // because direction is UP the other case is reach only row boundary
+                    i += 1
+                }
+
+            } else {
+
+                // two cases if we get both boundaries
+                // if we get only col boundary
+
+                while ( i < maxRow && j >= 0){
+                    res[index] = mat[i][j]
+                    j -= 1
+                    i += 1
+                    index += 1
+                }
+
+                dirUp = true
+
+                if ( i == maxRow){
+                    j += 2
+                    i -= 1
+                } else {
+                    j+=1
+                }
+            }
+        }
+        return res
+    }
+
+    // 
 }
 
 data class Structure(var priority : Int, var index: Int, var char: Char )
