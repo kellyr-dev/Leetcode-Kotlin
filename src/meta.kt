@@ -820,7 +820,74 @@ class Meta {
         return res
     }
 
-    // 
+    // 129. Sum Root to Leaf Numbers
+    fun sumNumbers(root: TreeNode?): Int {
+
+        if (root == null){
+            return 0
+        }
+        var globalSum = 0
+
+        fun dfs(root: TreeNode?, localSum: Int) {
+
+            if (root == null){
+                return
+            }
+            var local = localSum * 10 + root.value
+
+            if (root.left == null && root.right == null){
+                globalSum += local
+                return
+            }
+
+            dfs(root.left, local)
+            dfs(root.right, local)
+
+        }
+
+        dfs(root, 0)
+        return globalSum
+
+    }
+
+    // 46. Permutations
+    fun permute(nums: IntArray): List<List<Int>> {
+
+        val result = ArrayList<ArrayList<Int>>()
+        val local_res = ArrayList<Int>()
+        val local_set = HashSet<Int>()
+
+        fun backtracking(nums : IntArray, local_res : ArrayList<Int>, local_set : HashSet<Int>){
+
+            println("local_res: ${local_res}")
+            if (local_res.size == nums.size){
+                result.add(ArrayList(local_res))
+                println("so why is not here adding")
+                return
+            }
+
+            for ( i in 0 until nums.size){
+
+                if (local_set.contains(nums[i])){
+                    continue
+                }
+                local_res.add(nums[i])
+                local_set.add(nums[i])
+
+                backtracking(nums, local_res, local_set)
+                local_res.removeLast()
+                local_set.remove(nums[i])
+
+            }
+
+        }
+
+        backtracking(nums, local_res, local_set)
+        println("result: ${result}")
+        return result
+
+    }
+
 }
 
 data class Structure(var priority : Int, var index: Int, var char: Char )
@@ -835,9 +902,9 @@ fun main(){
     var logs = arrayListOf("0:start:0","0:start:2","0:end:5","1:start:6","1:end:6","0:end:7")
     var x = 0.00001
     var n = 2147483647
-    var result = testClass.myPow(x, n)
-    println("result: ${result}")
-    
+    var nums = intArrayOf(1,2,3) //nums = [1,2,3]
+    var input = "AAB"
+    var order = "cba"
 
 }
 
