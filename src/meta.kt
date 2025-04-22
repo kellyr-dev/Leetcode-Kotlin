@@ -888,6 +888,35 @@ class Meta {
 
     }
 
+    // 1209. Remove All Adjacent Duplicates in String II
+    fun removeDuplicatesa(s: String, k: Int): String {
+
+        val stack = mutableListOf<Pair<Char, Int>>()
+
+        for (char in s) {
+            if (stack.isNotEmpty() && stack.last().first == char) {
+                val count = stack.last().second + 1
+                stack[stack.size - 1] = Pair(char, count)
+                if (count == k) {
+                    stack.removeAt(stack.size - 1)
+                }
+            } else {
+
+                stack.add(Pair(char, 1))
+            }
+
+        }
+
+        val result = StringBuilder()
+        for ((char, count) in stack) {
+            for (i in 0 until count) {
+                result.append(char)
+            }
+        }
+        return result.toString()
+    }
+
+
 }
 
 data class Structure(var priority : Int, var index: Int, var char: Char )
@@ -905,6 +934,9 @@ fun main(){
     var nums = intArrayOf(1,2,3) //nums = [1,2,3]
     var input = "AAB"
     var order = "cba"
+    var s = "pbbcggttciiippooaais"
+
+    println(testClass.removeDuplicatesa(s, 2))
 
 }
 
