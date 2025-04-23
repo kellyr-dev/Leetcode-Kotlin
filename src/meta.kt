@@ -3,6 +3,7 @@ import kotlin.Comparator
 import kotlin.collections.ArrayDeque
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.collections.HashSet
 import kotlin.math.min
 import kotlin.properties.Delegates
 
@@ -916,6 +917,133 @@ class Meta {
         return result.toString()
     }
 
+    // 921. Minimum Add to Make Parentheses Valid
+    fun minAddToMakeValid(s: String): Int {
+
+        var opened = 0
+        var closed = 0
+
+        for (char in s){
+            if (char == '('){
+                opened += 1
+            } else {
+                if (opened > 0 ){
+                    opened -= 1
+                } else {
+                    closed += 1
+                }
+            }
+        }
+        return opened + closed
+    }
+
+    // 1249. Minimum Remove to Make Valid Parentheses
+    fun minRemoveToMakeValid(s: String): String {
+
+        var stack = ArrayDeque<Int>()
+        var str = StringBuilder(s)
+
+        for (i in 0 until s.length){
+
+            if (str[i] == '('){
+                stack.add(i)
+            } else {
+                if (str[i] == ')'){
+                    if (stack.size > 0){
+                        stack.removeLast()
+                    } else {
+                        str[i] = '*'
+                    }
+                }
+            }
+        }
+
+        while (stack.size > 0 ){
+            str[stack.removeLast()] = '*'
+        }
+
+        var result = StringBuilder()
+        for (i in 0 until str.length){
+
+            if (str[i] != '*'){
+                result.append(str[i])
+            }
+
+        }
+
+        return result.toString()
+    }
+
+    // 76. Minimum Window Substring
+    fun minWindow(s: String, t: String): String {
+
+        if (t.length > s.length){
+            return ""
+        }
+
+        if (t.length == s.length){
+
+            if (t.toList().sorted() == s.toList().sorted()){
+                return s
+            }else{
+                return ""
+            }
+        }
+
+        if (t.length == 1){
+            if (t in s){
+                return t
+            }
+            return ""
+        }
+
+        var map = HashMap<Char, Int>()
+        for (char in t){
+            map[char] = map.getOrDefault(char, 0) + 1
+        }
+
+        println("map: ${map}")
+
+        var left  = 0
+        var right = 0
+        var minLen = Int.MAX_VALUE
+        var count =0
+        var indexLeft = 0
+
+        var windowMap = HashMap<Char, Int>()
+
+        while (right < s.length){
+
+            var currentChar = s[right]
+            windowMap[currentChar] = windowMap.getOrDefault(currentChar, 0) + 1
+
+            if (map.containsKey(currentChar) && map[currentChar]!! >= windowMap[currentChar]!!) {
+                count += 1
+            }
+
+            while (count == t.length){
+                if (right - left + 1 < minLen){
+                    minLen = (right - left + 1)
+                    indexLeft = left
+                }
+
+                var leftChar = s[left]
+                windowMap[leftChar] = windowMap[leftChar]!! - 1
+
+                if ( map.containsKey(leftChar) && map[leftChar]!! > windowMap[leftChar]!! ){
+                    count -= 1
+                }
+                left += 1
+            }
+            right += 1
+
+        }
+
+        if (minLen == Int.MAX_VALUE) return ""
+
+        return s.slice(indexLeft .. indexLeft + minLen-1)
+
+    }
 
 }
 
@@ -934,9 +1062,11 @@ fun main(){
     var nums = intArrayOf(1,2,3) //nums = [1,2,3]
     var input = "AAB"
     var order = "cba"
-    var s = "pbbcggttciiippooaais"
+    var s = "ADOBECODEBANC"
+    var t = "ABC"
+    //s = "ADOBECODEBANC", t = "ABC"
 
-    println(testClass.removeDuplicatesa(s, 2))
+    println(testClass.minWindow(s, t))
 
 }
 
