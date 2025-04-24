@@ -1045,6 +1045,148 @@ class Meta {
 
     }
 
+    // 1216. Valid Palindrome III
+    fun isValidPalindrome(s: String, k: Int): Boolean {
+
+        if (s.length <= 1){
+            return true
+        }
+
+        if (k > s.length){
+            return false
+        }
+
+        var memo = HashMap<Triple<Int, Int, Int>, Boolean>()
+
+        fun dfs(s: String, left: Int, right: Int, k:Int): Boolean{
+            if (left >= right){
+                if (k >= 0){
+                    return true
+                } else {
+                    return false
+                }
+            }
+
+            if (right < 0 || left >= s.length || k < 0){
+                return false
+            }
+
+            var key = Triple(left, right, k)
+
+            if (memo.containsKey(key)){
+                return memo[key]!!
+            }
+
+            if (s[left] == s[right]){
+                var result = dfs(s, left +1, right-1, k)
+                memo[key] = result
+                return result
+            } else {
+                var result = dfs(s, left+1, right, k-1) || dfs(s, left, right-1, k-1)
+                memo[key] = result
+                return result
+            }
+
+        }
+        return dfs(s,0,s.length-1, k)
+    }
+
+    // 300. Longest Increasing Subsequence
+    fun lengthOfLIS(nums: IntArray): Int {
+
+        var result = ArrayList<Int>()
+        var set = HashSet<Int>()
+        set.add(nums[0])
+        result.add(nums[0])
+
+        for (i in 1 until nums.size) {
+
+            if (nums[i] > result.last()) {
+                result.add(nums[i])
+                set.add(nums[i])
+                println("result: ${result}")
+            } else {
+
+                // apply binary Search to find a right place to place the current num
+                println("set: ${set}")
+                var l = 0
+                var r = result.size - 1
+                var mid = (l + r) // 2
+                var target = nums[i]
+
+                if (!(set.contains(nums[i]))) {
+                    while (l < r) {
+                        mid = (l + r)/2
+                        if (result[mid] > target) {
+                            r = mid
+                        } else {
+                            l = mid + 1
+                        }
+                    }
+
+                    set.remove(result[r])
+                    set.add(nums[i])
+                    result[r] = nums[i]
+
+                }
+                println("result: ${result}")
+            }
+
+        }
+        return result.size
+    }
+
+    // 354. Russian Doll Envelopes
+    fun maxEnvelopes(envelopes: Array<IntArray>): Int {
+
+
+        envelopes.sortWith(compareBy<IntArray> { it[0] }.thenByDescending { it[1] })
+
+        var height = ArrayList<Int>()
+        height.add(envelopes[0][1])
+        var setHeight = HashSet<Int>()
+        setHeight.add(envelopes[0][1])
+
+        // [[5,4],[6,4],[6,7],[2,3]]
+        // [2,3], [5,4], [6,4], [6,7]
+        // h = [3]
+
+        // [3,4,7]
+
+        for (i in 1 until envelopes.size){
+            var currenHeight = envelopes[i][1]
+            if (currenHeight > height.last()){
+                height.add(currenHeight)
+                setHeight.add(currenHeight)
+            } else {
+                // need to find a way
+
+                var l = 0
+                var r = height.size - 1
+                var mid = -1
+
+                if (!(setHeight.contains(currenHeight))){
+                    while (l < r){
+                        mid = (l + r)/ 2
+
+                        if (height[mid] > currenHeight){
+                            r = mid
+                        } else {
+                            l = mid + 1
+                        }
+                    }
+
+                    setHeight.remove(height[l])
+                    setHeight.add(currenHeight)
+                    height[l] = currenHeight
+                }
+
+            }
+        }
+
+        return height.size
+
+    }
 }
 
 data class Structure(var priority : Int, var index: Int, var char: Char )
@@ -1057,16 +1199,14 @@ fun main(){
     var upper = 0
     var sentence = "I speak Goat Latin"
     var logs = arrayListOf("0:start:0","0:start:2","0:end:5","1:start:6","1:end:6","0:end:7")
-    var x = 0.00001
-    var n = 2147483647
-    var nums = intArrayOf(1,2,3) //nums = [1,2,3]
+    var nums = arrayOf(intArrayOf(4,5), intArrayOf(4,6), intArrayOf(6,7), intArrayOf(2,3), intArrayOf(1,1)) //[[4,5],[4,6],[6,7],[2,3],[1,1]]
     var input = "AAB"
     var order = "cba"
     var s = "ADOBECODEBANC"
     var t = "ABC"
+    var n = intArrayOf(4,10,4,3,8,9)
     //s = "ADOBECODEBANC", t = "ABC"
-
-    println(testClass.minWindow(s, t))
+    println(testClass.maxEnvelopes(nums))
 
 }
 
