@@ -4,6 +4,7 @@ import kotlin.collections.ArrayDeque
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
+import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
 
@@ -1187,6 +1188,139 @@ class Meta {
         return height.size
 
     }
+
+    // 480. Sliding Window Median
+    fun medianSlidingWindow(nums: IntArray, k: Int): DoubleArray {
+
+        var minHeap = PriorityQueue<Int>()
+        var maxHeap = PriorityQueue<Int>(Comparator.reverseOrder())
+        var result = ArrayList<Double>()
+        var isEven = false
+        var index = 0
+
+        if (k % 2 == 0){
+            isEven = true
+        }
+
+        for (i in 0 until nums.size){
+            if (i >= k) {
+                var dropValue = nums[index]
+
+                if (minHeap.contains(dropValue)){
+                    minHeap.remove(dropValue)
+                } else {
+                    if (maxHeap.contains(dropValue)){
+                        maxHeap.remove(dropValue)
+                    }
+                }
+                index += 1
+            }
+
+            minHeap.add(nums[i])
+            maxHeap.add(minHeap.poll())
+
+            if (maxHeap.size > minHeap.size){
+                minHeap.add(maxHeap.poll())
+            }
+
+            if (i >= k-1){
+                if (isEven){
+                    var auxResult = (minHeap.first().toDouble() + maxHeap.first().toDouble())/ 2.0
+                    result.add(auxResult)
+                } else {
+                    var auxResult = minHeap.first().toDouble()
+                    result.add(auxResult)
+                }
+            }
+        }
+        return result.toDoubleArray()
+    }
+
+    // 329. Longest Increasing Path in a Matrix
+    fun longestIncreasingPath(matrix: Array<IntArray>): Int {
+
+        var maxLen = 1
+        var map = HashMap<Triple<Int, Int, Int>, Int>()
+        fun dfs(i: Int, j: Int, map : HashMap<Triple<Int, Int, Int>, Int>, prev: Int): Int{
+
+            if (i < 0 || i >= matrix.size || j < 0 || j >= matrix[0].size){
+                return 0
+            }
+
+            var key = Triple(i,j, prev)
+            if (map.containsKey(key)) {
+                return map[key]!!
+            }
+
+            if ( matrix[i][j] > prev){
+
+                var result = 1 + maxOf(dfs(i,j+1, map, matrix[i][j]), dfs(i,j-1, map, matrix[i][j]), dfs(i+1, j, map, matrix[i][j]), dfs(i-1, j, map, matrix[i][j]) )
+                map[key] = result
+                return result
+            } else {
+                return 0
+            }
+        }
+
+        for ( i in 0 until matrix.size){
+            for (j in 0 until matrix[0].size){
+                var prev = -1
+                var localResult = dfs(i, j, map, prev)
+                maxLen = Math.max(maxLen, localResult)
+                //localResult = 0
+            }
+        }
+        return maxLen
+    }
+
+    // 42. Trapping Rain Water
+    fun trap(height: IntArray): Int {
+
+        var left_max = 0
+        var right_max = 0
+        var leftArray = IntArray(height.size)
+        var rightArray = IntArray(height.size)
+
+        var trapResult = IntArray(height.size)
+
+        for (i in 0 until height.size){
+            leftArray[i]= (left_max)
+            left_max = max(height[i], left_max)
+        }
+
+        for (j in height.size-1 downTo 0){
+            rightArray[j] = (right_max)
+            right_max = max(height[j], right_max)
+        }
+
+        for (i in 0 until height.size){
+            var vol = min(leftArray[i], rightArray[i]) - height[i]
+            if (vol > 0){
+                trapResult[i] = vol
+            }
+        }
+
+        print("Left: ")
+        leftArray.forEach { print("${it} ") }
+        println()
+        print("Righ: ")
+        rightArray.forEach { print("${it} ") }
+        println()
+        print("heig: ")
+        height.forEach { print("${it} ") }
+        println()
+        print("Trap: ")
+        trapResult.forEach { print("${it} ") }
+        println()
+        println("MaxLeft: ${left_max}")
+        println("MaxRight: ${right_max}")
+
+
+
+        return trapResult.sum()
+
+    }
+
 }
 
 data class Structure(var priority : Int, var index: Int, var char: Char )
@@ -1204,9 +1338,10 @@ fun main(){
     var order = "cba"
     var s = "ADOBECODEBANC"
     var t = "ABC"
-    var n = intArrayOf(4,10,4,3,8,9)
-    //s = "ADOBECODEBANC", t = "ABC"
-    println(testClass.maxEnvelopes(nums))
+    var height = intArrayOf(0,1,0,2,1,0,1,3,2,1,2,1)
+    var k = 2
+    var matrix = arrayOf(intArrayOf(9,9,4), intArrayOf(6,6,8), intArrayOf(2,1,1)) // [[9,9,4],[6,6,8],[2,1,1]]
+    println(testClass.trap(height))
 
 }
 
