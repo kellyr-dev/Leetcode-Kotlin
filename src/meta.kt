@@ -1321,6 +1321,94 @@ class Meta {
 
     }
 
+    // 827. Making A Large Island
+    fun largestIsland(grid: Array<IntArray>): Int {
+
+        fun dfs(i : Int, j : Int, color: Int): Int {
+
+            if (i < 0 || j < 0 || i >= grid.size || j >= grid[0].size ){
+                return 0
+            }
+
+            if (grid[i][j] == 1){
+                grid[i][j] = color
+                return 1 + dfs(i+1, j, color) + dfs(i-1, j, color) + dfs(i, j+1, color) + dfs(i, j-1, color)
+            } else {
+                return  0
+            }
+
+        }
+
+        var maxLen = 1
+        var color = 1
+        var colored = HashMap<Int, Int>() // color, value
+        var hasZeros = false
+        for (i in 0 until grid.size){
+            for (j in 0 until grid[0].size){
+
+                var value = 0
+                if (grid[i][j] == 1){
+                    color += 1
+                    value = dfs(i, j, color)
+                    colored[color] = value
+                }
+
+                if (grid[i][j] == 0){
+                    hasZeros = true
+                }
+            }
+        }
+
+        if (!hasZeros){
+            return grid.size * grid[0].size
+        }
+
+        for (list in grid){
+
+            print("[")
+            list.forEach { print("${it},") }
+            print("]")
+        }
+        println()
+        println("colored: ${colored}")
+        println()
+
+        fun dfsL(i:Int, j:Int, colored: HashMap<Int, Int>, visited: HashSet<Int>): Int {
+
+            if (i < 0 || j < 0 || i >= grid.size || j >= grid[0].size ){
+                return 0
+            }
+
+            if (visited.contains(grid[i][j])){
+                return 0
+            }
+
+            visited.add(grid[i][j])
+
+            if (colored.containsKey(grid[i][j])){
+                println("for: (${i},${j}) value is: ${colored[grid[i][j]]!!}")
+                return colored[grid[i][j]]!!
+            } else {
+                return 0
+            }
+        }
+
+
+        for (i in 0 until grid.size){
+            for (j in 0 until grid[0].size){
+
+                var local_max : Int
+                var visited = HashSet<Int>()
+                if (grid[i][j] == 0){
+                    local_max = 1 + dfsL(i+1,j, colored, visited) + dfsL(i-1,j, colored, visited) + dfsL(i,j+1, colored, visited) + dfsL(i,j-1, colored, visited)
+                    maxLen = Math.max(local_max, maxLen)
+                }
+            }
+        }
+
+        return maxLen
+    }
+
 }
 
 data class Structure(var priority : Int, var index: Int, var char: Char )
@@ -1340,8 +1428,9 @@ fun main(){
     var t = "ABC"
     var height = intArrayOf(0,1,0,2,1,0,1,3,2,1,2,1)
     var k = 2
-    var matrix = arrayOf(intArrayOf(9,9,4), intArrayOf(6,6,8), intArrayOf(2,1,1)) // [[9,9,4],[6,6,8],[2,1,1]]
-    println(testClass.trap(height))
+    //var matrix = arrayOf(intArrayOf(1,1,0,1), intArrayOf(0,0,1,1), intArrayOf(1,0,0,0), intArrayOf(1,0,0,1)) // [[1,1],[1,0]]
+    var matrix = arrayOf(intArrayOf(1,1), intArrayOf(1,1))
+    println(testClass.largestIsland(matrix))
 
 }
 
