@@ -1,3 +1,4 @@
+import java.lang.Exception
 import java.util.*
 import kotlin.Comparator
 import kotlin.collections.ArrayDeque
@@ -1409,6 +1410,101 @@ class Meta {
         return maxLen
     }
 
+    // valid number
+    fun isNumber(s: String): Boolean {
+
+        // Recap:
+        // if the string number has exponential
+            // if yes? I will split in two part
+            // exponential part must be integer
+            // base part must be an integer or decimal
+            // if these two can be convert by built-in function are good string accordindly
+        // else
+            // check if a decimal or integer
+            // if it can be convert to decimal or integer
+
+        // return true
+
+
+        var hasExponential = false
+        var isE = false
+        var ise = false
+
+        if (s.contains("e") || s.contains("E")){ // O(n)
+            hasExponential = true
+        }
+
+        if (hasExponential){
+
+            var basePart = ""
+            var expoPart = ""
+            if (s.contains("e")) {
+                var arraList = s.split("e")
+
+                if (arraList.size != 2){
+                    return false
+                }
+                basePart += arraList[0]
+                expoPart += arraList[1]
+
+
+            } else {
+                var arrayList = s.split("E")
+
+                if (arrayList.size != 2){
+                    return false
+                }
+                basePart += arrayList[0]
+                expoPart += arrayList[1]
+            }
+
+            // can I convert expoPart to Int?
+            // can I convert basePart to Decimal?
+
+            try {
+                basePart.toBigDecimal() // O(N)
+            }catch (e : Exception){
+                println("${e.message}")
+                return false
+            }
+
+
+            try {
+                expoPart.toBigInteger() // O(N)
+            } catch (e : Exception){
+                println(" ${e.message}")
+                return false
+            }
+
+
+        } else {
+
+            if (s.contains(".")) {
+                try {
+                    var result = s.toBigDecimal()
+                    return true
+                } catch (e: Exception){
+                    println("result can not be convert to a Double: ${e.message}")
+                    return false
+                }
+            } else {
+
+                try {
+                    var result = s.toBigInteger()
+                    return true
+                } catch (e: Exception){
+                    println("result can not be convert to a Int: ${e.message}")
+                    return false
+                }
+
+            }
+        }
+
+        return true
+    }
+
+
+
 }
 
 data class Structure(var priority : Int, var index: Int, var char: Char )
@@ -1430,7 +1526,8 @@ fun main(){
     var k = 2
     //var matrix = arrayOf(intArrayOf(1,1,0,1), intArrayOf(0,0,1,1), intArrayOf(1,0,0,0), intArrayOf(1,0,0,1)) // [[1,1],[1,0]]
     var matrix = arrayOf(intArrayOf(1,1), intArrayOf(1,1))
-    println(testClass.largestIsland(matrix))
+    var number = "1E9"
+    println(testClass.isNumber(number))
 
 }
 
