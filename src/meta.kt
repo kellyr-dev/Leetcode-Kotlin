@@ -509,83 +509,6 @@ class Meta {
 
     }
 
-    // 249. Group Shifted Strings (pass 25/26)
-    fun groupStrings(strings: Array<String>): List<List<String>> {
-
-        var res = ArrayList<List<String>>()
-        var strs = HashMap<String, Int>()
-
-        for (words in strings){ //asuming unique values a set will be ok // asuming different values a Map will be the solution
-            if (strs.containsKey(words)){
-                strs[words] = strs[words]!! +1
-            } else {
-                strs[words] = 1
-            }
-        }
-        println("map: ${strs}")
-
-        for (word in strings){
-
-            if (strs.isEmpty()) {
-                break
-            }
-
-            var aux = ArrayList<String>()
-            if (strs.contains(word)){
-                strs.remove(word)
-                aux.add(word)
-            }
-
-            var strBld = word
-            // shift right (26 call function)
-            // for each shift check if the string is in the map
-
-            println("for word: ${word}")
-            for (i in 0 until 25){
-
-                var newString = ""
-                for (j in 0 until strBld.length){
-
-                    var newChar = strBld[j].toInt()+1
-                    if (newChar > 122){
-                        newString += "a"
-                    } else {
-                        newString += newChar.toChar()
-                    }
-                    // check each letter in the position j at strBld
-                    // get the ascii code and add +1 to get the right Shift for each letter
-                    //
-                }
-                println("combination ${i} -> ${newString}")
-
-                if (strs.isNotEmpty()){
-
-                    if (strs.contains(newString)){
-                        aux.add(newString)
-                        strs.remove(newString)
-                    }
-
-                } else {
-                    break
-                }
-
-                strBld = newString
-
-            }
-
-
-            // shift left (26 call function)
-            // for each shift check if the string is in the map
-
-            if (aux.isNotEmpty()){
-                res.add(aux)
-            }
-        }
-
-        return res
-
-    }
-
     // 670. Maximum Swap
     fun maximumSwap(num: Int): Int {
 
@@ -1410,7 +1333,7 @@ class Meta {
         return maxLen
     }
 
-    // valid number
+    // 65. Valid Number
     fun isNumber(s: String): Boolean {
 
         // Recap:
@@ -1503,8 +1426,170 @@ class Meta {
         return true
     }
 
+    // 56. Merge Intervals
+    fun merge(intervals: Array<IntArray>): Array<IntArray> {
 
+        intervals.sortWith(compareBy { it[0] })
 
+        if (intervals.size == 0){
+            return emptyArray()
+        }
+
+        if (intervals.size == 1){
+            return intervals
+        }
+
+        var result = ArrayList<IntArray>()
+        var prev = intervals[0]
+
+        for (i in 1 until intervals.size){
+
+            if (intervals[i][0] <= prev[1]) {
+                var newInterval = intArrayOf(Math.min(intervals[i][0], prev[0]), Math.max(intervals[i][1], prev[1]))
+                result.add(newInterval)
+                prev = newInterval
+            } else {
+                result.add(intervals[i])
+                prev = intervals[i]
+            }
+        }
+
+        for (list in result){
+            list.forEach { print("${it}, " ) }
+            println()
+        }
+        println()
+        return intervals
+    }
+
+    // 56. Merge Variant
+    fun mergeVariant (list1: Array<IntArray>, list2: Array<IntArray>) : Array<IntArray>{
+
+        if (list1.size == 0 && list2.size != 0){
+            return list2
+        }
+
+        if (list1.size != 0 && list2.size == 0){
+            return list1
+        }
+
+        if (list1.size == 0 && list2.size == 0){
+            return emptyArray()
+        }
+
+        var i = 0
+        var j = 0
+        var result = ArrayList<IntArray>()
+
+        while (i < list1.size && j < list2.size){
+            if (list1[i][0] <= list2[j][0]){
+                if (result.isNotEmpty()){
+                    var current = result.last()
+                    if ( list1[i][0] <= current[1] ){
+                        result.removeLast()
+                        var newInterval = intArrayOf(Math.min(list1[i][0], current[0]), Math.max(list1[i][1], current[1]) )
+                        result.add(newInterval)
+
+                    } else {
+                        result.add(list1[i])
+                    }
+                    i += 1
+                } else {
+                    result.add(list1[i])
+                    i += 1
+                }
+            } else {
+                if (result.isNotEmpty()){
+                    var current = result.last()
+                    if ( list2[j][0] <= current[1] ){
+                        result.removeLast()
+                        var newInterval = intArrayOf(Math.min(list2[j][0], current[0]), Math.max(list2[j][1], current[1]) )
+                        result.add(newInterval)
+                    } else {
+                        result.add(list2[j])
+                    }
+                    j += 1
+                } else {
+                    result.add(list2[j])
+                    j += 1
+                }
+            }
+        }
+
+        while (i < list1.size){
+            var current = result.last()
+            if (list1[i][0] <= current[1]){
+                result.removeLast()
+                result.add(intArrayOf(Math.min(current[0], list1[i][0]), Math.max(current[1], list1[i][1]) ))
+            } else {
+                result.add(list1[i])
+            }
+            i += 1
+        }
+
+        while (j < list2.size){
+            var current = result.last()
+            if (list2[j][0] <= current[0]){
+                result.add(intArrayOf(Math.min(current[0], list2[j][0]), Math.max(current[1], list2[j][1]) ))
+            } else {
+                result.add(list2[j])
+            }
+            j+= 1
+        }
+
+        for (inter in result){
+            print("(${inter[0]},${inter[1]}) -> ")
+        }
+        println()
+        return result.toTypedArray()
+
+    }
+
+    //
+    fun groupStrings(strings: Array<String>): List<List<String>> {
+
+        val res = ArrayList<ArrayList<String>>()
+        val strs = HashMap<String, ArrayList<String>>()
+
+        for (word in strings){
+
+            if (word.length == 1){ // base case
+                var key = "-1"
+                if (strs.containsKey(key)){
+                    strs[key]?.add(word)
+                } else {
+                    strs[key] = arrayListOf(word)
+                }
+            } else {
+
+                var build = StringBuilder()
+
+                for (i in 1 until word.length){
+                    println("word[i]: ${word[i]}")
+                    var diff = (word[i] - word[i-1])
+                    println("diff: ${diff}")
+                    if (diff < 0){
+                        diff += 26
+                    }
+                    build.append(diff).append(",")
+                }
+                println("build: ${build}")
+                var pattern = build.toString()
+                if (strs.containsKey(pattern)){
+                    strs[pattern]?.add(word)
+                } else {
+                    strs[pattern] = arrayListOf(word)
+                }
+            }
+        }
+
+        for (pattern in strs){
+            res.add(pattern.value)
+        }
+
+        return res
+
+    }
 }
 
 data class Structure(var priority : Int, var index: Int, var char: Char )
@@ -1517,7 +1602,7 @@ fun main(){
     var upper = 0
     var sentence = "I speak Goat Latin"
     var logs = arrayListOf("0:start:0","0:start:2","0:end:5","1:start:6","1:end:6","0:end:7")
-    var nums = arrayOf(intArrayOf(4,5), intArrayOf(4,6), intArrayOf(6,7), intArrayOf(2,3), intArrayOf(1,1)) //[[4,5],[4,6],[6,7],[2,3],[1,1]]
+    var nums = arrayOf(intArrayOf(1,3), intArrayOf(2,6), intArrayOf(6,7), intArrayOf(2,3), intArrayOf(1,1)) //[[4,5],[4,6],[6,7],[2,3],[1,1]]
     var input = "AAB"
     var order = "cba"
     var s = "ADOBECODEBANC"
@@ -1525,9 +1610,11 @@ fun main(){
     var height = intArrayOf(0,1,0,2,1,0,1,3,2,1,2,1)
     var k = 2
     //var matrix = arrayOf(intArrayOf(1,1,0,1), intArrayOf(0,0,1,1), intArrayOf(1,0,0,0), intArrayOf(1,0,0,1)) // [[1,1],[1,0]]
-    var matrix = arrayOf(intArrayOf(1,1), intArrayOf(1,1))
-    var number = "1E9"
-    println(testClass.isNumber(number))
+    var list1 = arrayOf(intArrayOf(3,11), intArrayOf(14,15), intArrayOf(18,22), intArrayOf(23,24), intArrayOf(25,26))
+    var list2 = arrayOf(intArrayOf(2,8), intArrayOf(13,20))
+
+    var list = arrayOf("abc","bcd","acef","xyz","az","ba","a","z")
+    println(testClass.groupStrings(list))
 
 }
 
