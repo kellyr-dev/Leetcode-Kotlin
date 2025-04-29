@@ -1545,7 +1545,7 @@ class Meta {
 
     }
 
-    //
+    // 249. Group Shifted Strings
     fun groupStrings(strings: Array<String>): List<List<String>> {
 
         val res = ArrayList<ArrayList<String>>()
@@ -1565,15 +1565,15 @@ class Meta {
                 var build = StringBuilder()
 
                 for (i in 1 until word.length){
-                    println("word[i]: ${word[i]}")
+
                     var diff = (word[i] - word[i-1])
-                    println("diff: ${diff}")
+
                     if (diff < 0){
                         diff += 26
                     }
                     build.append(diff).append(",")
                 }
-                println("build: ${build}")
+
                 var pattern = build.toString()
                 if (strs.containsKey(pattern)){
                     strs[pattern]?.add(word)
@@ -1590,12 +1590,58 @@ class Meta {
         return res
 
     }
+
+    // 314. Binary Tree Vertical Order Traversal
+    fun verticalOrder(root: TreeNode?): List<List<Int>> {
+
+        if (root == null){
+            return emptyList()
+        }
+
+        val map = HashMap<Int, ArrayList<Int>>()
+        val queue = ArrayList<Pair<TreeNode, Int>>()
+        queue.add(Pair(root, 0))
+
+        while (queue.isNotEmpty()){
+
+            val current = queue.removeFirst()
+
+            if (map.containsKey(current.second)){
+                map[current.second]?.add(current.first.value)
+            } else {
+                map[current.second] = arrayListOf(current.first.value)
+            }
+
+            if (current.first.left != null){
+                queue.add( Pair(current.first.left!!, current.second - 1) )
+            }
+
+            if (current.first.right != null){
+                queue.add( Pair(current.first.right!!, current.second + 1) )
+            }
+        }
+
+        val result = ArrayList<List<Int>>()
+        val pq = PriorityQueue<Pair<Int, ArrayList<Int>>>(compareBy { it.first })
+
+        for ((key, value) in map){
+            var pair = Pair(key, value)
+            pq.add(pair)
+        }
+
+        while (pq.size > 0){
+            result.add(pq.poll().second)
+        }
+
+        return result
+
+    }
+
 }
 
 data class Structure(var priority : Int, var index: Int, var char: Char )
 
 fun main(){
-
 
     val testClass = Meta()
     var lower = -1
