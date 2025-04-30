@@ -9,8 +9,6 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
 
-
-
 class Meta {
 
     // 34. Find First and Last Position of Element in Sorted Array
@@ -785,10 +783,8 @@ class Meta {
 
         fun backtracking(nums : IntArray, local_res : ArrayList<Int>, local_set : HashSet<Int>){
 
-            println("local_res: ${local_res}")
             if (local_res.size == nums.size){
                 result.add(ArrayList(local_res))
-                println("so why is not here adding")
                 return
             }
 
@@ -1224,23 +1220,6 @@ class Meta {
             }
         }
 
-        print("Left: ")
-        leftArray.forEach { print("${it} ") }
-        println()
-        print("Righ: ")
-        rightArray.forEach { print("${it} ") }
-        println()
-        print("heig: ")
-        height.forEach { print("${it} ") }
-        println()
-        print("Trap: ")
-        trapResult.forEach { print("${it} ") }
-        println()
-        println("MaxLeft: ${left_max}")
-        println("MaxRight: ${right_max}")
-
-
-
         return trapResult.sum()
 
     }
@@ -1407,7 +1386,7 @@ class Meta {
                     var result = s.toBigDecimal()
                     return true
                 } catch (e: Exception){
-                    println("result can not be convert to a Double: ${e.message}")
+                    println("message: ${e.message}")
                     return false
                 }
             } else {
@@ -1416,7 +1395,7 @@ class Meta {
                     var result = s.toBigInteger()
                     return true
                 } catch (e: Exception){
-                    println("result can not be convert to a Int: ${e.message}")
+                    println("message: ${e.message}")
                     return false
                 }
 
@@ -1635,6 +1614,51 @@ class Meta {
 
         return result
 
+    }
+
+    // 2239. Find Closest Number to Zero
+    fun findClosestNumber(nums: IntArray): Int {
+
+        if (nums.size == 1){
+            return nums[0]
+        }
+
+        val pqMin = PriorityQueue<Int>()
+        val pqMax = PriorityQueue<Int>( compareByDescending{it})
+        for (i in 0 until nums.size){
+            if (nums[i] >= 0){
+                pqMin.add( nums[i] )
+            } else {
+                pqMax.add( nums[i] )
+            }
+        }
+
+        val result = ArrayList<Int>()
+        var k = 1
+
+        while (k > 0){
+            if (pqMin.size == 0 || pqMax.size == 0){
+
+                if (pqMin.size == 0){
+                    return pqMax.poll()
+                }
+                if (pqMax.size == 0){
+                    return pqMin.poll()
+                }
+            }
+
+            var num1 = pqMin.peek()
+            var num2 = pqMax.peek()
+
+            if (Math.abs(num1) <= Math.abs(num2) ){
+                result.add(num1)
+            } else {
+                result.add(num2)
+            }
+            k -= 1
+        }
+        println("${result}")
+        return result.removeFirst()
     }
 
 }
