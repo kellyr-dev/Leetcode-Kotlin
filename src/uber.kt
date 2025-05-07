@@ -1,3 +1,5 @@
+import kotlin.math.min
+
 class Uber {
 
     // 238. Product of Array Except Self
@@ -36,14 +38,6 @@ class Uber {
         return result
     }
 
-    // 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
-
-    // 1861. Rotating the Box
-    fun rotateTheBox(boxGrid: Array<CharArray>): Array<CharArray> {
-
-        return emptyArray()
-    }
-
     // 121. Best Time to Buy and Sell Stock
     fun maxProfit(prices: IntArray): Int {
 
@@ -70,15 +64,58 @@ class Uber {
 
     }
 
-    
+    // 322. Coin Change
+    fun coinChange(coins: IntArray, amount: Int): Int {
+
+        // [1,2,5] amount=11
+        //  amount-1, count +=1
+        //  amount, count += 0
+
+        val dp = HashMap<Pair<Int, Int>, Int>()
+
+        fun helper(coins: IntArray, amount: Int, index: Int): Int{
+
+            if (amount == 0){
+                return 0
+            }
+
+            val key = Pair(index, amount)
+            if (dp.containsKey(key)) return dp[key]!!
+
+            if (amount < 0 ){
+                return Int.MAX_VALUE - 1
+            }
+
+            if (index == coins.size){
+                return Int.MAX_VALUE - 1
+            }
+
+            var r = minOf( 1 + helper(coins, amount - coins[index], index), helper(coins, amount, index+1) )
+            dp[key] = r
+            return r
+
+        }
+
+        val result = helper(coins, amount, 0)
+        if (result == Int.MAX_VALUE - 1){
+            return -1
+        } else {
+            return result
+        }
+
+
+    }
 }
 
 fun main(){
 
-    val testClass = MyCalendar()
-    testClass.book(10,20)
-    testClass.book(15,25)
-    testClass.book(20,30)
+    val testClass = Uber()
+    var coins = intArrayOf(1,2,5)
+    var amount = 11
+
+    println(testClass.coinChange(coins, 11))
+
+
 }
 
 
