@@ -38,7 +38,39 @@ class Uber {
 
     // 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
 
-    //
+    // 1861. Rotating the Box
+    fun rotateTheBox(boxGrid: Array<CharArray>): Array<CharArray> {
+
+        return emptyArray()
+    }
+
+    // 121. Best Time to Buy and Sell Stock
+    fun maxProfit(prices: IntArray): Int {
+
+        if (prices.size <= 1) {
+            return 0
+        }
+
+        var right = 1
+        var left = 0
+        var maxProfit = 0
+
+        while (right < prices.size){
+
+            if (prices[right] <= prices[left]){
+                left = right
+                right += 1
+            } else {
+                maxProfit = Math.max(maxProfit, prices[right] - prices[left])
+                right += 1
+            }
+
+        }
+        return maxProfit
+
+    }
+
+    
 }
 
 fun main(){
@@ -49,19 +81,12 @@ fun main(){
     testClass.book(20,30)
 }
 
+
+    // 729. My Calendar I
+
 class MyCalendar() {
 
     val bookings = ArrayList<Pair<Int,Int>>() // start & end
-
-    // [10, 20], [15, 25], [20, 30],
-    //  [12,18]
-    // put [45, 45] // if (start < iEnd)
-    //  if (start < istar) && (end < istar){
-    // return true
-    //else
-    // return false
-    //
-
     fun book(startTime: Int, endTime: Int): Boolean {
 
         for (book in bookings){
