@@ -1,4 +1,7 @@
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.math.max
 
 
 class Google {
@@ -127,18 +130,54 @@ class Google {
     // 15. 3Sum
     fun threeSum(nums: IntArray): List<List<Int>> {
         // return all triplets that are equal to 0
+        return emptyList()
+    }
+    // 3. Longest Substring Without Repeating Characters
+    fun lengthOfLongestSubstring(s: String): Int {
 
-        
+        if (s.length <= 1){
+            return s.length
+        }
+
+        // p w w k e w
+        //           ^
+        //       ^
+
+        var left = 0
+        var right = 1
+        val map = HashMap<Char, Int>()
+        var maxLen = Int.MIN_VALUE
+
+        while (right < s.length){
+
+            println("map: ${map}")
+            if (map.containsKey(s[right])){
+                map[s[right]] = map[s[right]]!! + 1
+            } else {
+                map[s[right]] = 1
+            }
+
+            while (map.get(s[right])!! > 1){
+                map[s[left]] = map[s[left]]!! - 1
+                left += 1
+            }
+
+            maxLen = maxOf(maxLen, right - left + 1)
+            right +=1
+
+        }
+        return maxLen
 
     }
 }
+
 
 fun main(){
 
     val testClass = Google()
     val num1 = intArrayOf(-1,0,1,2,-1,-4)
-    val num2 = intArrayOf(2,2,5,4,4)
+    val string = "bbbbb"
 
-    println(testClass.threeSum(num1))
+    println(testClass.lengthOfLongestSubstring(string))
 
 }
