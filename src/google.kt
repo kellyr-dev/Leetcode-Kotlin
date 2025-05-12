@@ -169,6 +169,55 @@ class Google {
         return maxLen
 
     }
+
+    // 200. Number of Islands
+    fun numIslands(grid: Array<CharArray>): Int {
+        var count = 0
+        var map = HashSet<Pair<Int, Int>>()
+
+        fun dfs(i: Int, j: Int, map: HashSet<Pair<Int, Int>>){
+
+            if (i < 0 || i >= grid.size || j < 0 || j >= grid[0].size){
+                return
+            }
+
+            var pair = Pair(i,j)
+            if (map.contains(pair)){
+                return
+            }
+
+            if (grid[i][j] == '1'){
+
+                map.add(pair)
+                dfs(i+1, j, map)
+                dfs(i-1, j, map)
+                dfs(i, j+1, map)
+                dfs(i, j-1, map)
+
+            } else {
+                return
+            }
+
+        }
+
+        for (i in 0 until grid.size){
+
+            for (j in 0 until grid[0].size){
+
+                if ( !(map.contains(Pair(i,j)) )){
+                    if (grid[i][j] == '1'){
+
+                        dfs(i,j, map)
+                        count += 1
+                    }
+                }
+            }
+        }
+        return count
+
+    }
+
+    
 }
 
 
