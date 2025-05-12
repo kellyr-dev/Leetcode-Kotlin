@@ -173,51 +173,32 @@ class Google {
     // 200. Number of Islands
     fun numIslands(grid: Array<CharArray>): Int {
         var count = 0
-        var map = HashSet<Pair<Int, Int>>()
+        val map = HashSet<Pair<Int, Int>>()
 
-        fun dfs(i: Int, j: Int, map: HashSet<Pair<Int, Int>>){
+        fun dfs(i: Int, j: Int){
 
-            if (i < 0 || i >= grid.size || j < 0 || j >= grid[0].size){
+            if (i < 0 || i >= grid.size || j < 0 || j >= grid[0].size || grid[i][j] == '0'){
                 return
             }
-
-            var pair = Pair(i,j)
-            if (map.contains(pair)){
-                return
-            }
-
-            if (grid[i][j] == '1'){
-
-                map.add(pair)
-                dfs(i+1, j, map)
-                dfs(i-1, j, map)
-                dfs(i, j+1, map)
-                dfs(i, j-1, map)
-
-            } else {
-                return
-            }
-
+            grid[i][j] = '0' // mark for the next iteration
+            dfs(i+1, j)
+            dfs(i-1, j)
+            dfs(i, j+1)
+            dfs(i, j-1)
         }
 
         for (i in 0 until grid.size){
-
             for (j in 0 until grid[0].size){
-
-                if ( !(map.contains(Pair(i,j)) )){
-                    if (grid[i][j] == '1'){
-
-                        dfs(i,j, map)
-                        count += 1
-                    }
+                if (grid[i][j] == '1'){
+                    count += 1
+                    dfs(i,j)
                 }
             }
         }
         return count
-
     }
 
-    
+
 }
 
 
