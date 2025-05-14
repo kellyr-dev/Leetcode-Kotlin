@@ -11,49 +11,49 @@ class Google {
     fun findMedianSortedArrays(nums1: IntArray, nums2: IntArray): Double {
 
         val minHeap = PriorityQueue<Int>()
-        val maxHeap = PriorityQueue<Int>( compareByDescending { it })
+        val maxHeap = PriorityQueue<Int>(compareByDescending { it })
 
         var i = 0
         var j = 0
 
-        while (i < nums1.size && j < nums2.size){
+        while (i < nums1.size && j < nums2.size) {
 
             var num = 0
-            if (nums1[i] <= nums2[j]){
+            if (nums1[i] <= nums2[j]) {
                 num = nums1[i]
                 i += 1
             } else {
                 num = nums2[j]
-                j+=1
+                j += 1
             }
 
             minHeap.add(num)
-            if (minHeap.size > maxHeap.size + 1){
+            if (minHeap.size > maxHeap.size + 1) {
                 maxHeap.add(minHeap.poll())
             }
 
         }
 
-        while (i < nums1.size){
+        while (i < nums1.size) {
             minHeap.add(nums1[i])
-            if (minHeap.size > maxHeap.size + 1){
+            if (minHeap.size > maxHeap.size + 1) {
                 maxHeap.add(minHeap.poll())
             }
-            i+=1
+            i += 1
         }
 
-        while (j < nums2.size){
+        while (j < nums2.size) {
             minHeap.add(nums2[j])
-            if (minHeap.size > maxHeap.size + 1){
+            if (minHeap.size > maxHeap.size + 1) {
                 maxHeap.add(minHeap.poll())
             }
-            j+=1
+            j += 1
         }
         println("minHeap: ${minHeap} -> ${minHeap.poll()}")
         println("maxHeap: ${maxHeap} -> ${maxHeap.poll()}")
 
-        if (minHeap.size == maxHeap.size){
-            return (minHeap.poll() + maxHeap.poll())/2.0
+        if (minHeap.size == maxHeap.size) {
+            return (minHeap.poll() + maxHeap.poll()) / 2.0
         } else {
             return minHeap.poll().toDouble()
         }
@@ -70,10 +70,10 @@ class Google {
         var l11 = l1
         var l22 = l2
 
-        while (l11 != null && l22 != null){
+        while (l11 != null && l22 != null) {
 
             val aux = l11.value + l22.value + carry
-            if (aux >= 10){ // 12/10 = 1.2
+            if (aux >= 10) { // 12/10 = 1.2
                 carry = 1
                 listResult.add(aux % 10)
             } else {
@@ -86,10 +86,10 @@ class Google {
 
         }
 
-        while (l11 != null){
+        while (l11 != null) {
 
             val aux = l11.value + carry
-            if (aux >= 10){
+            if (aux >= 10) {
                 carry = 1
                 listResult.add(aux % 10)
             } else {
@@ -99,10 +99,10 @@ class Google {
             l11 = l11.next
         }
 
-        while (l22 != null){
+        while (l22 != null) {
 
             val aux = l22.value + carry
-            if (aux >= 10){
+            if (aux >= 10) {
                 carry = 1
                 listResult.add(aux % 10)
             } else {
@@ -112,14 +112,14 @@ class Google {
             l22 = l22.next
         }
 
-        if (carry == 1){
+        if (carry == 1) {
             listResult.add(1)
         }
 
         var head = ListNode(listResult.removeFirst())
         var iterator = head
 
-        while (listResult.isNotEmpty()){
+        while (listResult.isNotEmpty()) {
             iterator.next = ListNode(listResult.removeFirst())
             iterator = iterator.next!!
         }
@@ -133,10 +133,11 @@ class Google {
         // return all triplets that are equal to 0
         return emptyList()
     }
+
     // 3. Longest Substring Without Repeating Characters
     fun lengthOfLongestSubstring(s: String): Int {
 
-        if (s.length <= 1){
+        if (s.length <= 1) {
             return s.length
         }
 
@@ -149,22 +150,22 @@ class Google {
         val map = HashMap<Char, Int>()
         var maxLen = Int.MIN_VALUE
 
-        while (right < s.length){
+        while (right < s.length) {
 
             println("map: ${map}")
-            if (map.containsKey(s[right])){
+            if (map.containsKey(s[right])) {
                 map[s[right]] = map[s[right]]!! + 1
             } else {
                 map[s[right]] = 1
             }
 
-            while (map.get(s[right])!! > 1){
+            while (map.get(s[right])!! > 1) {
                 map[s[left]] = map[s[left]]!! - 1
                 left += 1
             }
 
             maxLen = maxOf(maxLen, right - left + 1)
-            right +=1
+            right += 1
 
         }
         return maxLen
@@ -178,23 +179,23 @@ class Google {
         var count = 0
         val map = HashSet<Pair<Int, Int>>()
 
-        fun dfs(i: Int, j: Int){
+        fun dfs(i: Int, j: Int) {
 
-            if (i < 0 || i >= grid.size || j < 0 || j >= grid[0].size || grid[i][j] == '0'){
+            if (i < 0 || i >= grid.size || j < 0 || j >= grid[0].size || grid[i][j] == '0') {
                 return
             }
             grid[i][j] = '0' // mark for the next iteration
-            dfs(i+1, j)
-            dfs(i-1, j)
-            dfs(i, j+1)
-            dfs(i, j-1)
+            dfs(i + 1, j)
+            dfs(i - 1, j)
+            dfs(i, j + 1)
+            dfs(i, j - 1)
         }
 
-        for (i in 0 until grid.size){
-            for (j in 0 until grid[0].size){
-                if (grid[i][j] == '1'){
+        for (i in 0 until grid.size) {
+            for (j in 0 until grid[0].size) {
+                if (grid[i][j] == '1') {
                     count += 1
-                    dfs(i,j)
+                    dfs(i, j)
                 }
             }
         }
@@ -206,6 +207,34 @@ class Google {
     // 3481. Apply Substitutions
 
     // 22. Generate Parentheses
+    fun generateParenthesis(n: Int): List<String> {
+
+        val opn = 0
+        val close = 0
+        val result = ArrayList<String>()
+
+        fun helper(opn : Int, close : Int, string : String){
+
+            // println("string: ${string}")
+            if (opn > n || close > n || opn < close){
+                return
+            }
+
+            if (opn == n && close == n){
+                result.add(string)
+                return
+            }
+
+            helper(opn+1, close, string+"(")
+            helper(opn, close+1, string+")")
+
+        }
+
+        helper(opn, close, "")
+        return result
+    }
+
+    
 }
 
 
@@ -217,5 +246,7 @@ fun main(){
 
     val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
     val text = "%A%_%B%"
+    val n = 8
+    println(testClass.generateParenthesis(n))
 
 }
