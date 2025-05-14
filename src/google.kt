@@ -1,4 +1,5 @@
 import java.util.*
+import kotlin.collections.ArrayDeque
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.math.max
@@ -170,6 +171,8 @@ class Google {
 
     }
 
+    // 42. Trapping Rain Water
+
     // 200. Number of Islands
     fun numIslands(grid: Array<CharArray>): Int {
         var count = 0
@@ -198,7 +201,11 @@ class Google {
         return count
     }
 
+    // 3453. Separate Squares I
 
+    // 3481. Apply Substitutions
+
+    // 22. Generate Parentheses
 }
 
 
@@ -208,6 +215,7 @@ fun main(){
     val num1 = intArrayOf(-1,0,1,2,-1,-4)
     val string = "bbbbb"
 
-    println(testClass.lengthOfLongestSubstring(string))
+    val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
+    val text = "%A%_%B%"
 
 }
