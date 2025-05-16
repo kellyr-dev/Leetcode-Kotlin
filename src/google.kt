@@ -234,6 +234,83 @@ class Google {
         return result
     }
 
+    // 56. Merge Intervals
+    fun merge(intervals: Array<IntArray>): Array<IntArray> {
+
+        if (intervals.size == 1){
+            return arrayOf(intervals[0])
+        }
+
+        intervals.sortBy{it[0]}
+        val result = ArrayList<IntArray>()
+        result.add(intArrayOf(intervals[0][0], intervals[0][1]) )
+
+        var i = 1
+
+        while (i < intervals.size){
+
+            if (intervals[i][0] <= result.last()[1]){
+
+                val current = result.removeLast()
+                val aux = intArrayOf( Math.min(intervals[i][0], current[0]), Math.max(intervals[i][1], current[1]) )
+                result.add(aux)
+            } else {
+                result.add(intArrayOf(intervals[i][0], intervals[i][1]))
+            }
+            i += 1
+
+        }
+
+        return result.toTypedArray()
+    }
+
+    // 198. House Robber
+    fun rob(nums: IntArray): Int {
+
+        val dp = HashMap<Int, Int>()
+        fun helper(i : Int, nums: IntArray) : Int{
+
+            if (i >= nums.size){
+                return 0
+            }
+
+            if (dp.containsKey(i)) return dp[i]!!
+
+            var result = Math.max( nums[i] + helper(i+2, nums), helper(i+1, nums) )
+            dp[i] = result
+            return result
+        }
+
+        return helper(0, nums)
+
+    }
+
+    // 11. Container With Most Water
+    fun maxArea(height: IntArray): Int {
+
+        if (height.size == 1){
+            return 0
+        }
+
+        var left = 0
+        var right = height.size-1
+        var maxArea = 0
+
+        while (left < right ){
+            var currentArea = (right - left) * (Math.min(height[left], height[right]) )
+            maxArea = Math.max( maxArea, currentArea)
+
+            if ( height[left] < height[right]){
+                left += 1
+            } else {
+                right -=1
+            }
+        }
+
+        return maxArea
+
+    }
+
     
 }
 
