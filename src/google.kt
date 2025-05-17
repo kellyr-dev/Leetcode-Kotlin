@@ -1,3 +1,4 @@
+import java.math.BigInteger
 import java.util.*
 import kotlin.collections.ArrayDeque
 import kotlin.collections.ArrayList
@@ -311,7 +312,55 @@ class Google {
 
     }
 
-    
+    // 560. Subarray Sum Equals K
+
+    // 7. Reverse Integer
+    fun reverse(x: Int): Int {
+
+        // 123 % 10 = 3 (value)
+        // 123 / 10 = 12 (next Iteration)
+        // 12.3
+
+        var isNeg = false
+        if (x < 0){
+            isNeg = true
+        }
+
+        if (x == 0){
+            return 0
+        }
+
+        if (x == Int.MIN_VALUE || x == Int.MAX_VALUE){
+            return 0
+        }
+
+        var aux = 1
+        if (isNeg){
+            aux = -x
+        } else {
+            aux = x
+        }
+
+        var queue = StringBuilder()
+        while (aux != 0){
+
+            queue.append(aux % 10)
+            aux = (aux/10).toInt()
+
+        }
+
+        var result = queue.toString().toDouble()
+        if (isNeg){
+            result *= -1
+        }
+
+        if (result > Int.MAX_VALUE || result < Int.MIN_VALUE){
+            return 0
+        }
+
+        return result.toInt()
+
+    }
 }
 
 
@@ -323,7 +372,7 @@ fun main(){
 
     val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
     val text = "%A%_%B%"
-    val n = 8
-    println(testClass.generateParenthesis(n))
+    val n = -2147483648
+    println(testClass.reverse(n))
 
 }
