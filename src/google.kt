@@ -361,6 +361,70 @@ class Google {
         return result.toInt()
 
     }
+
+    // 17. Letter Combinations of a Phone Number
+    fun letterCombinations(digits: String): List<String> {
+
+        val codes = hashMapOf<Char, String>(
+            '2' to "abc",
+            '3' to "def",
+            '4' to "ghi",
+            '5' to "jkl",
+            '6' to "mno",
+            '7' to "pqrs",
+            '8' to "tuv",
+            '9' to "wxyz"
+        )
+
+        if (digits.length == 0){
+            return emptyList()
+        }
+
+        var result = ArrayList<String>()
+
+        for (c in digits){
+            //   println("char: $c")
+
+            if ( !(codes.containsKey(c)) ) {
+                continue
+            }
+            var aux = codes[c]!!
+            // abc by [ff, fx, fy, fz]
+            // a*[ff, fx, fy, fz] = [aff, afx, afy, afz]
+            // b*[ff, fx, fy, fz] = [bff, bfx, bfy, bfz]
+            // c*[ff, fx, fy, fz] = [cff, cfx, cfy, cfz]
+
+            // abc by []
+            // a*[] = [a]
+            // b*[] = [b]
+            // c*[] = [c]
+
+            if ( result.isNotEmpty() ){
+
+                var auxArr = ArrayList<String>()
+                while (result.isNotEmpty()){
+
+                    var value = result.removeLast()
+                    for (w in aux){
+                        var newString = value + w
+                        auxArr.add(newString)
+                    }
+
+                }
+                result = auxArr
+
+            } else {
+                for (w in aux){
+                    result.add(w.toString())
+                }
+            }
+        }
+
+        return result
+
+    }
+
+    
 }
 
 
@@ -373,6 +437,7 @@ fun main(){
     val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
     val text = "%A%_%B%"
     val n = -2147483648
-    println(testClass.reverse(n))
+    val digits = "203"
+    println(testClass.letterCombinations(digits))
 
 }
