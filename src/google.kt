@@ -1,5 +1,6 @@
 import java.math.BigInteger
 import java.util.*
+import kotlin.Comparator
 import kotlin.collections.ArrayDeque
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -425,8 +426,36 @@ class Google {
     }
 
     // 253. Meeting Rooms II
-    fun minMeetingRooms(intervals: Array<IntArray>): Int {
 
+    // 128. Longest Consecutive Sequence
+    fun longestConsecutive(nums: IntArray): Int {
+
+        var lenghOf = 0
+        val existed = HashSet<Int>()
+
+        for (i in 0 until nums.size){
+
+            if ( !(existed.contains(nums[i])) ){
+                existed.add(nums[i])
+            }
+        }
+
+        for (j in 0 until nums.size){
+
+            var localMaxOf = 0
+            if ( existed.contains(nums[j]+1) ){
+                continue
+            } else {
+                var aux = nums[j]
+                while (existed.contains(aux) ) {
+                    localMaxOf += 1
+                    aux = aux - 1
+                }
+
+                lenghOf = Math.max(lenghOf, localMaxOf)
+            }
+        }
+        return lenghOf
     }
 }
 
@@ -440,7 +469,6 @@ fun main(){
     val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
     val text = "%A%_%B%"
     val n = -2147483648
-    val digits = "203"
-    println(testClass.letterCombinations(digits))
+    val intervals = arrayOf(intArrayOf(9,16), intArrayOf(6,16), intArrayOf(1,9), intArrayOf(3,15))
 
 }
