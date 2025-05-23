@@ -457,6 +457,18 @@ class Google {
         }
         return lenghOf
     }
+
+    // 84. Largest Rectangle in Histogram
+
+    // 2337. Move Pieces to Obtain a String
+
+    // 1944. Number of Visible People in a Queue
+
+    // 6. Zigzag Conversion
+
+    // 3532. Path Existence Queries in a Graph I
+
+    
 }
 
 
@@ -470,5 +482,8 @@ fun main(){
     val text = "%A%_%B%"
     val n = -2147483648
     val intervals = arrayOf(intArrayOf(9,16), intArrayOf(6,16), intArrayOf(1,9), intArrayOf(3,15))
+    val start = "_L__R__R_"
+    val end = "L______RR"
+    println(testClass.canChange(start, end))
 
 }
