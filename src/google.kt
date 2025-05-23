@@ -468,7 +468,52 @@ class Google {
 
     // 3532. Path Existence Queries in a Graph I
 
-    
+
+    fun decodeString(s: String): String {
+        
+        val stack = ArrayDeque<Char>()
+
+        for (c in s){
+
+            if (c != ']'){
+                stack.add(c)
+            } else{
+
+                var aux = ""
+                while (stack.last() != '['){
+                    aux = stack.removeLast() + aux
+                }
+
+                stack.removeLast()
+                var auxK = ""
+                while ( stack.isNotEmpty() && stack.last().isDigit()){
+                    auxK = stack.removeLast() + auxK
+                }
+
+                var k = auxK.toInt()
+                var result = ""
+                var i = 0
+                while ( i < k){
+                    result += aux
+                    i+= 1
+                }
+
+                for (ch in result){
+                    stack.add(ch)
+                }
+
+            }
+
+        }
+
+        var res = ""
+        while (stack.isNotEmpty()){
+            res += stack.removeFirst()
+        }
+        return res
+
+    }
+
 }
 
 
@@ -484,6 +529,8 @@ fun main(){
     val intervals = arrayOf(intArrayOf(9,16), intArrayOf(6,16), intArrayOf(1,9), intArrayOf(3,15))
     val start = "_L__R__R_"
     val end = "L______RR"
-    println(testClass.canChange(start, end))
+    val s = "322[leetcode]"
+    println(testClass.decodeString(s))
+
 
 }
