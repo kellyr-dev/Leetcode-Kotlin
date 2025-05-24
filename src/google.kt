@@ -4,6 +4,7 @@ import kotlin.Comparator
 import kotlin.collections.ArrayDeque
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.collections.HashSet
 import kotlin.math.max
 
 
@@ -470,7 +471,7 @@ class Google {
 
 
     fun decodeString(s: String): String {
-        
+
         val stack = ArrayDeque<Char>()
 
         for (c in s){
@@ -514,6 +515,44 @@ class Google {
 
     }
 
+    // 402. Remove K Digits
+    fun removeKdigits(num: String, k: Int): String {
+
+        val candidates = HashSet<String>()
+        fun helper(string : String, k : Int, i : Int){
+
+            if (i >= string.length || string.length < k){
+                return
+            }
+
+            if (k == 0){
+                if ( !(candidates.contains(string))){
+                    candidates.add(string)
+                    return
+                }
+            }
+
+            var newString = string.replaceRange(i,i+1, "")
+            println("newString: ${newString} and k: ${k}")
+            helper(newString, k-1, i)
+            helper(string, k,i+1)
+
+        }
+
+        helper(num, k, 0)
+        println("candidates: ${candidates}")
+
+        var result = Int.MAX_VALUE
+
+        for (valor in candidates){
+            var aux = valor.toInt()
+            if (aux < result){
+                result = aux
+            }
+        }
+
+        return result.toString()
+    }
 }
 
 
@@ -529,8 +568,9 @@ fun main(){
     val intervals = arrayOf(intArrayOf(9,16), intArrayOf(6,16), intArrayOf(1,9), intArrayOf(3,15))
     val start = "_L__R__R_"
     val end = "L______RR"
-    val s = "322[leetcode]"
-    println(testClass.decodeString(s))
+    val s = "112"
+    val k = 1
+    println(testClass.removeKdigits(s, k))
 
 
 }
