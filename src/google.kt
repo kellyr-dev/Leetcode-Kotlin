@@ -5,6 +5,7 @@ import kotlin.collections.ArrayDeque
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
+import kotlin.math.ceil
 import kotlin.math.max
 
 
@@ -553,15 +554,42 @@ class Google {
 
         return result.toString()
     }
+
+    // 1283. Find the Smallest Divisor Given a Threshold (TLE)
+    fun smallestDivisor(nums: IntArray, threshold: Int): Int {
+
+        var result = 1
+        var maxValue = nums.max()
+        for (i in 1 .. maxValue){
+
+            var sumaAux = 0.0
+
+            //  println("============i:${i} ====================")
+            for (num in nums){
+                var div = ceil((num/i.toDouble()))
+                //         println("num: ${num}")
+                //         println("div: ${div}")
+
+                sumaAux += div
+            }
+
+            if (sumaAux <= threshold){
+                result = i
+                break
+            }
+        }
+
+        return result
+
+    }
+
 }
 
 
 fun main(){
 
     val testClass = Google()
-    val num1 = intArrayOf(-1,0,1,2,-1,-4)
     val string = "bbbbb"
-
     val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
     val text = "%A%_%B%"
     val n = -2147483648
@@ -570,7 +598,10 @@ fun main(){
     val end = "L______RR"
     val s = "112"
     val k = 1
-    println(testClass.removeKdigits(s, k))
+    val num = intArrayOf(1,5,3,2)
+    val threshold = 83091
+    println(testClass.smallestDivisor(num, threshold))
+
 
 
 }
