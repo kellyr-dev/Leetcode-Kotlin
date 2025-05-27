@@ -555,27 +555,28 @@ class Google {
         return result.toString()
     }
 
-    // 1283. Find the Smallest Divisor Given a Threshold (TLE)
+    // 1283. Find the Smallest Divisor Given a Threshold
     fun smallestDivisor(nums: IntArray, threshold: Int): Int {
 
         var result = 1
-        var maxValue = nums.max()
-        for (i in 1 .. maxValue){
+        val maxValue = nums.max()
+        var left = 0
+        var right = maxValue
+        while ( left <= right) {
 
             var sumaAux = 0.0
+            val mid = (left + right) / 2
 
-            //  println("============i:${i} ====================")
             for (num in nums){
-                var div = ceil((num/i.toDouble()))
-                //         println("num: ${num}")
-                //         println("div: ${div}")
-
+                val div = ceil( ( (num * 1.0) / mid ))
                 sumaAux += div
             }
 
             if (sumaAux <= threshold){
-                result = i
-                break
+                result = mid
+                right = mid - 1
+            } else {
+                left = mid + 1
             }
         }
 
@@ -583,6 +584,7 @@ class Google {
 
     }
 
+    // 
 }
 
 
@@ -598,8 +600,8 @@ fun main(){
     val end = "L______RR"
     val s = "112"
     val k = 1
-    val num = intArrayOf(1,5,3,2)
-    val threshold = 83091
+    val num = intArrayOf(44,22,33,11, 1)
+    val threshold =5
     println(testClass.smallestDivisor(num, threshold))
 
 
