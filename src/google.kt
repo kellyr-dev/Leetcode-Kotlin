@@ -584,7 +584,43 @@ class Google {
 
     }
 
-    // 
+    // 1944. Number of Visible People in a Queue (TLE)
+    fun canSeePersonsCount(heights: IntArray): IntArray {
+
+        //var result = IntArray(heights.size)
+        var result = ArrayList<Int>()
+        for (i in 0 until heights.size-1){
+
+
+            var count = 1
+            if (heights[i] < heights[i+1]){
+                result.add(count)
+                continue
+            }
+            var flag = false
+            var max_local = heights[i+1]
+            for (j in i+2 until heights.size){
+
+                if (heights[j] > max_local && flag){
+                    count += 1
+                    max_local = heights[j]
+                }
+
+                if (heights[j] > heights[i]){
+                    flag = true
+                }
+
+            }
+
+            //result[i] = count
+            result.add(count)
+            println("[i]:${i} -> ${result}")
+
+
+        }
+
+        return result.toIntArray()
+    }
 }
 
 
@@ -602,8 +638,7 @@ fun main(){
     val k = 1
     val num = intArrayOf(44,22,33,11, 1)
     val threshold =5
-    println(testClass.smallestDivisor(num, threshold))
-
-
+    val heights = intArrayOf(4,3,2,1)
+    println(testClass.canSeePersonsCount(heights))
 
 }
