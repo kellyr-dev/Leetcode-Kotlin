@@ -625,18 +625,24 @@ class Google {
     // 162. Find Peak Element
     fun findPeakElement(nums: IntArray): Int {
 
-        var result = 0
-        var maxValue = Int.MIN_VALUE
-        for (i in 0 until nums.size){
+        var left = 0
+        var right = nums.size - 1
 
-            if (nums[i] >= maxValue){
-                maxValue = nums[i]
-                result = i
+        while (left < right){
+
+            val mid = (left + right ) / 2
+            if (nums[mid] > nums[mid+1]){
+                right = mid
+            } else {
+                left = mid + 1
             }
+
         }
 
-        return result
+        return left
     }
+
+    
 }
 
 
