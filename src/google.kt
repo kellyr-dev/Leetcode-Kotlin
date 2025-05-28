@@ -621,6 +621,11 @@ class Google {
 
         return result.toIntArray()
     }
+
+    // 162. Find Peak Element
+    fun findPeakElement(nums: IntArray): Int {
+
+    }
 }
 
 
