@@ -642,7 +642,28 @@ class Google {
         return left
     }
 
-    
+    // 739. Daily Temperatures
+    fun dailyTemperatures(temperatures: IntArray): IntArray {
+
+        var result = IntArray(temperatures.size)
+
+        val stack = ArrayDeque<Pair<Int, Int>>()
+
+        for (i in 0 until temperatures.size){
+
+            println("stack: ${stack}")
+
+            while (stack.isNotEmpty() && temperatures[i] > stack.last().first){
+                result[stack.last().second] = i - stack.removeLast().second
+            }
+            stack.add(Pair(temperatures[i], i))
+
+        }
+        println("result =>")
+        result.forEach { print("${it}->") }
+        return result
+    }
+
 }
 
 
@@ -660,7 +681,7 @@ fun main(){
     val k = 1
     val num = intArrayOf(44,22,33,11, 1)
     val threshold =5
-    val heights = intArrayOf(4,3,2,1)
-    println(testClass.canSeePersonsCount(heights))
+    val temperatures = intArrayOf(73,74,75,71,69,72,76,73)
+    println(testClass.dailyTemperatures(temperatures))
 
 }
