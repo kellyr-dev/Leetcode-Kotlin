@@ -664,6 +664,37 @@ class Google {
         return result
     }
 
+    // 496. Next Greater Element I
+    fun nextGreaterElement(nums1: IntArray, nums2: IntArray): IntArray {
+
+        val map = HashMap<Int, Int>()
+        val stack = ArrayDeque<Int>()
+
+        stack.add(nums2[0])
+        for (i in 1 until nums2.size){
+
+            while (stack.isNotEmpty() && nums2[i] > stack.last() ){
+                map[stack.removeLast()] = nums2[i]
+            }
+            stack.add(nums2[i])
+
+        }
+        while (stack.isNotEmpty()){
+            map[stack.removeLast()] = -1
+        }
+
+
+        println("map: ${map}")
+
+        val result = IntArray(nums1.size)
+
+        for (i in 0 until nums1.size){
+            result[i] = map[nums1[i]]!!
+        }
+
+        return result
+    }
+
 }
 
 
@@ -681,7 +712,8 @@ fun main(){
     val k = 1
     val num = intArrayOf(44,22,33,11, 1)
     val threshold =5
-    val temperatures = intArrayOf(73,74,75,71,69,72,76,73)
-    println(testClass.dailyTemperatures(temperatures))
+    val num1 = intArrayOf(4,1,2)
+    val num2 = intArrayOf(1,3,4,2)
+    println(testClass.nextGreaterElement(num1, num2))
 
 }
