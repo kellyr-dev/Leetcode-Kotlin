@@ -516,45 +516,6 @@ class Google {
 
     }
 
-    // 402. Remove K Digits
-    fun removeKdigits(num: String, k: Int): String {
-
-        val candidates = HashSet<String>()
-        fun helper(string : String, k : Int, i : Int){
-
-            if (i >= string.length || string.length < k){
-                return
-            }
-
-            if (k == 0){
-                if ( !(candidates.contains(string))){
-                    candidates.add(string)
-                    return
-                }
-            }
-
-            var newString = string.replaceRange(i,i+1, "")
-            println("newString: ${newString} and k: ${k}")
-            helper(newString, k-1, i)
-            helper(string, k,i+1)
-
-        }
-
-        helper(num, k, 0)
-        println("candidates: ${candidates}")
-
-        var result = Int.MAX_VALUE
-
-        for (valor in candidates){
-            var aux = valor.toInt()
-            if (aux < result){
-                result = aux
-            }
-        }
-
-        return result.toString()
-    }
-
     // 1283. Find the Smallest Divisor Given a Threshold
     fun smallestDivisor(nums: IntArray, threshold: Int): Int {
 
@@ -695,6 +656,54 @@ class Google {
         return result
     }
 
+    // 402. Remove K Digits
+    fun removeKdigits(num: String, k: Int): String {
+
+        if (k >= num.length){
+            return "0"
+        }
+
+
+        var aux = k
+        val stack = ArrayDeque<Int>()
+
+        stack.add(num[0].digitToInt())
+        for (i in 1 until num.length){
+
+            while (stack.isNotEmpty() && aux > 0 && num[i].digitToInt() < stack.last() ) {
+                stack.removeLast()
+                aux -= 1
+            }
+            stack.add(num[i].digitToInt())
+
+
+        }
+
+        if (aux > 0){
+            while (stack.isNotEmpty() && aux > 0 ){
+                stack.removeLast()
+                aux -= 1
+            }
+        }
+
+        val result = StringBuilder()
+        var leadingZero = true
+        while (stack.isNotEmpty()){
+
+            if (leadingZero && stack.first() == 0){
+                stack.removeFirst()
+                continue
+            }
+            leadingZero = false
+            result.append(stack.removeFirst())
+
+        }
+
+        if (result.isEmpty()) return "0"
+        return result.toString()
+
+    }
+
 }
 
 
@@ -708,12 +717,10 @@ fun main(){
     val intervals = arrayOf(intArrayOf(9,16), intArrayOf(6,16), intArrayOf(1,9), intArrayOf(3,15))
     val start = "_L__R__R_"
     val end = "L______RR"
-    val s = "112"
-    val k = 1
     val num = intArrayOf(44,22,33,11, 1)
     val threshold =5
-    val num1 = intArrayOf(4,1,2)
-    val num2 = intArrayOf(1,3,4,2)
-    println(testClass.nextGreaterElement(num1, num2))
+    val num2 = "10"
+    val k = 1
+    println(testClass.removeKdigits(num2, k))
 
 }
