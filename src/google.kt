@@ -463,6 +463,99 @@ class Google {
     // 84. Largest Rectangle in Histogram
 
     // 2337. Move Pieces to Obtain a String
+    fun canChange(start: String, target: String): Boolean {
+        
+        if (start.length != target.length){
+            return false
+        }
+
+        var startR = 0
+        var startL = 0
+
+        var targetR = 0
+        var targetL = 0
+
+        for (i in 0 until start.length){
+
+            if (start[i] == 'R'){
+                startR +=1
+            }
+
+            if (start[i] == 'L'){
+                startL += 1
+            }
+        }
+
+        for (j in 0 until target.length){
+
+            if (target[j] == 'R'){
+                targetR +=1
+            }
+
+            if (target[j] == 'L'){
+                targetL +=1
+            }
+        }
+
+        if (targetR != startR || startL != targetL){
+            return false
+        }
+
+        var i = 0
+        var j = 0
+
+        val stackStart = ArrayDeque<Pair<Char, Int>>()
+        val stackTarget = ArrayDeque<Pair<Char, Int>>()
+
+        while (i < start.length){
+
+            if (start[i] == 'L' || start[i] == 'R'){
+                stackStart.add( Pair(start[i], i) )
+            }
+
+            i += 1
+
+        }
+
+        while (j < target.length){
+
+            if (target[j] == 'L' || target[j] == 'R'){
+                stackTarget.add( Pair(target[j], j) )
+            }
+
+            j += 1
+        }
+
+        // if (L in start is greater than L in target) ok
+        // if (L in start is less than L in target) not
+
+        // if (R in start is less than R in target) ok
+        // if (R in start is greater than R in target) not
+
+        while (stackStart.isNotEmpty() && stackTarget.isNotEmpty()){
+
+            var aux_start = stackStart.removeFirst()
+            var aux_target = stackTarget.removeFirst()
+            if (aux_start.first != aux_target.first){
+                return false
+            } else {
+                if (aux_start.first == 'L'){
+                    if (aux_start.second < aux_target.second){
+                        return false
+                    }
+
+                } else {
+                    if (aux_start.second > aux_target.second){
+                        return false
+                    }
+
+                }
+            }
+        }
+
+        return true
+
+    }
 
     // 1944. Number of Visible People in a Queue
 
@@ -663,7 +756,6 @@ class Google {
             return "0"
         }
 
-
         var aux = k
         val stack = ArrayDeque<Int>()
 
@@ -675,8 +767,6 @@ class Google {
                 aux -= 1
             }
             stack.add(num[i].digitToInt())
-
-
         }
 
         if (aux > 0){
@@ -696,13 +786,12 @@ class Google {
             }
             leadingZero = false
             result.append(stack.removeFirst())
-
         }
 
         if (result.isEmpty()) return "0"
         return result.toString()
-
     }
+
 
 }
 
@@ -719,7 +808,7 @@ fun main(){
     val end = "L______RR"
     val num = intArrayOf(44,22,33,11, 1)
     val threshold =5
-    val num2 = "10"
+    val num2 = "bcabc"
     val k = 1
     println(testClass.removeKdigits(num2, k))
 
