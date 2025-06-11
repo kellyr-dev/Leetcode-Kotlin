@@ -464,7 +464,7 @@ class Google {
 
     // 2337. Move Pieces to Obtain a String
     fun canChange(start: String, target: String): Boolean {
-        
+
         if (start.length != target.length){
             return false
         }
@@ -562,7 +562,6 @@ class Google {
     // 6. Zigzag Conversion
 
     // 3532. Path Existence Queries in a Graph I
-
 
     fun decodeString(s: String): String {
 
@@ -792,7 +791,31 @@ class Google {
         return result.toString()
     }
 
+    // 169. Majority Element
+    fun majorityElement(nums: IntArray): Int {
 
+        var count = 0
+        var value = 0
+
+       //  [2,2,1,1,1,2,2]
+        //              ^
+        // value = 2
+        // count = 1
+
+        for (num in nums){
+
+           if ( count == 0){
+               value = num
+           }
+           if (num == value){
+               count += 1
+           } else {
+               count -= 1
+           }
+
+        }
+
+        return value
 }
 
 
@@ -808,8 +831,8 @@ fun main(){
     val end = "L______RR"
     val num = intArrayOf(44,22,33,11, 1)
     val threshold =5
-    val num2 = "bcabc"
+    val nums = intArrayOf(1,1,2,3,3,4,4,8,8)
     val k = 1
-    println(testClass.removeKdigits(num2, k))
+    println(testClass.majorityElement(nums))
 
 }
