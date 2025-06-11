@@ -217,20 +217,20 @@ class Google {
         val close = 0
         val result = ArrayList<String>()
 
-        fun helper(opn : Int, close : Int, string : String){
+        fun helper(opn: Int, close: Int, string: String) {
 
             // println("string: ${string}")
-            if (opn > n || close > n || opn < close){
+            if (opn > n || close > n || opn < close) {
                 return
             }
 
-            if (opn == n && close == n){
+            if (opn == n && close == n) {
                 result.add(string)
                 return
             }
 
-            helper(opn+1, close, string+"(")
-            helper(opn, close+1, string+")")
+            helper(opn + 1, close, string + "(")
+            helper(opn, close + 1, string + ")")
 
         }
 
@@ -241,22 +241,22 @@ class Google {
     // 56. Merge Intervals
     fun merge(intervals: Array<IntArray>): Array<IntArray> {
 
-        if (intervals.size == 1){
+        if (intervals.size == 1) {
             return arrayOf(intervals[0])
         }
 
-        intervals.sortBy{it[0]}
+        intervals.sortBy { it[0] }
         val result = ArrayList<IntArray>()
-        result.add(intArrayOf(intervals[0][0], intervals[0][1]) )
+        result.add(intArrayOf(intervals[0][0], intervals[0][1]))
 
         var i = 1
 
-        while (i < intervals.size){
+        while (i < intervals.size) {
 
-            if (intervals[i][0] <= result.last()[1]){
+            if (intervals[i][0] <= result.last()[1]) {
 
                 val current = result.removeLast()
-                val aux = intArrayOf( Math.min(intervals[i][0], current[0]), Math.max(intervals[i][1], current[1]) )
+                val aux = intArrayOf(Math.min(intervals[i][0], current[0]), Math.max(intervals[i][1], current[1]))
                 result.add(aux)
             } else {
                 result.add(intArrayOf(intervals[i][0], intervals[i][1]))
@@ -272,15 +272,15 @@ class Google {
     fun rob(nums: IntArray): Int {
 
         val dp = HashMap<Int, Int>()
-        fun helper(i : Int, nums: IntArray) : Int{
+        fun helper(i: Int, nums: IntArray): Int {
 
-            if (i >= nums.size){
+            if (i >= nums.size) {
                 return 0
             }
 
             if (dp.containsKey(i)) return dp[i]!!
 
-            var result = Math.max( nums[i] + helper(i+2, nums), helper(i+1, nums) )
+            var result = Math.max(nums[i] + helper(i + 2, nums), helper(i + 1, nums))
             dp[i] = result
             return result
         }
@@ -292,22 +292,22 @@ class Google {
     // 11. Container With Most Water
     fun maxArea(height: IntArray): Int {
 
-        if (height.size == 1){
+        if (height.size == 1) {
             return 0
         }
 
         var left = 0
-        var right = height.size-1
+        var right = height.size - 1
         var maxArea = 0
 
-        while (left < right ){
-            var currentArea = (right - left) * (Math.min(height[left], height[right]) )
-            maxArea = Math.max( maxArea, currentArea)
+        while (left < right) {
+            var currentArea = (right - left) * (Math.min(height[left], height[right]))
+            maxArea = Math.max(maxArea, currentArea)
 
-            if ( height[left] < height[right]){
+            if (height[left] < height[right]) {
                 left += 1
             } else {
-                right -=1
+                right -= 1
             }
         }
 
@@ -325,39 +325,39 @@ class Google {
         // 12.3
 
         var isNeg = false
-        if (x < 0){
+        if (x < 0) {
             isNeg = true
         }
 
-        if (x == 0){
+        if (x == 0) {
             return 0
         }
 
-        if (x == Int.MIN_VALUE || x == Int.MAX_VALUE){
+        if (x == Int.MIN_VALUE || x == Int.MAX_VALUE) {
             return 0
         }
 
         var aux = 1
-        if (isNeg){
+        if (isNeg) {
             aux = -x
         } else {
             aux = x
         }
 
         var queue = StringBuilder()
-        while (aux != 0){
+        while (aux != 0) {
 
             queue.append(aux % 10)
-            aux = (aux/10).toInt()
+            aux = (aux / 10).toInt()
 
         }
 
         var result = queue.toString().toDouble()
-        if (isNeg){
+        if (isNeg) {
             result *= -1
         }
 
-        if (result > Int.MAX_VALUE || result < Int.MIN_VALUE){
+        if (result > Int.MAX_VALUE || result < Int.MIN_VALUE) {
             return 0
         }
 
@@ -379,16 +379,16 @@ class Google {
             '9' to "wxyz"
         )
 
-        if (digits.length == 0){
+        if (digits.length == 0) {
             return emptyList()
         }
 
         var result = ArrayList<String>()
 
-        for (c in digits){
+        for (c in digits) {
             //   println("char: $c")
 
-            if ( !(codes.containsKey(c)) ) {
+            if (!(codes.containsKey(c))) {
                 continue
             }
             var aux = codes[c]!!
@@ -402,13 +402,13 @@ class Google {
             // b*[] = [b]
             // c*[] = [c]
 
-            if ( result.isNotEmpty() ){
+            if (result.isNotEmpty()) {
 
                 var auxArr = ArrayList<String>()
-                while (result.isNotEmpty()){
+                while (result.isNotEmpty()) {
 
                     var value = result.removeLast()
-                    for (w in aux){
+                    for (w in aux) {
                         var newString = value + w
                         auxArr.add(newString)
                     }
@@ -417,7 +417,7 @@ class Google {
                 result = auxArr
 
             } else {
-                for (w in aux){
+                for (w in aux) {
                     result.add(w.toString())
                 }
             }
@@ -435,21 +435,21 @@ class Google {
         var lenghOf = 0
         val existed = HashSet<Int>()
 
-        for (i in 0 until nums.size){
+        for (i in 0 until nums.size) {
 
-            if ( !(existed.contains(nums[i])) ){
+            if (!(existed.contains(nums[i]))) {
                 existed.add(nums[i])
             }
         }
 
-        for (j in 0 until nums.size){
+        for (j in 0 until nums.size) {
 
             var localMaxOf = 0
-            if ( existed.contains(nums[j]+1) ){
+            if (existed.contains(nums[j] + 1)) {
                 continue
             } else {
                 var aux = nums[j]
-                while (existed.contains(aux) ) {
+                while (existed.contains(aux)) {
                     localMaxOf += 1
                     aux = aux - 1
                 }
@@ -465,7 +465,7 @@ class Google {
     // 2337. Move Pieces to Obtain a String
     fun canChange(start: String, target: String): Boolean {
 
-        if (start.length != target.length){
+        if (start.length != target.length) {
             return false
         }
 
@@ -475,29 +475,29 @@ class Google {
         var targetR = 0
         var targetL = 0
 
-        for (i in 0 until start.length){
+        for (i in 0 until start.length) {
 
-            if (start[i] == 'R'){
-                startR +=1
+            if (start[i] == 'R') {
+                startR += 1
             }
 
-            if (start[i] == 'L'){
+            if (start[i] == 'L') {
                 startL += 1
             }
         }
 
-        for (j in 0 until target.length){
+        for (j in 0 until target.length) {
 
-            if (target[j] == 'R'){
-                targetR +=1
+            if (target[j] == 'R') {
+                targetR += 1
             }
 
-            if (target[j] == 'L'){
-                targetL +=1
+            if (target[j] == 'L') {
+                targetL += 1
             }
         }
 
-        if (targetR != startR || startL != targetL){
+        if (targetR != startR || startL != targetL) {
             return false
         }
 
@@ -507,20 +507,20 @@ class Google {
         val stackStart = ArrayDeque<Pair<Char, Int>>()
         val stackTarget = ArrayDeque<Pair<Char, Int>>()
 
-        while (i < start.length){
+        while (i < start.length) {
 
-            if (start[i] == 'L' || start[i] == 'R'){
-                stackStart.add( Pair(start[i], i) )
+            if (start[i] == 'L' || start[i] == 'R') {
+                stackStart.add(Pair(start[i], i))
             }
 
             i += 1
 
         }
 
-        while (j < target.length){
+        while (j < target.length) {
 
-            if (target[j] == 'L' || target[j] == 'R'){
-                stackTarget.add( Pair(target[j], j) )
+            if (target[j] == 'L' || target[j] == 'R') {
+                stackTarget.add(Pair(target[j], j))
             }
 
             j += 1
@@ -532,20 +532,20 @@ class Google {
         // if (R in start is less than R in target) ok
         // if (R in start is greater than R in target) not
 
-        while (stackStart.isNotEmpty() && stackTarget.isNotEmpty()){
+        while (stackStart.isNotEmpty() && stackTarget.isNotEmpty()) {
 
             var aux_start = stackStart.removeFirst()
             var aux_target = stackTarget.removeFirst()
-            if (aux_start.first != aux_target.first){
+            if (aux_start.first != aux_target.first) {
                 return false
             } else {
-                if (aux_start.first == 'L'){
-                    if (aux_start.second < aux_target.second){
+                if (aux_start.first == 'L') {
+                    if (aux_start.second < aux_target.second) {
                         return false
                     }
 
                 } else {
-                    if (aux_start.second > aux_target.second){
+                    if (aux_start.second > aux_target.second) {
                         return false
                     }
 
@@ -567,32 +567,32 @@ class Google {
 
         val stack = ArrayDeque<Char>()
 
-        for (c in s){
+        for (c in s) {
 
-            if (c != ']'){
+            if (c != ']') {
                 stack.add(c)
-            } else{
+            } else {
 
                 var aux = ""
-                while (stack.last() != '['){
+                while (stack.last() != '[') {
                     aux = stack.removeLast() + aux
                 }
 
                 stack.removeLast()
                 var auxK = ""
-                while ( stack.isNotEmpty() && stack.last().isDigit()){
+                while (stack.isNotEmpty() && stack.last().isDigit()) {
                     auxK = stack.removeLast() + auxK
                 }
 
                 var k = auxK.toInt()
                 var result = ""
                 var i = 0
-                while ( i < k){
+                while (i < k) {
                     result += aux
-                    i+= 1
+                    i += 1
                 }
 
-                for (ch in result){
+                for (ch in result) {
                     stack.add(ch)
                 }
 
@@ -601,7 +601,7 @@ class Google {
         }
 
         var res = ""
-        while (stack.isNotEmpty()){
+        while (stack.isNotEmpty()) {
             res += stack.removeFirst()
         }
         return res
@@ -615,17 +615,17 @@ class Google {
         val maxValue = nums.max()
         var left = 0
         var right = maxValue
-        while ( left <= right) {
+        while (left <= right) {
 
             var sumaAux = 0.0
             val mid = (left + right) / 2
 
-            for (num in nums){
-                val div = ceil( ( (num * 1.0) / mid ))
+            for (num in nums) {
+                val div = ceil(((num * 1.0) / mid))
                 sumaAux += div
             }
 
-            if (sumaAux <= threshold){
+            if (sumaAux <= threshold) {
                 result = mid
                 right = mid - 1
             } else {
@@ -642,24 +642,24 @@ class Google {
 
         //var result = IntArray(heights.size)
         var result = ArrayList<Int>()
-        for (i in 0 until heights.size-1){
+        for (i in 0 until heights.size - 1) {
 
 
             var count = 1
-            if (heights[i] < heights[i+1]){
+            if (heights[i] < heights[i + 1]) {
                 result.add(count)
                 continue
             }
             var flag = false
-            var max_local = heights[i+1]
-            for (j in i+2 until heights.size){
+            var max_local = heights[i + 1]
+            for (j in i + 2 until heights.size) {
 
-                if (heights[j] > max_local && flag){
+                if (heights[j] > max_local && flag) {
                     count += 1
                     max_local = heights[j]
                 }
 
-                if (heights[j] > heights[i]){
+                if (heights[j] > heights[i]) {
                     flag = true
                 }
 
@@ -681,10 +681,10 @@ class Google {
         var left = 0
         var right = nums.size - 1
 
-        while (left < right){
+        while (left < right) {
 
-            val mid = (left + right ) / 2
-            if (nums[mid] > nums[mid+1]){
+            val mid = (left + right) / 2
+            if (nums[mid] > nums[mid + 1]) {
                 right = mid
             } else {
                 left = mid + 1
@@ -702,11 +702,11 @@ class Google {
 
         val stack = ArrayDeque<Pair<Int, Int>>()
 
-        for (i in 0 until temperatures.size){
+        for (i in 0 until temperatures.size) {
 
             println("stack: ${stack}")
 
-            while (stack.isNotEmpty() && temperatures[i] > stack.last().first){
+            while (stack.isNotEmpty() && temperatures[i] > stack.last().first) {
                 result[stack.last().second] = i - stack.removeLast().second
             }
             stack.add(Pair(temperatures[i], i))
@@ -724,15 +724,15 @@ class Google {
         val stack = ArrayDeque<Int>()
 
         stack.add(nums2[0])
-        for (i in 1 until nums2.size){
+        for (i in 1 until nums2.size) {
 
-            while (stack.isNotEmpty() && nums2[i] > stack.last() ){
+            while (stack.isNotEmpty() && nums2[i] > stack.last()) {
                 map[stack.removeLast()] = nums2[i]
             }
             stack.add(nums2[i])
 
         }
-        while (stack.isNotEmpty()){
+        while (stack.isNotEmpty()) {
             map[stack.removeLast()] = -1
         }
 
@@ -741,7 +741,7 @@ class Google {
 
         val result = IntArray(nums1.size)
 
-        for (i in 0 until nums1.size){
+        for (i in 0 until nums1.size) {
             result[i] = map[nums1[i]]!!
         }
 
@@ -751,7 +751,7 @@ class Google {
     // 402. Remove K Digits
     fun removeKdigits(num: String, k: Int): String {
 
-        if (k >= num.length){
+        if (k >= num.length) {
             return "0"
         }
 
@@ -759,17 +759,17 @@ class Google {
         val stack = ArrayDeque<Int>()
 
         stack.add(num[0].digitToInt())
-        for (i in 1 until num.length){
+        for (i in 1 until num.length) {
 
-            while (stack.isNotEmpty() && aux > 0 && num[i].digitToInt() < stack.last() ) {
+            while (stack.isNotEmpty() && aux > 0 && num[i].digitToInt() < stack.last()) {
                 stack.removeLast()
                 aux -= 1
             }
             stack.add(num[i].digitToInt())
         }
 
-        if (aux > 0){
-            while (stack.isNotEmpty() && aux > 0 ){
+        if (aux > 0) {
+            while (stack.isNotEmpty() && aux > 0) {
                 stack.removeLast()
                 aux -= 1
             }
@@ -777,9 +777,9 @@ class Google {
 
         val result = StringBuilder()
         var leadingZero = true
-        while (stack.isNotEmpty()){
+        while (stack.isNotEmpty()) {
 
-            if (leadingZero && stack.first() == 0){
+            if (leadingZero && stack.first() == 0) {
                 stack.removeFirst()
                 continue
             }
@@ -797,25 +797,26 @@ class Google {
         var count = 0
         var value = 0
 
-       //  [2,2,1,1,1,2,2]
+        //  [2,2,1,1,1,2,2]
         //              ^
         // value = 2
         // count = 1
 
-        for (num in nums){
+        for (num in nums) {
 
-           if ( count == 0){
-               value = num
-           }
-           if (num == value){
-               count += 1
-           } else {
-               count -= 1
-           }
+            if (count == 0) {
+                value = num
+            }
+            if (num == value) {
+                count += 1
+            } else {
+                count -= 1
+            }
 
         }
 
         return value
+    }
 }
 
 
