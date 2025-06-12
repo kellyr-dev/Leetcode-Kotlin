@@ -797,11 +797,6 @@ class Google {
         var count = 0
         var value = 0
 
-        //  [2,2,1,1,1,2,2]
-        //              ^
-        // value = 2
-        // count = 1
-
         for (num in nums) {
 
             if (count == 0) {
@@ -817,6 +812,73 @@ class Google {
 
         return value
     }
+
+    // 305. Number of Islands II (TLE)
+    fun numIslands2(m: Int, n: Int, positions: Array<IntArray>): List<Int> {
+
+        // for each positions change the matrix in that position to 1
+        // after change the matrix call the function count island
+        // put the result in the List
+        // when finish positions return the List
+
+        var matrix = Array(m) {IntArray(n)}
+
+        var result = ArrayList<Int>()
+
+        for (pos in positions){
+            matrix[pos[0]][pos[1]] = 1
+            result.add( countMatrix(matrix))
+        }
+
+        return result
+
+    }
+
+    fun countMatrix(matrix: Array<IntArray>) : Int{
+
+        println("Matrix Entering:")
+        for (arr in matrix){
+            for (i in 0 until arr.size){
+                print("${arr[i]}->")
+            }
+            println()
+        }
+
+        fun helper(i: Int, j: Int, matrix: Array<IntArray>, map: HashSet<String>){
+            if (i < 0 || i >= matrix.size || j < 0 || j >= matrix[0].size || matrix[i][j] == 0){
+                return
+            }
+
+            var key = "($i,$j)"
+            if ( map.contains(key) ){
+                return
+            }
+            map.add(key)
+            helper(i+1, j, matrix, map)
+            helper(i-1, j, matrix, map)
+            helper(i, j+1, matrix, map)
+            helper(i, j-1, matrix, map)
+
+        }
+
+        var count = 0
+        var map = HashSet<String>()
+        for (i in 0 until matrix.size){
+            for (j in 0 until matrix[0].size){
+
+                var pair = "($i,$j)"
+                if (matrix[i][j] == 1 && !(map.contains(pair)) ){
+                    count += 1
+                    helper(i, j, matrix, map)
+                }
+            }
+        }
+        println("count: ${count}")
+        return count
+
+    }
+
+    //
 }
 
 
@@ -834,6 +896,9 @@ fun main(){
     val threshold =5
     val nums = intArrayOf(1,1,2,3,3,4,4,8,8)
     val k = 1
-    println(testClass.majorityElement(nums))
+    var r = 3
+    var c = 3
+    var positions = arrayOf(intArrayOf(0,0), intArrayOf(0,1), intArrayOf(1,2), intArrayOf(2,1))
+    println(testClass.numIslands2(r, c, positions))
 
 }
