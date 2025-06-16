@@ -881,9 +881,18 @@ class Google {
     // 442. Find All Duplicates in an Array
     fun findDuplicates(nums: IntArray): List<Int> {
 
-        // [4,3,2,7,8,2,3,1]
-        // from n=1
+        val result = ArrayList<Int>()
+        for (num in nums){
 
+            nums.forEach { print("${it},") }
+
+            if (nums[Math.abs(num)-1] < 0){
+                result.add(Math.abs(num))
+            } else {
+                nums[Math.abs(num)-1] *= -1
+            }
+        }
+        return result
     }
 }
 
@@ -898,7 +907,7 @@ fun main(){
     val intervals = arrayOf(intArrayOf(9,16), intArrayOf(6,16), intArrayOf(1,9), intArrayOf(3,15))
     val start = "_L__R__R_"
     val end = "L______RR"
-    val num = intArrayOf(44,22,33,11, 1)
+    val num = intArrayOf(4,3,2,7,8,2,3,1)
     val threshold =5
     val nums = intArrayOf(1,1,2,3,3,4,4,8,8)
     val k = 1
@@ -907,6 +916,6 @@ fun main(){
     var positions = arrayOf(intArrayOf(0,0), intArrayOf(0,1), intArrayOf(1,2), intArrayOf(2,1))
     var s = "PAYPALISHIRING"
     var numRows = 4
-    println(testClass.convert(s, numRows))
+    println(testClass.findDuplicates(num))
 
 }
