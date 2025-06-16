@@ -878,7 +878,13 @@ class Google {
 
     }
 
-    //
+    // 442. Find All Duplicates in an Array
+    fun findDuplicates(nums: IntArray): List<Int> {
+
+        // [4,3,2,7,8,2,3,1]
+        // from n=1
+
+    }
 }
 
 
@@ -899,6 +905,8 @@ fun main(){
     var r = 3
     var c = 3
     var positions = arrayOf(intArrayOf(0,0), intArrayOf(0,1), intArrayOf(1,2), intArrayOf(2,1))
-    println(testClass.numIslands2(r, c, positions))
+    var s = "PAYPALISHIRING"
+    var numRows = 4
+    println(testClass.convert(s, numRows))
 
 }
