@@ -894,6 +894,58 @@ class Google {
         }
         return result
     }
+
+    // 875. Koko Eating Bananas
+    fun minEatingSpeed(piles: IntArray, h: Int): Int {
+
+        // then
+        /* Problem: Find a k that is between min and max of number in piles
+            where the sum of all elements divided by that k is less or equal to h
+        */
+
+        if (piles.size == h){
+            return piles.max()
+        }
+
+        if (piles.size == 0){
+            return 0
+        }
+
+        if (piles.size == 1){
+            return ceil(piles[0]/h.toDouble()).toInt()
+        }
+
+        var minValue = piles.min()
+        var maxValue = piles.max()
+
+        if (minValue == maxValue){
+            if (h < minValue){
+                return minValue
+            }
+        }
+
+        var left = 0
+        var right = maxValue
+        var k = -1
+
+        while (left < right){
+
+            val mid = (left + right) / 2
+
+            var suma = 0.0
+            piles.forEach { suma += ceil(it/mid.toDouble())  }
+            if (suma <= h){
+                right = mid
+                k = right
+            } else {
+                left = mid + 1
+            }
+        }
+        return k
+
+    }
+
+    
 }
 
 
@@ -909,13 +961,14 @@ fun main(){
     val end = "L______RR"
     val num = intArrayOf(4,3,2,7,8,2,3,1)
     val threshold =5
-    val nums = intArrayOf(1,1,2,3,3,4,4,8,8)
+    val nums = intArrayOf(805306368,805306368,805306368)
     val k = 1
     var r = 3
     var c = 3
     var positions = arrayOf(intArrayOf(0,0), intArrayOf(0,1), intArrayOf(1,2), intArrayOf(2,1))
     var s = "PAYPALISHIRING"
     var numRows = 4
-    println(testClass.findDuplicates(num))
+    var h = 1000000000
+    println(testClass.minEatingSpeed(nums, h))
 
 }
