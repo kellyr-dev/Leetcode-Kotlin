@@ -6,6 +6,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 import kotlin.math.ceil
+import kotlin.math.log
 import kotlin.math.max
 
 
@@ -945,7 +946,77 @@ class Google {
 
     }
 
-    
+    // 1101. The Earliest Moment When Everyone Become Friends
+    fun earliestAcq(logs: Array<IntArray>, n: Int): Int {
+
+        // go build the map adjacency list
+        // for each timestamp of creating adjacency list (make DFS or BFS)
+        // if a each step your visited is equal to n
+        // return the current timestamp
+
+
+        // before run algo above
+        // remember to sort ascending in order to have the earliest time
+
+        logs.sortBy { it[0] }
+
+        val adj = HashMap<Int, ArrayList<Int>>()
+
+        for (log in logs){
+
+            if (adj.containsKey(log[1])){
+                adj[log[1]]?.add(log[2])
+            } else {
+                adj[log[1]] = arrayListOf(log[2])
+            }
+
+            if (adj.containsKey(log[2])){
+                adj[log[2]]?.add(log[1])
+            } else {
+                adj[log[2]] = arrayListOf(log[1])
+            }
+
+            println("Graph until now: ${adj}")
+
+            if (bfs(adj, n)){
+                return log[0]
+            }
+
+        }
+        return -1
+
+    }
+
+    fun bfs(map: HashMap<Int, ArrayList<Int>>, x : Int) : Boolean{
+
+        var queue = ArrayDeque<Int>()
+        var visited = HashSet<Int>()
+
+        var first = map.keys.first()
+        println("First: ${first}")
+        queue.add(first)
+
+        while (queue.isNotEmpty()){
+
+            var current = queue.removeFirst()
+            if (!visited.contains(current)){
+                visited.add(current)
+                if (visited.size == x){
+                    return true
+                }
+
+                for (neighbor in map[current]!!){
+                    queue.add(neighbor)
+                }
+
+            }
+
+        }
+
+       return false
+
+    }
+
 }
 
 
@@ -955,11 +1026,10 @@ fun main(){
     val string = "bbbbb"
     val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
     val text = "%A%_%B%"
-    val n = -2147483648
     val intervals = arrayOf(intArrayOf(9,16), intArrayOf(6,16), intArrayOf(1,9), intArrayOf(3,15))
     val start = "_L__R__R_"
     val end = "L______RR"
-    val num = intArrayOf(4,3,2,7,8,2,3,1)
+    val num = intArrayOf(0,1,2,2,3,0,4,2)
     val threshold =5
     val nums = intArrayOf(805306368,805306368,805306368)
     val k = 1
@@ -968,7 +1038,11 @@ fun main(){
     var positions = arrayOf(intArrayOf(0,0), intArrayOf(0,1), intArrayOf(1,2), intArrayOf(2,1))
     var s = "PAYPALISHIRING"
     var numRows = 4
-    var h = 1000000000
-    println(testClass.minEatingSpeed(nums, h))
+    val n = 4
+
+
+    //[,[],[],[]]
+    var logs = arrayOf(intArrayOf(0,2,0), intArrayOf(1,0,1), intArrayOf(3,0,3), intArrayOf(4,1,2), intArrayOf(7,3,1))
+    println(testClass.earliestAcq(logs, n))
 
 }
