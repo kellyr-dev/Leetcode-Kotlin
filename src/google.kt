@@ -563,6 +563,59 @@ class Google {
     // 6. Zigzag Conversion
 
     // 3532. Path Existence Queries in a Graph I
+    fun pathExistenceQueries(n: Int, nums: IntArray, maxDiff: Int, queries: Array<IntArray>): BooleanArray {
+
+        val result = BooleanArray(n)
+        val map = HashMap<Int, ArrayList<Int>>()
+
+        var i = 0
+        for (query in queries){
+
+            if (Math.abs(nums[query[0]] - nums[query[1]]) <= maxDiff){
+                result[i] = true
+
+                if (map.containsKey(query[0])){
+                    map[query[0]]?.add(query[1])
+                } else {
+                    map[query[0]] = arrayListOf(query[1])
+                }
+
+                if (map.containsKey(query[1])){
+                    map[query[1]]?.add(query[0])
+                } else {
+                    map[query[0]] = arrayListOf(query[1])
+                }
+
+            } else{
+
+                var index = query[0]+1
+                var flagResult = true
+                while (index <= query[1]){
+                    if (Math.abs(nums[index-1] - nums[index]) > maxDiff){
+                        flagResult = false
+                        break
+                    }
+                    index += 1
+                }
+
+                if (flagResult){
+                    result[i] = true
+                } else {
+                    result[i] = false
+                }
+
+                // need to build the graph
+                // basically you have (startPoint, endPoint, graph)
+                // if from startPoint to endPoint get the Math.abs(ith, jth) keep building edges
+                // if find endPoint put true in the result
+                // the graph was re-built for the next iteration
+            }
+            i += 1
+        }
+
+        return result
+
+    }
 
     fun decodeString(s: String): String {
 
