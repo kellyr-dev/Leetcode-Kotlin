@@ -565,7 +565,7 @@ class Google {
     // 3532. Path Existence Queries in a Graph I
     fun pathExistenceQueries(n: Int, nums: IntArray, maxDiff: Int, queries: Array<IntArray>): BooleanArray {
 
-        val result = BooleanArray(n)
+        val result = BooleanArray(queries.size)
         val map = HashMap<Int, ArrayList<Int>>()
 
         var i = 0
@@ -574,28 +574,19 @@ class Google {
             if (Math.abs(nums[query[0]] - nums[query[1]]) <= maxDiff){
                 result[i] = true
 
-                if (map.containsKey(query[0])){
-                    map[query[0]]?.add(query[1])
-                } else {
-                    map[query[0]] = arrayListOf(query[1])
-                }
-
-                if (map.containsKey(query[1])){
-                    map[query[1]]?.add(query[0])
-                } else {
-                    map[query[0]] = arrayListOf(query[1])
-                }
-
             } else{
 
-                var index = query[0]+1
+                var minIndex = query.min()
+                var maxIndex = query.max()
                 var flagResult = true
-                while (index <= query[1]){
-                    if (Math.abs(nums[index-1] - nums[index]) > maxDiff){
+                var prev = minIndex
+                while (minIndex <= maxIndex){
+                    if (Math.abs(nums[prev] - nums[minIndex]) > maxDiff){
                         flagResult = false
                         break
                     }
-                    index += 1
+                    prev = minIndex
+                    minIndex +=1
                 }
 
                 if (flagResult){
@@ -613,6 +604,8 @@ class Google {
             i += 1
         }
 
+        println("printing: ")
+        result.forEach { print("${it}->") }
         return result
 
     }
@@ -1084,18 +1077,16 @@ fun main(){
     val end = "L______RR"
     val num = intArrayOf(0,1,2,2,3,0,4,2)
     val threshold =5
-    val nums = intArrayOf(805306368,805306368,805306368)
     val k = 1
     var r = 3
     var c = 3
     var positions = arrayOf(intArrayOf(0,0), intArrayOf(0,1), intArrayOf(1,2), intArrayOf(2,1))
     var s = "PAYPALISHIRING"
     var numRows = 4
-    val n = 4
-
-
-    //[,[],[],[]]
-    var logs = arrayOf(intArrayOf(0,2,0), intArrayOf(1,0,1), intArrayOf(3,0,3), intArrayOf(4,1,2), intArrayOf(7,3,1))
-    println(testClass.earliestAcq(logs, n))
+    val n = 2
+    val maxDiff = 6
+    val nums = intArrayOf(2975,50642)
+    val queries = arrayOf(intArrayOf(1,0))
+    println(testClass.pathExistenceQueries(n, nums, maxDiff, queries))
 
 }
