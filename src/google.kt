@@ -594,12 +594,6 @@ class Google {
                 } else {
                     result[i] = false
                 }
-
-                // need to build the graph
-                // basically you have (startPoint, endPoint, graph)
-                // if from startPoint to endPoint get the Math.abs(ith, jth) keep building edges
-                // if find endPoint put true in the result
-                // the graph was re-built for the next iteration
             }
             i += 1
         }
@@ -1063,6 +1057,49 @@ class Google {
 
     }
 
+    // 31. Next Permutation
+    fun nextPermutation(nums: IntArray): Unit {
+
+    }
+
+    // 19. Remove Nth Node From End of List
+    fun removeNthFromEnd(head: ListNode?, n: Int): ListNode? {
+
+        val stack = ArrayDeque<Int>()
+
+        var aux = head
+        while (aux != null){
+            stack.add(0, aux.value)
+            aux = aux.next
+        }
+
+        if (stack.isNotEmpty() && n >= 1){
+            print("here entering")
+            if (n == 1){
+                stack.removeFirst()
+            } else{
+                stack.removeAt(n-1)
+            }
+
+        } else {
+            return null
+        }
+
+        if (stack.isEmpty()){
+            return null
+        }
+
+        var auxiliar = ListNode(stack.removeLast())
+        val result = auxiliar
+
+        while (stack.isNotEmpty()){
+            auxiliar.next = ListNode(stack.removeLast())
+            auxiliar = auxiliar.next!!
+        }
+
+        return result
+
+    }
 }
 
 
