@@ -209,7 +209,6 @@ class Google {
 
     // 3453. Separate Squares I
 
-    // 3481. Apply Substitutions
 
     // 22. Generate Parentheses
     fun generateParenthesis(n: Int): List<String> {
@@ -1100,6 +1099,65 @@ class Google {
         return result
 
     }
+
+    // 3481. Apply Substitutions
+    fun applySubstitutions(replacements: List<List<String>>, text: String): String {
+
+        // create a map from replacements
+        // if (value has %)
+        // build the map with only letters
+        // make the same for text
+
+
+        // %A%_%B%_%C%
+        //            ^
+        //         ^
+        // %A%_%B%_abc%B%
+        //
+
+        val map = HashMap<String, String>()
+
+        for (list in replacements){
+            map[list[0]] = list[1]
+        }
+
+        val queue = ArrayDeque<String>()
+        for (s in text){
+            queue.add(s.toString())
+        }
+
+        var result = StringBuilder()
+
+        while (queue.isNotEmpty()){
+
+            var aux = queue.removeFirst()
+            if (aux == "%"){
+
+                var key = ""
+                while (queue.isNotEmpty() && queue.first() != "%"){
+                    key += queue.removeFirst()
+                }
+                if (queue.isNotEmpty() && queue.first() == "%"){
+                    queue.removeFirst()
+                }
+
+                println("key: ${key}")
+
+                if (map.containsKey(key)){
+                    queue.add(0, map[key]!!)
+                }
+
+
+            }else{
+                result.append(aux)
+            }
+
+        }
+
+        return result.toString()
+
+    }
+
 }
 
 
@@ -1107,8 +1165,6 @@ fun main(){
 
     val testClass = Google()
     val string = "bbbbb"
-    val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
-    val text = "%A%_%B%"
     val intervals = arrayOf(intArrayOf(9,16), intArrayOf(6,16), intArrayOf(1,9), intArrayOf(3,15))
     val start = "_L__R__R_"
     val end = "L______RR"
@@ -1124,6 +1180,8 @@ fun main(){
     val maxDiff = 6
     val nums = intArrayOf(2975,50642)
     val queries = arrayOf(intArrayOf(1,0))
-    println(testClass.pathExistenceQueries(n, nums, maxDiff, queries))
+    val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
+    val text = "%A%_%B%"
+    println(testClass.applySubstitutions(replacements, text))
 
 }
