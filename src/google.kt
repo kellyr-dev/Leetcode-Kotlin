@@ -1158,6 +1158,44 @@ class Google {
 
     }
 
+    // 2200. Find All K-Distant Indices in an Array
+    fun findKDistantIndices(nums: IntArray, key: Int, k: Int): List<Int> {
+
+        val exist = HashSet<Int>()
+        for (i in 0 until nums.size){
+
+            if (nums[i] == key){
+                exist.add(i)
+            }
+        }
+
+        if (exist.size == 0){
+            return emptyList()
+        }
+
+        val checkIn = HashSet<Int>()
+        val result = ArrayList<Int>()
+
+
+        for (value in exist){
+
+            for (i in 0 until nums.size){
+
+                if (!(result.contains(i))) {
+
+                    if (Math.abs(value - i) <= k){
+                        result.add(i)
+                        checkIn.add(i)
+                    }
+                }
+
+            }
+        }
+
+        result.sort()
+        return result
+    }
+
 }
 
 
