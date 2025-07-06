@@ -1196,6 +1196,40 @@ class Google {
         return result
     }
 
+    // 283. Move Zeroes
+    fun moveZeroes(nums: IntArray): Unit {
+
+        // nums [1, 3, 12, 0, 0]
+        //                    ^
+        //                    ^
+        //      [1, 3, 0, 0, 12]
+        //
+        //                   ^
+
+
+        for (i in 0 until nums.size){
+
+
+            if (nums[i] == 0){
+
+                println("nums[i]: ${nums[i]} && i:${i}")
+
+                var j = i
+                while (j < nums.size && nums[j] == 0){
+                    j+= 1
+                }
+                println("j:${j}")
+                if (j < nums.size){
+                    nums[i] = nums[j]
+                    nums[j] = 0
+                }
+
+            } else {
+                continue
+            }
+
+        }
+    }
 }
 
 
@@ -1216,10 +1250,10 @@ fun main(){
     var numRows = 4
     val n = 2
     val maxDiff = 6
-    val nums = intArrayOf(2975,50642)
+    val nums = intArrayOf(0,1,0,3,12)
     val queries = arrayOf(intArrayOf(1,0))
     val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
     val text = "%A%_%B%"
-    println(testClass.applySubstitutions(replacements, text))
+    println(testClass.moveZeroes(nums))
 
 }
