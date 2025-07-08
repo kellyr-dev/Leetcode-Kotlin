@@ -1230,6 +1230,53 @@ class Google {
 
         }
     }
+
+    // 202. Happy Number
+    fun isHappy(n: Int): Boolean {
+
+        var check = HashSet<Int>()
+        var num = n
+
+        while (num >= 0 && (!check.contains(num)) ){
+
+            println("current num: ${num}")
+
+            if (check.contains(num)){
+                return false
+            }
+            check.add(num)
+
+            var aux = num
+            var newNum = 0
+            var i = 10
+//19 / 2 = 1.9
+            // 19
+
+            while (aux > 0){
+
+                var digit = (aux % 10)
+                var pow2 = digit * digit
+                newNum += pow2
+                aux = (aux / 10)
+
+            }
+            num = newNum
+
+            if (num == 1){
+                return true
+            }
+
+        }
+
+        if (num == 1){
+            return true
+        }
+
+        return false
+
+    }
+
+    // 
 }
 
 
@@ -1248,12 +1295,12 @@ fun main(){
     var positions = arrayOf(intArrayOf(0,0), intArrayOf(0,1), intArrayOf(1,2), intArrayOf(2,1))
     var s = "PAYPALISHIRING"
     var numRows = 4
-    val n = 2
+    val n = 19
     val maxDiff = 6
     val nums = intArrayOf(0,1,0,3,12)
     val queries = arrayOf(intArrayOf(1,0))
     val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
     val text = "%A%_%B%"
-    println(testClass.moveZeroes(nums))
+    println(testClass.isHappy(n))
 
 }
