@@ -1276,7 +1276,8 @@ class Google {
 
     }
 
-    // 
+
+
 }
 
 
@@ -1301,6 +1302,31 @@ fun main(){
     val queries = arrayOf(intArrayOf(1,0))
     val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
     val text = "%A%_%B%"
-    println(testClass.isHappy(n))
+
+}
+
+// 359. Logger Rate Limiter
+class Logger() {
+
+    val timeMessage = HashMap<String, Int>()
+    fun shouldPrintMessage(timestamp: Int, message: String): Boolean {
+
+        if (timeMessage.containsKey(message)){
+
+            var currentTime = timeMessage[message]!!
+
+            if (timestamp >= currentTime + 10){
+                timeMessage[message] = timestamp
+                return true
+            } else {
+                return false
+            }
+
+        } else {
+            timeMessage[message] = timestamp
+            return true
+        }
+
+    }
 
 }
