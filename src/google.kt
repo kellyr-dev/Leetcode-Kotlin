@@ -1276,7 +1276,24 @@ class Google {
 
     }
 
+    // 3330. Find the Original Typed String I
+    fun possibleStringCount(word: String): Int {
 
+        var count = 1
+
+        if (word.length <= 1){
+            return word.length
+        }
+
+        for ( i in 1 until word.length){
+
+            if (word[i] == word[i-1]){
+                count += 1
+            }
+        }
+
+        return count
+    }
 
 }
 
