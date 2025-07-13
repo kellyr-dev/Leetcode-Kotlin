@@ -1276,8 +1276,35 @@ class Google {
 
     }
 
+    // 70. Climbing Stairs
+    fun climbStairs(n: Int): Int {
+        val memo = HashMap<Int, Int>()
 
+        fun helper(top : Int, i: Int): Int{
 
+            if (memo.containsKey(i)){
+                return memo[i]!!
+            }
+
+            if (i > top){
+                return 0
+            }
+
+            if (i == top){
+                return 1
+            }
+
+            val mem = helper(top, i + 1) + helper(top, i+2)
+            memo[i] = mem
+            return mem
+
+        }
+
+        var result = helper(n,0)
+        return result
+    }
+
+    
 }
 
 
