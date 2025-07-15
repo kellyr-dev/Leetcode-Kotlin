@@ -1059,6 +1059,62 @@ class Google {
     // 31. Next Permutation
     fun nextPermutation(nums: IntArray): Unit {
 
+        // 1) find the longest match or break point
+        // 2) from the breakpoint get the minimun value in the rest values in array but greater than the breakpoint
+        // 3) make a swap from the breakpoint to the smallest number in array greater than breakpoint
+        // 3) putting all number in sorted order from breakpoint
+
+        // input: 1,3,2
+        // output: 2,1,3
+
+        var breakPoint = -1
+        for (i in 0 until nums.size - 1){
+
+            if (nums[i] < nums[i+1]){
+                breakPoint = i
+            }
+        }
+
+        println("BreakPoint is: ${breakPoint}")
+
+        if (breakPoint == -1){
+            return nums.sort()
+        }
+
+        var maxQueue = PriorityQueue<Int>()
+        var minQueue = PriorityQueue<Int>()
+
+        for (i in breakPoint until nums.size){
+            if (nums[i] > nums[breakPoint]){
+                maxQueue.add(nums[i])
+            } else {
+                minQueue.add(nums[i])
+            }
+        }
+
+        println("maxQueue: ${maxQueue}")
+        println("minQueue: ${minQueue}")
+
+        if (maxQueue.size == 0){
+            var swap = nums[0]
+            nums[0] = nums[1]
+            nums[1] = swap
+            return
+
+        }
+        nums[breakPoint] = maxQueue.poll()!!
+        breakPoint += 1
+
+        while (minQueue.size > 0){
+            maxQueue.add(minQueue.poll()!!)
+        }
+
+        while (maxQueue.size > 0){
+            nums[breakPoint] = maxQueue.poll()!!
+            breakPoint += 1
+        }
+        
+
     }
 
     // 19. Remove Nth Node From End of List
@@ -1343,10 +1399,12 @@ fun main(){
     var numRows = 4
     val n = 19
     val maxDiff = 6
-    val nums = intArrayOf(0,1,0,3,12)
+    val nums = intArrayOf(1,3,2)
     val queries = arrayOf(intArrayOf(1,0))
     val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
     val text = "%A%_%B%"
+
+    println(testClass.nextPermutation(nums))
 
 }
 
