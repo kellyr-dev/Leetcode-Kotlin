@@ -1101,23 +1101,8 @@ class Google {
             nums[minIndex] = swap
         }
 
-        println("Swapeted:")
-        nums.forEach { print("${it}->") }
+        nums.sort(breakPoint+1, nums.size)
 
-        var arraySorted = ArrayList<Int>()
-
-        for (j in breakPoint+1 until nums.size){
-            arraySorted.add(nums[j])
-        }
-
-        arraySorted.sort()
-
-        println("Array Sorted: ${arraySorted}")
-
-
-        for (j in breakPoint+1 until nums.size){
-            nums[j] = arraySorted.removeAt(0)
-        }
 
     }
 
