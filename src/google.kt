@@ -1081,39 +1081,43 @@ class Google {
             return nums.sort()
         }
 
-        var maxQueue = PriorityQueue<Int>()
-        var minQueue = PriorityQueue<Int>()
-
-        for (i in breakPoint until nums.size){
+        var minNumber = Int.MAX_VALUE
+        var minIndex = -1
+        for (i in breakPoint+1 until nums.size){
             if (nums[i] > nums[breakPoint]){
-                maxQueue.add(nums[i])
-            } else {
-                minQueue.add(nums[i])
+                if (nums[i] <= minNumber){
+                    minNumber = nums[i]
+                    minIndex = i
+                }
             }
         }
 
-        println("maxQueue: ${maxQueue}")
-        println("minQueue: ${minQueue}")
+        println("Index: ${minIndex}")
 
-        if (maxQueue.size == 0){
-            var swap = nums[0]
-            nums[0] = nums[1]
-            nums[1] = swap
-            return
+        if (minIndex != -1){
 
-        }
-        nums[breakPoint] = maxQueue.poll()!!
-        breakPoint += 1
-
-        while (minQueue.size > 0){
-            maxQueue.add(minQueue.poll()!!)
+            var swap = nums[breakPoint]
+            nums[breakPoint] = nums[minIndex]
+            nums[minIndex] = swap
         }
 
-        while (maxQueue.size > 0){
-            nums[breakPoint] = maxQueue.poll()!!
-            breakPoint += 1
+        println("Swapeted:")
+        nums.forEach { print("${it}->") }
+
+        var arraySorted = ArrayList<Int>()
+
+        for (j in breakPoint+1 until nums.size){
+            arraySorted.add(nums[j])
         }
-        
+
+        arraySorted.sort()
+
+        println("Array Sorted: ${arraySorted}")
+
+
+        for (j in breakPoint+1 until nums.size){
+            nums[j] = arraySorted.removeAt(0)
+        }
 
     }
 
