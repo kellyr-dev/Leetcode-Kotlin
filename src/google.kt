@@ -1383,24 +1383,6 @@ class Google {
             return a
         }
 
-        /*
-
-            Input: a = "11", b = "1"
-            Output: "100"
-
-            11
-             1
-           100
-
-            Input: a = "1010", b = "1011"
-            Output: "10101"
-
-            1010
-            1011
-           10101
-
-         */
-
         var i = a.length-1
         var j = b.length-1
         var carry = '0'
@@ -1488,6 +1470,32 @@ class Google {
 
         return result
     }
+
+    // 148. Sort List
+    fun sortList(head: ListNode?): ListNode? {
+
+        var aux = head
+        var auxList = ArrayList<Int>()
+
+        while (aux != null){
+            auxList.add(aux.value)
+            aux = aux.next
+        }
+
+        auxList.sort()
+
+        var auxResult = ListNode(-1)
+        var result = auxResult
+        for ( i in 0 until auxList.size){
+            var newNode = ListNode(auxList[i])
+            auxResult.next = newNode
+            auxResult = auxResult.next!!
+        }
+
+        // [-1]
+        return result.next
+
+    }
 }
 
 
@@ -1514,8 +1522,11 @@ fun main(){
     val text = "%A%_%B%"
     val a = "1111"
     val b = "1111"
-
-    println(testClass.addBinary(a, b))
+    val head = ListNode(4)
+    head.next = ListNode(2)
+    head!!.next!!.next = ListNode(1)
+    head!!.next!!.next!!.next = ListNode(3)
+    println(testClass.sortList(head))
 
 }
 
