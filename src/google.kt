@@ -1496,6 +1496,47 @@ class Google {
         return result.next
 
     }
+
+    // 3597. Partition String
+    fun partitionString(s: String): List<String> {
+
+        if (s.isEmpty()){
+            return emptyList()
+        }
+
+        if (s.length == 1){
+            return arrayListOf(s)
+        }
+
+        val segments = HashMap<String, Int>()
+        var index = 0
+        var auxString = StringBuilder()
+
+        for (i in 0 until s.length){
+
+            auxString.append(s[i])
+            if (!(segments.containsKey(auxString.toString()))) {
+                // means I got an already String that is in segments
+                // means this String does not exist in segments
+                // I can add it and clear my String
+                segments[auxString.toString()] = index
+                auxString.clear()
+                index += 1
+            }
+
+        }
+
+        val result = ArrayList<String>()
+        for (j in 0 until segments.size){
+            result.add("")
+        }
+
+        for ( (value, key) in segments ){
+            result[key] = value
+        }
+
+        return result
+    }
 }
 
 
@@ -1519,14 +1560,15 @@ fun main(){
     val nums = intArrayOf(1,3,2)
     val queries = arrayOf(intArrayOf(1,0))
     val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
-    val text = "%A%_%B%"
+
     val a = "1111"
     val b = "1111"
     val head = ListNode(4)
     head.next = ListNode(2)
     head!!.next!!.next = ListNode(1)
     head!!.next!!.next!!.next = ListNode(3)
-    println(testClass.sortList(head))
+    val text = "abbccccd"
+    println(testClass.partitionString(text))
 
 }
 
