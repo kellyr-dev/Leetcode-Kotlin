@@ -1537,6 +1537,7 @@ class Google {
 
         return result
     }
+
 }
 
 
@@ -1553,7 +1554,6 @@ fun main(){
     var r = 3
     var c = 3
     var positions = arrayOf(intArrayOf(0,0), intArrayOf(0,1), intArrayOf(1,2), intArrayOf(2,1))
-    var s = "PAYPALISHIRING"
     var numRows = 4
     val n = 19
     val maxDiff = 6
@@ -1567,8 +1567,8 @@ fun main(){
     head.next = ListNode(2)
     head!!.next!!.next = ListNode(1)
     head!!.next!!.next!!.next = ListNode(3)
-    val text = "abbccccd"
-    println(testClass.partitionString(text))
+    val s = "bbbaaaba"
+    val t = "aaabbbba"
 
 }
 
