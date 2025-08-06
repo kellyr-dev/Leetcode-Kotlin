@@ -1538,6 +1538,19 @@ class Google {
         return result
     }
 
+    // 58. Length of Last Word
+    fun lengthOfLastWord(s: String): Int {
+
+        var newString = s.trimStart().trimEnd()
+        val words = newString.split(" ")
+
+        for (word in words){
+            println("word: ${word}")
+        }
+
+        return words.last().length
+
+    }
 }
 
 
@@ -1567,8 +1580,10 @@ fun main(){
     head.next = ListNode(2)
     head!!.next!!.next = ListNode(1)
     head!!.next!!.next!!.next = ListNode(3)
-    val s = "bbbaaaba"
+    val s = "   fly me   to   the moon  "
     val t = "aaabbbba"
+
+    println(testClass.lengthOfLastWord(s))
 
 }
 
