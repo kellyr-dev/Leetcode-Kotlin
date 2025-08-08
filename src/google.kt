@@ -1573,7 +1573,6 @@ class Google {
 
     }
 
-
 }
 
 
@@ -1605,7 +1604,15 @@ fun main(){
     val t = "aaabbbba"
     val n = 10
     val num = intArrayOf(24,69,100,99,79,78,67,36,26,19)
-    println(testClass.peakIndexInMountainArray(num))
+    val testing = RandomizedSet()
+    println(testing.insert(1))
+    println(testing.remove(2))
+    println(testing.insert(2))
+    println(testing.getRandom())
+    println(testing.remove(1))
+    println(testing.insert(2))
+    println(testing.getRandom())
+   // println(testClass.peakIndexInMountainArray(num))
 
 }
 
@@ -1631,6 +1638,52 @@ class Logger() {
             return true
         }
 
+    }
+
+}
+
+// 380. Insert Delete GetRandom O(1)
+class RandomizedSet() {
+
+    val set = HashMap<Int, Int>()
+    var index = 0
+    val indexes = HashMap<Int, Int>()
+
+    fun insert(`val`: Int): Boolean {
+
+        if (set.containsKey(`val`)){
+            return false
+        } else {
+            set[`val`] = index
+            indexes[index] = `val`
+            index += 1
+            return true
+        }
+
+    }
+
+    fun remove(`val`: Int): Boolean {
+
+        if (set.containsKey(`val`)){
+
+            var removeIndex = set[`val`]!!
+            set.remove(`val`)
+            indexes.remove(removeIndex)
+            return true
+        } else {
+            return false
+        }
+
+    }
+
+    fun getRandom(): Int {
+
+        println("setOf values: ${set}")
+        println("setOf indexes: ${indexes}")
+
+        var indexOf = indexes.keys
+        var key = indexOf.random()
+        return indexes[key]!!
     }
 
 }
