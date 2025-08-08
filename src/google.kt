@@ -1551,6 +1551,29 @@ class Google {
         return words.last().length
 
     }
+
+
+    // 852. Peak Index in a Mountain Array
+    fun peakIndexInMountainArray(arr: IntArray): Int {
+        var maxdiff = 0
+        var res = -1
+
+        for (i in 1 until arr.size){
+
+            if (arr[i] < arr[i-1]){
+                if (arr[i-1] > maxdiff){
+                    maxdiff = arr[i-1]
+                    res = i-1
+                }
+            }
+
+        }
+
+        return res
+
+    }
+
+
 }
 
 
@@ -1561,29 +1584,28 @@ fun main(){
     val intervals = arrayOf(intArrayOf(9,16), intArrayOf(6,16), intArrayOf(1,9), intArrayOf(3,15))
     val start = "_L__R__R_"
     val end = "L______RR"
-    val num = intArrayOf(0,1,2,2,3,0,4,2)
+
     val threshold =5
     val k = 1
     var r = 3
     var c = 3
     var positions = arrayOf(intArrayOf(0,0), intArrayOf(0,1), intArrayOf(1,2), intArrayOf(2,1))
     var numRows = 4
-    val n = 19
     val maxDiff = 6
     val nums = intArrayOf(1,3,2)
     val queries = arrayOf(intArrayOf(1,0))
     val replacements = arrayListOf(arrayListOf("A","bce"), arrayListOf("B","ace"), arrayListOf("C","abc%B%"))
-
     val a = "1111"
     val b = "1111"
     val head = ListNode(4)
     head.next = ListNode(2)
     head!!.next!!.next = ListNode(1)
     head!!.next!!.next!!.next = ListNode(3)
-    val s = "   fly me   to   the moon  "
+    val s = "aabbgsadb"
     val t = "aaabbbba"
-
-    println(testClass.lengthOfLastWord(s))
+    val n = 10
+    val num = intArrayOf(24,69,100,99,79,78,67,36,26,19)
+    println(testClass.peakIndexInMountainArray(num))
 
 }
 
