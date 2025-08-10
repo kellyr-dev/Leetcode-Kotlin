@@ -1605,13 +1605,13 @@ fun main(){
     val n = 10
     val num = intArrayOf(24,69,100,99,79,78,67,36,26,19)
     val testing = RandomizedSet()
-    println(testing.insert(1))
-    println(testing.remove(2))
-    println(testing.insert(2))
+    println(testing.remove(0))
+    println(testing.remove(0))
+    println(testing.insert(0))
     println(testing.getRandom())
-    println(testing.remove(1))
-    println(testing.insert(2))
-    println(testing.getRandom())
+    println(testing.remove(0))
+    println(testing.insert(0))
+
    // println(testClass.peakIndexInMountainArray(num))
 
 }
@@ -1646,17 +1646,15 @@ class Logger() {
 class RandomizedSet() {
 
     val set = HashMap<Int, Int>()
-    var index = 0
-    val indexes = HashMap<Int, Int>()
+    val indexes = ArrayList<Int>()
 
     fun insert(`val`: Int): Boolean {
 
         if (set.containsKey(`val`)){
             return false
         } else {
-            set[`val`] = index
-            indexes[index] = `val`
-            index += 1
+            set[`val`] = indexes.size
+            indexes.add(`val`)
             return true
         }
 
@@ -1664,11 +1662,17 @@ class RandomizedSet() {
 
     fun remove(`val`: Int): Boolean {
 
+        //
+
         if (set.containsKey(`val`)){
 
-            var removeIndex = set[`val`]!!
+            var index = set[`val`]!!
+            var elemeInlast = indexes.last()
+            indexes[index] = elemeInlast
+            set[elemeInlast] = index
             set.remove(`val`)
-            indexes.remove(removeIndex)
+            indexes.removeLast()
+
             return true
         } else {
             return false
@@ -1678,12 +1682,7 @@ class RandomizedSet() {
 
     fun getRandom(): Int {
 
-        println("setOf values: ${set}")
-        println("setOf indexes: ${indexes}")
-
-        var indexOf = indexes.keys
-        var key = indexOf.random()
-        return indexes[key]!!
+        return indexes.random()
     }
 
 }
