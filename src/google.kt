@@ -1573,6 +1573,94 @@ class Google {
 
     }
 
+    // 417. Pacific Atlantic Water Flow
+    fun pacificAtlantic(heights: Array<IntArray>): List<List<Int>> {
+
+
+        fun atlanticDown(i: Int, j: Int, heights: Array<IntArray>) : Boolean{
+
+            var prev = heights[i][j]
+            var row = i+1
+
+            while (row < heights.size){
+                if (prev >= heights[row][j]){
+                    prev = heights[row][j]
+                    row += 1
+                } else {
+                    return false
+                }
+            }
+
+            return true
+        }
+
+        fun atlanticRight(i: Int, j: Int, heights: Array<IntArray>) : Boolean{
+
+            var prev = heights[i][j]
+            var col = j+1
+
+            while (col < heights[0].size){
+                if (prev >= heights[i][col]){
+                    prev = heights[i][col]
+                    col +=1
+                } else {
+                    return false
+                }
+            }
+
+            return true
+        }
+
+        fun pacificUp(i: Int, j: Int, heights: Array<IntArray>) : Boolean{
+
+            var prev = heights[i][j]
+            var row = i-1
+
+            while (row > -1){
+                if (prev >= heights[row][j]){
+                    prev = heights[row][j]
+                    row -= 1
+                } else {
+                    return false
+                }
+            }
+
+            return true
+        }
+
+        fun pacificLeft(i: Int, j: Int, heights: Array<IntArray>) : Boolean{
+
+            var prev = heights[i][j]
+            var col = j-1
+
+            while (col > -1){
+                if (prev >= heights[i][col]){
+                    prev = heights[i][col]
+                    col -= 1
+                } else {
+                    return false
+                }
+            }
+
+            return true
+        }
+
+
+        val res = ArrayList<List<Int>>()
+
+        for (i in 0 until heights.size){
+            for (j in 0 until heights[0].size){
+
+                if ((atlanticDown(i,j, heights) || atlanticRight(i,j, heights)) && (pacificUp(i,j, heights) || pacificLeft(i,j, heights))) {
+                    res.add( listOf(i,j) )
+                }
+
+            }
+        }
+
+        return res
+    }
+
 }
 
 
@@ -1604,15 +1692,17 @@ fun main(){
     val t = "aaabbbba"
     val n = 10
     val num = intArrayOf(24,69,100,99,79,78,67,36,26,19)
-    val testing = RandomizedSet()
-    println(testing.remove(0))
-    println(testing.remove(0))
-    println(testing.insert(0))
-    println(testing.getRandom())
-    println(testing.remove(0))
-    println(testing.insert(0))
+    val heights = arrayOf(intArrayOf(1,2,2,3,5), intArrayOf(3,2,3,4,4), intArrayOf(2,4,5,3,1), intArrayOf(6,7,1,4,5), intArrayOf(5,1,1,2,4) ) // [[],[],[],[],[]]
 
-   // println(testClass.peakIndexInMountainArray(num))
+    println(testClass.pacificAtlantic(heights))
+//    val testing = RandomizedSet()
+//    println(testing.remove(0))
+//    println(testing.remove(0))
+//    println(testing.insert(0))
+//    println(testing.getRandom())
+//    println(testing.remove(0))
+//    println(testing.insert(0))
+//    println(testClass.peakIndexInMountainArray(num))
 
 }
 
