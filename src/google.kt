@@ -1593,7 +1593,6 @@ class Google {
 
             return true
         }
-
         fun atlanticRight(i: Int, j: Int, heights: Array<IntArray>) : Boolean{
 
             var prev = heights[i][j]
@@ -1610,7 +1609,6 @@ class Google {
 
             return true
         }
-
         fun pacificUp(i: Int, j: Int, heights: Array<IntArray>) : Boolean{
 
             var prev = heights[i][j]
@@ -1627,7 +1625,6 @@ class Google {
 
             return true
         }
-
         fun pacificLeft(i: Int, j: Int, heights: Array<IntArray>) : Boolean{
 
             var prev = heights[i][j]
@@ -1645,21 +1642,59 @@ class Google {
             return true
         }
 
+        fun dfs(i: Int, j: Int, heights: Array<IntArray>, prev: Int, memo: HashSet<Pair<Int,Int>>, visited : HashSet<Pair<Int, Int>>) : Boolean {
+
+            if (i < 0 || j < 0 || i >= heights.size || j >= heights[0].size){
+                return true
+            }
+
+            var pair = Pair(i,j)
+            if (memo.contains(pair)) return true
+
+            if (visited.contains(pair)) return false
+
+            println("for (${i},${j}): ${heights[i][j]} -> prev: ${prev}")
+
+            if (heights[i][j] >= prev){
+                // move to 4 points
+                var auxPrev = heights[i][j]
+                var pacific = (dfs(i-1, j, heights, auxPrev, memo, visited) || dfs(i, j-1, heights, auxPrev, memo, visited))
+                var atlantic = (dfs(i+1, j, heights, auxPrev, memo, visited) || dfs(i, j+1, heights, prev, memo, visited))
+                return  pacific && atlantic
+
+            } else {
+                return false
+            }
+
+        }
+
 
         val res = ArrayList<List<Int>>()
+        val memo = HashSet<Pair<Int, Int>>()
+        val visited = HashSet<Pair<Int, Int>>()
 
         for (i in 0 until heights.size){
             for (j in 0 until heights[0].size){
 
-                if ((atlanticDown(i,j, heights) || atlanticRight(i,j, heights)) && (pacificUp(i,j, heights) || pacificLeft(i,j, heights))) {
-                    res.add( listOf(i,j) )
+                // call dfs
+                val prev = 0
+                if (dfs(i,j, heights, prev, memo, visited)){
+                    memo.add(Pair(i,j))
+                    res.add(listOf(i,j))
+                } else {
+                    visited.add(Pair(i,j))
                 }
+                // means if I found a point (x,y) where I can go to both coast I will add to memo
+                // and add to answer
+
 
             }
         }
 
         return res
     }
+
+
 
 }
 
