@@ -130,6 +130,53 @@ class Paypal(){
         return res
 
     }
+
+    // 49. Group Anagrams
+    fun groupAnagrams(strs: Array<String>): List<List<String>> {
+
+
+        val mapOfstr = HashMap<String, Int>()
+        for (i in 0 until strs.size){
+
+            if (!(mapOfstr.containsKey(strs[i]))){
+                mapOfstr[strs[i]] = i
+            }
+
+        }
+
+        val mapSorted = HashMap<String, ArrayList<Int>>()
+        for (word in strs){
+
+            val auxWord = word.toList()
+            val wdSorted = auxWord.sorted()
+            var wordSorted = ""
+            for (c in wdSorted){
+                wordSorted += c
+            }
+
+            if (mapSorted.containsKey(wordSorted)){
+                mapSorted[wordSorted]!!.add(mapOfstr[word]!!)
+            } else {
+                mapSorted[wordSorted] = arrayListOf(mapOfstr[word]!!)
+            }
+        }
+
+        val res = ArrayList<List<String>>()
+
+        for ( (key, value) in mapSorted){
+            // value should be the ListOfString
+            val auxList = ArrayList<String>()
+            for (j in 0 until value.size){
+                auxList.add(strs[value[j]])
+            }
+            res.add(auxList)
+        }
+
+        return res
+
+    }
+
+    // 
 }
 
 
@@ -144,8 +191,8 @@ fun main(){
     val word = "PAYPALISHIRING"
     val numRows = 3
     val string = "PAYPALISHIRING"
-
-    println(testClass.convert(string, numRows))
+    val strs = arrayOf("eat","tea","tan","ate","nat","bat")
+    println(testClass.groupAnagrams(strs))
 
 
 }
