@@ -58,7 +58,9 @@ class Paypal(){
             }
 
             memo.add(Pair(i,j))
-            return dfs(i+1, j, board, index+1, memo) ||  dfs(i, j+1, board, index+1, memo) || dfs(i-1, j, board, index+1, memo) || dfs(i, j-1, board, index+1, memo)
+            var result = dfs(i+1, j, board, index+1, memo) ||  dfs(i, j+1, board, index+1, memo) || dfs(i-1, j, board, index+1, memo) || dfs(i, j-1, board, index+1, memo)
+            memo.remove(Pair(i,j))
+            return result
                 // down by 1
                 // right by 1
                 // up by 1
@@ -85,6 +87,49 @@ class Paypal(){
 
 
     }
+
+    // 6. Zigzag Conversion
+    fun convert(s: String, numRows: Int): String {
+
+        val list = ArrayList<ArrayList<Char>>()
+        for (k in 0 until numRows){
+            list.add(arrayListOf())
+        }
+
+        var i = 0
+        while (i < s.length){
+
+            //go down
+            var j = 0
+            while (j < numRows && i < s.length) {
+                list[j].add(s[i])
+                i+= 1
+                j+= 1
+            }
+
+            //go up
+            var up = numRows - 1 - 1
+            while (up > 0 && i < s.length){
+
+                list[up].add(s[i])
+                up -= 1
+                i += 1
+            }
+
+        }
+
+        var res = ""
+        for (smallist in list){
+
+            for (kk in 0 until smallist.size){
+                res += smallist[kk]
+            }
+        }
+        println("list: ${list}")
+
+        return res
+
+    }
 }
 
 
@@ -93,15 +138,14 @@ fun main(){
     val testClass = Paypal()
     val words = arrayOf("cat","bt","hat","tree")
     val chars = "atach"
-    /*
-    board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
-
-     */
-    val board = arrayOf(charArrayOf('A', 'B', 'C', 'E'), charArrayOf('S', 'F', 'C', 'S'), charArrayOf(
+    val board = arrayOf(charArrayOf('A', 'B', 'C', 'E'), charArrayOf('S', 'F', 'E', 'S'), charArrayOf(
         'A', 'D', 'E', 'E'
     ))
-    val word = "ABCB"
+    val word = "PAYPALISHIRING"
+    val numRows = 3
+    val string = "PAYPALISHIRING"
 
-    println(testClass.exist(board, word))
+    println(testClass.convert(string, numRows))
+
 
 }
