@@ -1,5 +1,8 @@
 
+import java.util.Collections
+import java.util.PriorityQueue
 import kotlin.collections.HashSet
+import kotlin.math.abs
 
 class Paypal(){
 
@@ -135,48 +138,33 @@ class Paypal(){
     fun groupAnagrams(strs: Array<String>): List<List<String>> {
 
 
-        val mapOfstr = HashMap<String, Int>()
-        for (i in 0 until strs.size){
+        val map = HashMap<String, ArrayList<String>>()
 
-            if (!(mapOfstr.containsKey(strs[i]))){
-                mapOfstr[strs[i]] = i
-            }
-
-        }
-
-        val mapSorted = HashMap<String, ArrayList<Int>>()
         for (word in strs){
+            val wordSorted = word.toList().sorted()
 
-            val auxWord = word.toList()
-            val wdSorted = auxWord.sorted()
-            var wordSorted = ""
-            for (c in wdSorted){
-                wordSorted += c
+            var auxWord = ""
+            for (c in wordSorted){
+                auxWord += c
             }
 
-            if (mapSorted.containsKey(wordSorted)){
-                mapSorted[wordSorted]!!.add(mapOfstr[word]!!)
+            if (map.containsKey(auxWord)){
+                map[auxWord]!!.add(word)
             } else {
-                mapSorted[wordSorted] = arrayListOf(mapOfstr[word]!!)
+                map[auxWord] = arrayListOf(word)
             }
         }
+
+      //  println("map: ${map}")
 
         val res = ArrayList<List<String>>()
-
-        for ( (key, value) in mapSorted){
-            // value should be the ListOfString
-            val auxList = ArrayList<String>()
-            for (j in 0 until value.size){
-                auxList.add(strs[value[j]])
-            }
-            res.add(auxList)
+        for ( (key, value) in map){
+            res.add(value)
         }
 
         return res
-
     }
 
-    // 
 }
 
 
@@ -185,14 +173,14 @@ fun main(){
     val testClass = Paypal()
     val words = arrayOf("cat","bt","hat","tree")
     val chars = "atach"
-    val board = arrayOf(charArrayOf('A', 'B', 'C', 'E'), charArrayOf('S', 'F', 'E', 'S'), charArrayOf(
-        'A', 'D', 'E', 'E'
-    ))
+    val board = arrayOf(charArrayOf('A', 'B', 'C', 'E'), charArrayOf('S', 'F', 'E', 'S'), charArrayOf('A', 'D', 'E', 'E'))
     val word = "PAYPALISHIRING"
     val numRows = 3
     val string = "PAYPALISHIRING"
-    val strs = arrayOf("eat","tea","tan","ate","nat","bat")
-    println(testClass.groupAnagrams(strs))
-
+    val strs = "dcab"
+    val pairs = arrayListOf(listOf(0,3), listOf(1,2), listOf(0,2))
+    val events = arrayOf(intArrayOf(1,4),intArrayOf(4,4), intArrayOf(2,2), intArrayOf(3,4), intArrayOf(1,1))
+    val nums = intArrayOf(1,-2,2,1,0)
+    val target = 1
 
 }
