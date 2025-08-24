@@ -1576,72 +1576,6 @@ class Google {
     // 417. Pacific Atlantic Water Flow (TLE)
     fun pacificAtlantic(heights: Array<IntArray>): List<List<Int>> {
 
-
-        fun atlanticDown(i: Int, j: Int, heights: Array<IntArray>) : Boolean{
-
-            var prev = heights[i][j]
-            var row = i+1
-
-            while (row < heights.size){
-                if (prev >= heights[row][j]){
-                    prev = heights[row][j]
-                    row += 1
-                } else {
-                    return false
-                }
-            }
-
-            return true
-        }
-        fun atlanticRight(i: Int, j: Int, heights: Array<IntArray>) : Boolean{
-
-            var prev = heights[i][j]
-            var col = j+1
-
-            while (col < heights[0].size){
-                if (prev >= heights[i][col]){
-                    prev = heights[i][col]
-                    col +=1
-                } else {
-                    return false
-                }
-            }
-
-            return true
-        }
-        fun pacificUp(i: Int, j: Int, heights: Array<IntArray>) : Boolean{
-
-            var prev = heights[i][j]
-            var row = i-1
-
-            while (row > -1){
-                if (prev >= heights[row][j]){
-                    prev = heights[row][j]
-                    row -= 1
-                } else {
-                    return false
-                }
-            }
-
-            return true
-        }
-        fun pacificLeft(i: Int, j: Int, heights: Array<IntArray>) : Boolean{
-
-            var prev = heights[i][j]
-            var col = j-1
-
-            while (col > -1){
-                if (prev >= heights[i][col]){
-                    prev = heights[i][col]
-                    col -= 1
-                } else {
-                    return false
-                }
-            }
-
-            return true
-        }
-
         fun dfs(i: Int, j: Int, heights: Array<IntArray>, prev: Int, memo: HashSet<Pair<Int,Int>>, visited : HashSet<Pair<Int, Int>>) : Boolean {
 
             if (i < 0 || j < 0 || i >= heights.size || j >= heights[0].size){
@@ -1668,7 +1602,6 @@ class Google {
 
         }
 
-
         val res = ArrayList<List<Int>>()
         val memo = HashSet<Pair<Int, Int>>()
         val visited = HashSet<Pair<Int, Int>>()
@@ -1693,8 +1626,6 @@ class Google {
 
         return res
     }
-
-
 
 }
 
