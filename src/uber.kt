@@ -1,3 +1,5 @@
+import java.sql.SQLOutput
+import java.util.PriorityQueue
 import kotlin.math.min
 
 class Uber {
@@ -105,15 +107,19 @@ class Uber {
 
 
     }
+
 }
 
 fun main(){
 
-    val testClass = Uber()
+
     var coins = intArrayOf(1,2,5)
     var amount = 11
-
-    println(testClass.coinChange(coins, 11))
+    val nums = intArrayOf(809)
+    val testClass = FirstUnique(nums)
+    println(testClass.showFirstUnique())
+    testClass.add(809)
+    println(testClass.showFirstUnique())
 
 
 }
@@ -139,4 +145,65 @@ class MyCalendar() {
         return true
 
     }
+}
+
+data class IndexAndValue(var index : Int, var value: Int)
+
+    // 1429. First Unique Number
+class FirstUnique(nums: IntArray) {
+
+    val exist = HashMap<Int, Pair<Int, Int>>()
+        val comparedByFreq : Comparator<IndexAndValue> = compareBy{ it.index }
+    val queue : PriorityQueue<IndexAndValue> = PriorityQueue(comparedByFreq)
+    var globalIndex = 0
+        init {
+            for (i in 0 until nums.size){
+                if (!(exist.containsKey(nums[i]))){
+                    exist[nums[i]] = Pair(1,globalIndex)
+                    globalIndex += 1
+                }else {
+                    val auxPair = exist[nums[i]]!!
+                    val newPair = Pair(auxPair.first+1, auxPair.second)
+                    exist[nums[i]] = newPair
+                }
+            }
+
+            for ((key, value) in exist){
+                if (value.first == 1){
+                    queue.add( IndexAndValue(value.second, key))
+                }
+            }
+
+        }
+
+    fun showFirstUnique(): Int {
+
+        if (queue.isNotEmpty()){
+            return queue.peek().value
+        } else {
+            return -1
+        }
+
+    }
+
+    fun add(value: Int) {
+
+        if (exist.containsKey(value)){
+            val pair = IndexAndValue(exist[value]!!.second, value)
+            if (queue.contains(pair)){
+                println("contains!!")
+                queue.remove(pair)
+            }
+
+        }else {
+
+            exist[value] = Pair(1,globalIndex)
+            val auxPair = IndexAndValue(globalIndex, value)
+            queue.add(auxPair)
+            globalIndex += 1
+
+        }
+
+    }
+
 }
