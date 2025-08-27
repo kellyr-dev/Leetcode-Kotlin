@@ -1,4 +1,5 @@
 import java.sql.SQLOutput
+import java.util.Collections
 import java.util.PriorityQueue
 import kotlin.math.min
 
@@ -108,6 +109,61 @@ class Uber {
 
     }
 
+    // 1005. Maximize Sum Of Array After K Negations
+    fun largestSumAfterKNegations(nums: IntArray, k: Int): Int {
+
+        val pq = PriorityQueue<Int>()
+
+        for (i in 0 until nums.size){
+            pq.add(nums[i])
+        }
+        var aux = k
+        while (aux > 0){
+            var value = pq.poll()
+            value *= -1
+            pq.add(value)
+            aux -= 1
+        }
+
+        return pq.sum()
+    }
+
+    // 2008. Maximum Earnings From Taxi
+    fun maxTaxiEarnings(n: Int, rides: Array<IntArray>): Long {
+        var suma : Long = 0
+        rides.sortBy { it[0] }
+
+        val ridesMerge = ArrayList<IntArray>()
+        ridesMerge.add(rides[0])
+        var prev = rides[0]
+
+        for (i in 1 until rides.size){
+            if (rides[i][0] < prev[1]){ // if there is a collision
+                // if yes, I have to check what will be the most profitable
+                var preValue = prev[1] - prev[0] + prev[2]
+                var currentValue = rides[i][1] - rides[i][0] + rides[i][2]
+
+                if (currentValue > preValue){
+                    ridesMerge.removeLast()
+                    ridesMerge.add(rides[i])
+                    prev = rides[i]
+                }
+
+            } else {
+                // update prev
+                ridesMerge.add(rides[i])
+                prev = rides[i]
+            }
+        }
+
+        for (interval in ridesMerge){
+            println("(${interval[0]},${interval[1]},${interval[2]})")
+            suma += interval[1] - interval[0] + interval[2]
+        }
+
+        return suma
+    }
+
 }
 
 fun main(){
@@ -115,12 +171,15 @@ fun main(){
 
     var coins = intArrayOf(1,2,5)
     var amount = 11
-    val nums = intArrayOf(809)
-    val testClass = FirstUnique(nums)
-    println(testClass.showFirstUnique())
-    testClass.add(809)
-    println(testClass.showFirstUnique())
+    val nums = intArrayOf(2,-3,-1,5,-4)
+    val rides = arrayOf(intArrayOf(2,5,4), intArrayOf(1,5,1))
+    val k = 2
+    val testClass = Uber()
+    println(testClass.maxTaxiEarnings(k, rides))
 
+    // [[2,3,6],[8,9,8],[5,9,7],[8,9,1],[2,9,2],[9,10,6],[7,10,10],[6,7,9],[4,9,7],[2,3,1]]
+    // n = 10
+    // out = 33
 
 }
 
