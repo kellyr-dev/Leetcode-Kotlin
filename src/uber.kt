@@ -130,8 +130,9 @@ class Uber {
 
     // 2008. Maximum Earnings From Taxi
     fun maxTaxiEarnings(n: Int, rides: Array<IntArray>): Long {
+
         var suma : Long = 0
-        rides.sortBy { it[0] }
+        rides.sortWith(compareBy({it[0]}, {it[1]}))
 
         val ridesMerge = ArrayList<IntArray>()
         ridesMerge.add(rides[0])
@@ -139,7 +140,6 @@ class Uber {
 
         for (i in 1 until rides.size){
             if (rides[i][0] < prev[1]){ // if there is a collision
-                // if yes, I have to check what will be the most profitable
                 var preValue = prev[1] - prev[0] + prev[2]
                 var currentValue = rides[i][1] - rides[i][0] + rides[i][2]
 
@@ -157,7 +157,6 @@ class Uber {
         }
 
         for (interval in ridesMerge){
-            println("(${interval[0]},${interval[1]},${interval[2]})")
             suma += interval[1] - interval[0] + interval[2]
         }
 
@@ -172,14 +171,17 @@ fun main(){
     var coins = intArrayOf(1,2,5)
     var amount = 11
     val nums = intArrayOf(2,-3,-1,5,-4)
-    val rides = arrayOf(intArrayOf(2,5,4), intArrayOf(1,5,1))
+    val rides = arrayOf(intArrayOf(2,3,6), intArrayOf(8,9,8), intArrayOf(5,9,7), intArrayOf(8,9,1), intArrayOf(2,9,2), intArrayOf(9,10,6),
+        intArrayOf(7,10,10), intArrayOf(6,7,9), intArrayOf(4,9,7),intArrayOf(2,3,1))
     val k = 2
-    val testClass = Uber()
-    println(testClass.maxTaxiEarnings(k, rides))
+    val testClass = TimeMap()
+    testClass.set("foo", "bar", 1)
+    println(testClass.get("foo",1))
+    println(testClass.get("foo",3))
+    testClass.set("foo", "bar2", 4)
+    println(testClass.get("foo",4))
+    println(testClass.get("foo",5))
 
-    // [[2,3,6],[8,9,8],[5,9,7],[8,9,1],[2,9,2],[9,10,6],[7,10,10],[6,7,9],[4,9,7],[2,3,1]]
-    // n = 10
-    // out = 33
 
 }
 
@@ -206,9 +208,9 @@ class MyCalendar() {
     }
 }
 
-data class IndexAndValue(var index : Int, var value: Int)
 
     // 1429. First Unique Number
+    data class IndexAndValue(var index : Int, var value: Int)
 class FirstUnique(nums: IntArray) {
 
     val exist = HashMap<Int, Pair<Int, Int>>()
@@ -261,6 +263,67 @@ class FirstUnique(nums: IntArray) {
             queue.add(auxPair)
             globalIndex += 1
 
+        }
+
+    }
+
+}
+
+
+    // 981. Time Based Key-Value Store
+    data class TimeStampAndValue(var timestamp: Int, var value: String)
+class TimeMap() {
+
+    var map = HashMap<String, ArrayList<TimeStampAndValue>>()
+
+    fun set(key: String, value: String, timestamp: Int) {
+
+        if (map.containsKey(key)){
+
+            var list = map[key]!!
+            list.add(TimeStampAndValue(timestamp, value))
+            map[key] = list
+
+        } else {
+            var obj = TimeStampAndValue(timestamp, value)
+            map[key] = arrayListOf(obj)
+        }
+
+    }
+
+    fun get(key: String, timestamp: Int): String {
+
+        if (map.containsKey(key)){
+
+            var currentList = map[key]!!
+            if (currentList.isEmpty() || timestamp < currentList.first().timestamp) {
+                return ""
+            }
+
+            var i = 0
+            var j = currentList.size-1
+            var mid = (i + j)/2
+            var res = ""
+
+            while (i <= j){
+
+                mid = (i + j)/2
+
+                if (currentList[mid].timestamp == timestamp){
+                    return currentList[mid].value
+                } else if (currentList[mid].timestamp < timestamp)  {
+                    i = mid + 1
+                    res = currentList[mid].value
+                } else {
+                    j = mid - 1
+                }
+
+            }
+
+           return res
+
+        } else {
+            return ""
         }
 
     }
