@@ -163,6 +163,33 @@ class Uber {
         return suma
     }
 
+    // 792. Number of Matching Subsequences
+    fun numMatchingSubseq(s: String, words: Array<String>): Int {
+
+        var maxCount = 0
+        for (word in words){
+            var i = 0
+            var j = 0
+
+            while (i < s.length && j < word.length){
+                if (s[i] == word[j]){
+                    i+=1
+                    j+=1
+                }else{
+                    i+= 1
+                }
+            }
+
+            if (j == word.length){
+                maxCount += 1
+            }
+        }
+
+        return maxCount
+    }
+
+    
+
 }
 
 fun main(){
