@@ -188,7 +188,80 @@ class Uber {
         return maxCount
     }
 
-    
+    // 2101. Detonate the Maximum Bombs
+    fun maximumDetonation(bombs: Array<IntArray>): Int {
+
+        // Pair<Int,Int> = [x,y]
+        /*
+            Graph = {
+                (x,y) : [(x0,y0), (x1,y1)]
+                (x,y) : [(x0,y0), (x1,y1)]
+                }
+         */
+        val graph = HashMap<Pair<Int,Int>, ArrayList<Pair<Int,Int>>>()
+
+        // building Graph
+        for (i in 0 until bombs.size) {
+            var currentPair = Pair(bombs[i][0], bombs[i][1])
+            if (!(graph.containsKey(currentPair))) {
+                graph[currentPair] = arrayListOf()
+            } else {
+                continue
+            }
+            for (j in i + 1 until bombs.size) {
+
+                var comparePair = Pair(bombs[j][0], bombs[j][1])
+
+                for (k in 0..360) {
+                    var x = bombs[i][0] + bombs[i][2] * Math.cos(i.toDouble())
+                    var y = bombs[i][1] + bombs[i][2] * Math.sin(i.toDouble())
+
+                    if ((comparePair.first >= x) || (comparePair.second >= y)) {
+                        graph[currentPair]!!.add(comparePair)
+                        break
+                    }
+                }
+            }
+        }
+
+            // now the Graph is built make BFS from this point
+
+            var maxDetoned = 0
+            val visited = HashSet<Pair<Int, Int>>()
+            for ( (key, value) in graph) {
+
+                println("For key: ${key}")
+                if (!(visited.contains(key))) {
+                    visited.add(key)
+                    var detonated = HashSet<Pair<Int, Int>>()
+                    detonated.add(key)
+
+                    var queue = ArrayDeque<Pair<Int, Int>>()
+                    queue.add(key)
+
+                    while (queue.isNotEmpty()) {
+                        var currentNode = graph[queue.removeFirst()]
+                        println("currentNodeList: ${currentNode}")
+                        if (currentNode != null){
+                            for (node in currentNode) {
+                                if (!(detonated.contains(node))) {
+                                    queue.add(node)
+                                    detonated.add(node)
+                                }
+                            }
+                        }
+                    }
+
+                    maxDetoned = Math.max(maxDetoned, detonated.size)
+                }
+            }
+
+
+        println("Graph: ${graph}")
+
+        return maxDetoned
+
+    }
 
 }
 
@@ -201,13 +274,9 @@ fun main(){
     val rides = arrayOf(intArrayOf(2,3,6), intArrayOf(8,9,8), intArrayOf(5,9,7), intArrayOf(8,9,1), intArrayOf(2,9,2), intArrayOf(9,10,6),
         intArrayOf(7,10,10), intArrayOf(6,7,9), intArrayOf(4,9,7),intArrayOf(2,3,1))
     val k = 2
-    val testClass = TimeMap()
-    testClass.set("foo", "bar", 1)
-    println(testClass.get("foo",1))
-    println(testClass.get("foo",3))
-    testClass.set("foo", "bar2", 4)
-    println(testClass.get("foo",4))
-    println(testClass.get("foo",5))
+    val bombs = arrayOf(intArrayOf(1,2,3), intArrayOf(2,3,1), intArrayOf(3,4,2), intArrayOf(4,5,3), intArrayOf(5,6,4))
+    val testClass = Uber()
+    println(testClass.maximumDetonation(bombs))
 
 
 }
