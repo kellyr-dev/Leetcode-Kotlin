@@ -43,6 +43,79 @@ class Capital {
         return true
     }
 
+    // 2544. Alternating Digit Sum
+    fun alternateDigitSum(n: Int): Int {
+
+        var auxnum = n
+        var stack = ArrayDeque<Int>()
+
+
+        var num = auxnum.toString()
+        println("Num: ${num}")
+
+        var i = 0
+        var suma = 0
+
+        while (i < num.length){
+            suma += num[i].digitToInt()
+            i += 2
+        }
+        var j = 1
+        var resta = 0
+        while (j < num.length){
+            resta += num[j].digitToInt()
+            j += 2
+        }
+
+        return suma - resta
+    }
+
+    // 2672. Number of Adjacent Elements With the Same Color
+    fun colorTheArray(n: Int, queries: Array<IntArray>): IntArray {
+
+        val colors = IntArray(n) {0}
+        val result = IntArray(queries.size) {0}
+        var countPair = 0
+
+        for (i in 0 .. queries.size-1){
+
+            var color = queries[i][1]
+            var index = queries[i][0]
+            var oldColor = colors[index]
+
+            if (oldColor != 0){
+
+                // check leftSide
+                if (index > 0 && colors[index - 1] == oldColor){
+                    countPair--
+                }
+                // check rightSide
+                if (index < colors.size-1 && colors[index+1] == oldColor){
+                    countPair--
+                }
+            }
+
+            colors[index] = color
+
+            if (color != 0){
+                if (index > 0 && color == colors[index-1]){
+                    countPair++
+                }
+                if (index < colors.size-1 && color == colors[index+1]){
+                    countPair++
+                }
+            }
+
+
+            result[i] = countPair
+
+        }
+
+        return result
+    }
+
+    // 
+
 }
 
 fun main(args : Array<String>){
@@ -53,9 +126,11 @@ fun main(args : Array<String>){
     val balance = longArrayOf(0)
     val testClass = Bank(balance)
     val intervals = arrayOf(intArrayOf(1,2), intArrayOf(2,3), intArrayOf(3,4), intArrayOf(1,3))
+    val queries = arrayOf(intArrayOf(0,2), intArrayOf(1,2), intArrayOf(3,1), intArrayOf(1,1), intArrayOf(2,1))
 
     val capitalTest = Capital()
-    println(capitalTest.isMonotonic(arr1))
+    val n = 4
+    println(capitalTest.colorTheArray(n, queries))
 
 }
 
