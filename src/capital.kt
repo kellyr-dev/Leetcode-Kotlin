@@ -234,6 +234,155 @@ class Capital {
         return longest
     }
 
+    // 2021. Brightest Position on Street (my solution)
+    /*
+    fun brightestPosition(lights: Array<IntArray>): Int {
+
+        var newLights = ArrayList<Pair<Int, Int>>()
+        var minRange = Int.MAX_VALUE
+        var maxRange = Int.MIN_VALUE
+
+        var maxValue = Int.MIN_VALUE
+
+        for (intervals in lights){
+
+            var startRange = (intervals[0]-intervals[1])
+            var endRange = (intervals[0]+intervals[1])
+
+            newLights.add(Pair(startRange, endRange))
+
+            minRange = min(minRange, startRange)
+            maxRange = max(maxRange, endRange)
+        }
+        newLights.sortBy { it.first }
+        //   println("NewLights: ${newLights}" )
+
+        var offset = 0
+        if (minRange < 0){
+            offset = -minRange
+        }
+        if (maxRange <= 0){
+            maxRange = 0
+        }
+
+        var negativeRange = IntArray(offset+1)
+        var positiveRange = IntArray(maxRange + 1)
+
+        for (pair in newLights){
+
+            var startR = pair.first
+            var endR = pair.second
+
+            if (startR < 0 && endR < 0){
+                var auxStart = startR * -1
+                var auxEnd = endR * -1
+
+                for (j in auxEnd .. auxStart){
+                    negativeRange[j] += 1
+
+                    maxValue = max(maxValue, negativeRange[j])
+                }
+            }
+
+            if (startR < 0 && endR >= 0){
+                var auxStart = startR * -1
+
+                for (i in 1 .. auxStart){
+                    negativeRange[i] += 1
+                    maxValue = max(maxValue, negativeRange[i])
+                }
+
+                for (j in 0 .. endR){
+                    positiveRange[j] += 1
+                    maxValue = max(maxValue, positiveRange[j])
+                }
+            }
+
+            if (startR >=0){
+                for (j in startR .. endR){
+                    positiveRange[j] += 1
+                    maxValue = max(maxValue, positiveRange[j])
+                }
+            }
+        }
+
+        //negativeRange.forEach { print("${it}->") }
+        //println()
+        //positiveRange.forEach { print("${it}->") }
+        //println()
+
+        var maxResult = 0
+
+        for (j in minRange*-1 downTo 0){
+            if (negativeRange[j] == maxValue){
+                maxResult = j*-1
+                return maxResult
+            }
+        }
+
+        for (i in 0 until maxRange+1){
+            if (positiveRange[i] == maxValue){
+                maxResult = i
+                return maxResult
+            }
+        }
+        return maxResult
+
+
+    }
+    */
+
+    // 1743. Restore the Array From Adjacent Pairs
+    fun restoreArray(adjacentPairs: Array<IntArray>): IntArray {
+
+        var dict = HashMap<Int, MutableList<Int>>()
+        for (list in adjacentPairs){
+
+            if (dict.containsKey(list[0])){
+                dict[list[0]]!!.add(list[1])
+            }else{
+                dict.put(list[0], mutableListOf(list[1]))
+            }
+
+            if (dict.containsKey(list[1])){
+                dict[list[1]]!!.add(list[0])
+            }else{
+                dict.put(list[1], mutableListOf(list[0]))
+            }
+        }
+
+        var nodesStart = Int.MAX_VALUE
+
+        for ( (key, value) in dict){
+            if (value.size == 1){
+                nodesStart = key
+                break
+            }
+        }
+
+        println("dict: ${dict}")
+
+        var result = ArrayList<Int>()
+        var queue = ArrayDeque<Int>()
+        var visited = HashSet<Int>()
+        queue.add(nodesStart)
+
+        while (queue.isNotEmpty()){
+
+            var current = queue.removeFirst()
+            result.add(current)
+            visited.add(current)
+
+            for (node in dict[current]!!){
+
+                if (!(visited.contains(node))){
+                    queue.add(node)
+                }
+            }
+        }
+
+        return result.toIntArray()
+    }
 
 }
 
@@ -254,7 +403,8 @@ fun main(args : Array<String>){
     val n = 4
     val nums = intArrayOf(24,12,71,33,5,87,10,11,3,58,2,97,97,36,32,35,15,80,24,45,38,9,22,21,33,68,22,85,35,83,92,38,59,90,42,64,61,15,4,40,50,44,54,25,34,14,33,94,66,27,78,56,3,29,3,51,19,5,93,21,58,91,65,87,55,70,29,81,89,67,58,29,68,84,4,51,87,74,42,85,81,55,8,95,39)
     val limit = 87
-    println(capitalTest.longestSubarray(nums, limit))
+    val lights = arrayOf(intArrayOf(2,1), intArrayOf(3,4), intArrayOf(3,2))
+    println(capitalTest.restoreArray(lights))
 
 }
 
