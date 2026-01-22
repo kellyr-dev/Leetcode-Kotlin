@@ -1,6 +1,7 @@
 import java.util.Comparator
 import java.util.PriorityQueue
 import javax.print.DocFlavor.STRING
+import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.max
 import kotlin.math.min
@@ -8,23 +9,23 @@ import kotlin.math.min
 class Capital {
 
     // 896. Monotonic Array
-    fun isMonotonic(nums: IntArray): Boolean{
+    fun isMonotonic(nums: IntArray): Boolean {
         //[1,2,2,3]
         //     ^ ^
-        if (nums.size <= 1){
+        if (nums.size <= 1) {
             return true
         }
         return isIncreasing(nums) || isDecreasing(nums)
     }
 
-    fun isIncreasing(nums: IntArray) : Boolean{
+    fun isIncreasing(nums: IntArray): Boolean {
         var i = 0
         var j = 1
 
-        while (j < nums.size){
-            if (nums[i] <= nums[j]){
-                j+= 1
-                i+= 1
+        while (j < nums.size) {
+            if (nums[i] <= nums[j]) {
+                j += 1
+                i += 1
 
             } else {
                 return false
@@ -33,14 +34,14 @@ class Capital {
         return true
     }
 
-    fun isDecreasing(nums: IntArray): Boolean{
+    fun isDecreasing(nums: IntArray): Boolean {
         var i = 0
         var j = 1
 
-        while (j < nums.size){
-            if (nums[i] >= nums[j]){
-                j+= 1
-                i+= 1
+        while (j < nums.size) {
+            if (nums[i] >= nums[j]) {
+                j += 1
+                i += 1
 
             } else {
                 return false
@@ -62,13 +63,13 @@ class Capital {
         var i = 0
         var suma = 0
 
-        while (i < num.length){
+        while (i < num.length) {
             suma += num[i].digitToInt()
             i += 2
         }
         var j = 1
         var resta = 0
-        while (j < num.length){
+        while (j < num.length) {
             resta += num[j].digitToInt()
             j += 2
         }
@@ -79,35 +80,35 @@ class Capital {
     // 2672. Number of Adjacent Elements With the Same Color
     fun colorTheArray(n: Int, queries: Array<IntArray>): IntArray {
 
-        val colors = IntArray(n) {0}
-        val result = IntArray(queries.size) {0}
+        val colors = IntArray(n) { 0 }
+        val result = IntArray(queries.size) { 0 }
         var countPair = 0
 
-        for (i in 0 .. queries.size-1){
+        for (i in 0..queries.size - 1) {
 
             var color = queries[i][1]
             var index = queries[i][0]
             var oldColor = colors[index]
 
-            if (oldColor != 0){
+            if (oldColor != 0) {
 
                 // check leftSide
-                if (index > 0 && colors[index - 1] == oldColor){
+                if (index > 0 && colors[index - 1] == oldColor) {
                     countPair--
                 }
                 // check rightSide
-                if (index < colors.size-1 && colors[index+1] == oldColor){
+                if (index < colors.size - 1 && colors[index + 1] == oldColor) {
                     countPair--
                 }
             }
 
             colors[index] = color
 
-            if (color != 0){
-                if (index > 0 && color == colors[index-1]){
+            if (color != 0) {
+                if (index > 0 && color == colors[index - 1]) {
                     countPair++
                 }
-                if (index < colors.size-1 && color == colors[index+1]){
+                if (index < colors.size - 1 && color == colors[index + 1]) {
                     countPair++
                 }
             }
@@ -123,41 +124,41 @@ class Capital {
     // 1052. Grumpy Bookstore Owner
     fun maxSatisfied(customers: IntArray, grumpy: IntArray, minutes: Int): Int {
 
-        if (minutes >= customers.size){
+        if (minutes >= customers.size) {
             return customers.sum()
         }
 
         var i = 0
-        var j = minutes-1
+        var j = minutes - 1
         var maxCount = 0
         var windowCount = 0
 
-        for (h in 0 .. j){
+        for (h in 0..j) {
             windowCount += customers[h]
         }
 
         maxCount = windowCount
 
-        for (index in j+1 .. grumpy.size-1){
-            if (grumpy[index] == 0){
+        for (index in j + 1..grumpy.size - 1) {
+            if (grumpy[index] == 0) {
                 maxCount += customers[index]
             }
         }
 
-        while (j < customers.size){
+        while (j < customers.size) {
             var localCount = 0
-            if (j+1 < customers.size){
-                localCount = windowCount - customers[i] + customers[j+1]
+            if (j + 1 < customers.size) {
+                localCount = windowCount - customers[i] + customers[j + 1]
                 windowCount = localCount
 
-                for (ith in 0 .. i){
-                    if (grumpy[ith] == 0){
+                for (ith in 0..i) {
+                    if (grumpy[ith] == 0) {
                         localCount += customers[ith]
                     }
                 }
 
-                for (jth in j+2 .. grumpy.size-1){
-                    if (grumpy[jth] == 0){
+                for (jth in j + 2..grumpy.size - 1) {
+                    if (grumpy[jth] == 0) {
                         localCount += customers[jth]
                     }
                 }
@@ -175,16 +176,16 @@ class Capital {
     // 11. Container With Most Water
     fun maxArea(height: IntArray): Int {
 
-        var j = height.size-1
+        var j = height.size - 1
         var i = 0
         var mArea = 0
         var localArea = 0
 
-        while (i < j){
+        while (i < j) {
             localArea = (j - i) * (min(height[j], height[i]))
             mArea = max(localArea, mArea)
 
-            if (height[j] <= height[i]){
+            if (height[j] <= height[i]) {
                 j--
             } else {
                 i++
@@ -208,18 +209,18 @@ class Capital {
             // B: is the index
 
          */
-        var comparedByValue : Comparator<Pair<Int,Int>> = compareBy { it.first }
-        var pqMax : PriorityQueue<Pair<Int,Int>> = PriorityQueue(comparedByValue.reversed())
-        var pqMin : PriorityQueue<Pair<Int,Int>> = PriorityQueue(comparedByValue)
+        var comparedByValue: Comparator<Pair<Int, Int>> = compareBy { it.first }
+        var pqMax: PriorityQueue<Pair<Int, Int>> = PriorityQueue(comparedByValue.reversed())
+        var pqMin: PriorityQueue<Pair<Int, Int>> = PriorityQueue(comparedByValue)
         var longest = 0
 
-        while (j < nums.size){
+        while (j < nums.size) {
 
-            pqMax.add(Pair(nums[j],j))
-            pqMin.add(Pair(nums[j],j))
+            pqMax.add(Pair(nums[j], j))
+            pqMin.add(Pair(nums[j], j))
 
-            if (Math.abs(pqMax.peek().first - pqMin.peek().first) <= limit ){
-                longest = max(longest, j-i+1)
+            if (Math.abs(pqMax.peek().first - pqMin.peek().first) <= limit) {
+                longest = max(longest, j - i + 1)
             } else {
                 var valueInPq = i
 
@@ -338,24 +339,24 @@ class Capital {
     fun restoreArray(adjacentPairs: Array<IntArray>): IntArray {
 
         var dict = HashMap<Int, MutableList<Int>>()
-        for (list in adjacentPairs){
+        for (list in adjacentPairs) {
 
-            if (dict.containsKey(list[0])){
+            if (dict.containsKey(list[0])) {
                 dict[list[0]]!!.add(list[1])
-            }else{
+            } else {
                 dict.put(list[0], mutableListOf(list[1]))
             }
 
-            if (dict.containsKey(list[1])){
+            if (dict.containsKey(list[1])) {
                 dict[list[1]]!!.add(list[0])
-            }else{
+            } else {
                 dict.put(list[1], mutableListOf(list[0]))
             }
         }
 
         var nodes = ArrayList<Int>()
-        for ( (key, value) in dict){
-            if (value.size == 1){
+        for ((key, value) in dict) {
+            if (value.size == 1) {
                 nodes.add(key)
             }
         }
@@ -367,15 +368,15 @@ class Capital {
         var visited = HashSet<Int>()
         queue.add(nodesStart)
 
-        while (queue.isNotEmpty()){
+        while (queue.isNotEmpty()) {
 
             var current = queue.removeFirst()
             result.add(current)
             visited.add(current)
 
-            for (node in dict[current]!!){
+            for (node in dict[current]!!) {
 
-                if (!(visited.contains(node))){
+                if (!(visited.contains(node))) {
                     queue.add(node)
                 }
             }
@@ -391,27 +392,27 @@ class Capital {
         var hash2 = HashSet<String>()
 
 
-        for (num in arr1){
+        for (num in arr1) {
             var aux = num.toString()
             var stringAux = ""
 
-            for (i in 0 until aux.length){
+            for (i in 0 until aux.length) {
 
                 stringAux += aux[i]
-                if (!(hash1.contains(stringAux))){
+                if (!(hash1.contains(stringAux))) {
                     hash1.add(stringAux)
                 }
             }
         }
 
-        for (num in arr2){
+        for (num in arr2) {
             var aux = num.toString()
             var stringAux = ""
 
-            for (i in 0 until aux.length){
+            for (i in 0 until aux.length) {
 
                 stringAux += aux[i]
-                if (!(hash2.contains(stringAux))){
+                if (!(hash2.contains(stringAux))) {
                     hash2.add(stringAux)
                 }
             }
@@ -421,15 +422,15 @@ class Capital {
         println("hash2: ${hash2}")
 
         var maxLength1 = Int.MIN_VALUE
-        for (key in hash1){
-            if (hash2.contains(key)){
+        for (key in hash1) {
+            if (hash2.contains(key)) {
                 maxLength1 = max(maxLength1, key.length)
             }
         }
 
         var maxLength2 = Int.MIN_VALUE
-        for (key in hash2){
-            if (hash1.contains(key)){
+        for (key in hash2) {
+            if (hash1.contains(key)) {
                 maxLength2 = max(maxLength2, key.length)
             }
         }
@@ -444,10 +445,10 @@ class Capital {
         var newTimePoint = ArrayList<Int>()
         println("date_times_original: ${timePoints}")
 
-        for (i in 0 until timePoints.size){
+        for (i in 0 until timePoints.size) {
 
             var timeP = timePoints[i]
-            if (exists.contains(timeP)){
+            if (exists.contains(timeP)) {
                 return 0
             }
             exists.add(timeP)
@@ -462,11 +463,12 @@ class Capital {
         newTimePoint.sortBy { it }
         println("date_times_new: ${newTimePoint}")
 
-        var closeValue = newTimePoint[newTimePoint.size-1]
+        var closeValue = newTimePoint[newTimePoint.size - 1]
         var result = Int.MAX_VALUE
-        var i = 0; var j = 1
+        var i = 0;
+        var j = 1
 
-        while (j < newTimePoint.size){
+        while (j < newTimePoint.size) {
 
             var toLeft = newTimePoint[j] - newTimePoint[i]
             var toRight = 1440 - closeValue + newTimePoint[i]
@@ -488,22 +490,22 @@ class Capital {
     // 71. Simplify Path
     fun simplifyPath(path: String): String {
 
-        var listOfpath  = path.trim().split("/")
+        var listOfpath = path.trim().split("/")
         println("List Path: ${listOfpath}")
 
         var stack = ArrayDeque<String>()
 
-        for (part in listOfpath){
+        for (part in listOfpath) {
 
             println("stack: ${stack}")
-            when(part) {
+            when (part) {
                 ".." -> if (stack.isNotEmpty()) stack.removeLast()
                 else -> stack.addLast(part)
             }
         }
 
         println("resultArray: ${stack}")
-        if (stack.isEmpty()){
+        if (stack.isEmpty()) {
             return "/"
         }
 
@@ -514,31 +516,31 @@ class Capital {
     fun numIslands(grid: Array<CharArray>): Int {
 
         var visited = HashSet<String>()
-        fun helper(i: Int, j:Int){
+        fun helper(i: Int, j: Int) {
             if (i < 0 || j < 0 || i > grid.size || j > grid[0].size) return
 
             var key = "$i,$j"
-            if (grid[i][j] == '0' || visited.contains(key)){
+            if (grid[i][j] == '0' || visited.contains(key)) {
                 return
             }
             visited.add(key)
 
             // left
-            helper(i, j+1)
+            helper(i, j + 1)
             // right
-            helper(i, j-1)
+            helper(i, j - 1)
             // up
-            helper(i-1, j)
+            helper(i - 1, j)
             // down
-            helper(i+1, j)
+            helper(i + 1, j)
         }
 
         var count = 0
-        for (i in 0 until grid.size){
-            for (j in 0 until grid[0].size){
+        for (i in 0 until grid.size) {
+            for (j in 0 until grid[0].size) {
                 var key = "$i,$j"
-                if (grid[i][j] == '1' && !visited.contains(key)){
-                    helper(i,j)
+                if (grid[i][j] == '1' && !visited.contains(key)) {
+                    helper(i, j)
                     count++
                 }
             }
@@ -553,26 +555,26 @@ class Capital {
 
         var visited = HashSet<String>()
         var result = Int.MAX_VALUE
-        for (y in 0 .. 2){
+        for (y in 0..2) {
 
-            if (y == 0){
+            if (y == 0) {
 
                 var yCount = moveYto(grid, y, visited)
-                var other1Count = moveOthersto(grid,1, visited)
+                var other1Count = moveOthersto(grid, 1, visited)
                 var other2Count = moveOthersto(grid, 2, visited)
                 var other = min(other1Count, other2Count)
                 result = min(result, other + yCount)
 
-            } else if (y == 1){
+            } else if (y == 1) {
                 var yCount = moveYto(grid, y, visited)
-                var other1Count = moveOthersto(grid,0, visited)
+                var other1Count = moveOthersto(grid, 0, visited)
                 var other2Count = moveOthersto(grid, 2, visited)
                 var other = min(other1Count, other2Count)
                 result = min(result, other + yCount)
 
             } else {
                 var yCount = moveYto(grid, y, visited)
-                var other1Count = moveOthersto(grid,1, visited)
+                var other1Count = moveOthersto(grid, 1, visited)
                 var other2Count = moveOthersto(grid, 0, visited)
                 var other = min(other1Count, other2Count)
                 result = min(result, other + yCount)
@@ -582,19 +584,19 @@ class Capital {
         return result
     }
 
-    fun moveYto (grid: Array<IntArray>, y: Int, visited: HashSet<String>): Int{
+    fun moveYto(grid: Array<IntArray>, y: Int, visited: HashSet<String>): Int {
 
         println("For y:${y} this is the hashSet: ${visited}")
 
-        var centerX = grid.size/2
-        var centerY = grid[0].size/2
+        var centerX = grid.size / 2
+        var centerY = grid[0].size / 2
         var i = 0
         var j = 0
         var count = 0
 
         println("i:${i}, j:${j}")
 
-        while (i < centerX && j < centerY){
+        while (i < centerX && j < centerY) {
             var key = "$i,$j"
             visited.add(key)
 
@@ -603,7 +605,7 @@ class Capital {
             j++
         }
         println("i:${i}, j:${j}")
-        while (i < grid.size){
+        while (i < grid.size) {
             var key = "$i,$j"
             visited.add(key)
 
@@ -612,9 +614,9 @@ class Capital {
         }
         println("i:${i}, j:${j}")
         j++
-        i = centerX-1
+        i = centerX - 1
 
-        while (i >=0 && j < grid[0].size){
+        while (i >= 0 && j < grid[0].size) {
             var key = "$i,$j"
             visited.add(key)
 
@@ -626,16 +628,16 @@ class Capital {
         return count
     }
 
-    fun moveOthersto (grid: Array<IntArray>, x: Int, visited : HashSet<String>): Int{
+    fun moveOthersto(grid: Array<IntArray>, x: Int, visited: HashSet<String>): Int {
 
         println("For x:${x} this is the hashSet: ${visited}")
 
         var count = 0
-        for (i in 0 until grid.size){
-            for (j in 0 until grid[0].size){
+        for (i in 0 until grid.size) {
+            for (j in 0 until grid[0].size) {
                 var key = "$i,$j"
 
-                if (!(visited.contains(key))){
+                if (!(visited.contains(key))) {
                     if (grid[i][j] != x) count++
                 }
             }
@@ -645,8 +647,100 @@ class Capital {
     }
 
     // 723. Candy Crush
-    
+    fun candyCrush(board: Array<IntArray>): Array<IntArray> {
 
+        var crushedSet = find(board)
+        while (crushedSet.isNotEmpty()) {
+            crush(board, crushedSet)
+            dropBoard(board)
+            crushedSet = find(board)
+        }
+
+        return board
+    }
+
+    private fun find(board: Array<IntArray>): Set<Pair<Int, Int>> {
+        val crushedSet = mutableSetOf<Pair<Int, Int>>()
+
+        // Check vertically adjacent candies
+        for (r in 1 until board.size - 1) {
+            for (c in 0 until board[0].size) {
+                if (board[r][c] == 0) continue
+                if (board[r][c] == board[r - 1][c] && board[r][c] == board[r + 1][c]) {
+                    crushedSet.add(Pair(r, c))
+                    crushedSet.add(Pair(r - 1, c))
+                    crushedSet.add(Pair(r + 1, c))
+                }
+            }
+        }
+
+        // Check horizontally adjacent candies
+        for (r in 0 until board.size) {
+            for (c in 1 until board[0].size - 1) {
+                if (board[r][c] == 0) continue
+                if (board[r][c] == board[r][c - 1] && board[r][c] == board[r][c + 1]) {
+                    crushedSet.add(Pair(r, c))
+                    crushedSet.add(Pair(r, c - 1))
+                    crushedSet.add(Pair(r, c + 1))
+                }
+            }
+        }
+
+        return crushedSet
+    }
+
+    private fun crush(board: Array<IntArray>, crushedSet: Set<Pair<Int, Int>>) {
+        for ((r, c) in crushedSet) {
+            board[r][c] = 0
+        }
+    }
+
+    private fun drop(board: Array<IntArray>) {
+        for (c in 0 until board[0].size) {
+            var lowestZero = -1
+
+            for (r in board.size - 1 downTo 0) {
+                if (board[r][c] == 0) {
+                    lowestZero = maxOf(lowestZero, r)
+                } else if (lowestZero >= 0) {
+                    val temp = board[r][c]
+                    board[r][c] = board[lowestZero][c]
+                    board[lowestZero][c] = temp
+                    lowestZero--
+                }
+            }
+        }
+    }
+
+    fun dropBoard(board: Array<IntArray>){
+
+        var lowestZero = -1
+        for (i in 0 until board[0].size){
+            var j = board.size-1
+
+            for (j in board.size-1 downTo 0){
+                if (board[j][i] == 0){
+                    lowestZero = max(lowestZero, j)
+                } else if (lowestZero >= 0) {
+                    //var temp = board[j][i]
+                    board[lowestZero][i] = board[j][i]
+                    board[j][i] = 0
+                    lowestZero--
+                }
+
+            }
+        }
+
+        for (i in 0 until board.size){
+            print("[")
+            for (j in 0 until board[0].size){
+                print("${board[i][j]}\t")
+            }
+            print("]")
+            println()
+        }
+
+    }
 
 }
 
@@ -655,19 +749,14 @@ fun main(args : Array<String>){
 
     val capitalTest = Capital()
     val balance = longArrayOf(10, 100, 20, 50, 30)
-    val testClass = Bank(balance)
-    println(testClass.withdraw(3,10))
-    println(testClass.transfer(5,1,20))
-    println(testClass.deposit(5,20))
-    println(testClass.transfer(3,4,15))
-    println(testClass.withdraw(10,50))
+    val n = 10
+    val testClass = Allocator(n)
     val intervals = arrayOf(intArrayOf(1,2), intArrayOf(2,3), intArrayOf(3,4), intArrayOf(1,3))
     val queries = arrayOf(intArrayOf(0,2), intArrayOf(1,2), intArrayOf(3,1), intArrayOf(1,1), intArrayOf(2,1))
     val customers = intArrayOf(1,0,1,2,1,1,7,5)
     val grumpy = intArrayOf(0,1,0,1,0,1,0,1)
     val minutes = 3
     val height = intArrayOf(1,1)
-    val n = 4
     val nums = intArrayOf(24,12,71,33,5,87,10,11,3,58,2,97,97,36,32,35,15,80,24,45,38,9,22,21,33,68,22,85,35,83,92,38,59,90,42,64,61,15,4,40,50,44,54,25,34,14,33,94,66,27,78,56,3,29,3,51,19,5,93,21,58,91,65,87,55,70,29,81,89,67,58,29,68,84,4,51,87,74,42,85,81,55,8,95,39)
     val limit = 87
     val lights = arrayOf(intArrayOf(2,1), intArrayOf(3,4), intArrayOf(3,2))
@@ -675,11 +764,19 @@ fun main(args : Array<String>){
     val arr2 = intArrayOf(1000)
     val timepoints = arrayListOf("00:00","23:59","00:10")
     val path = "/.../a/../b/c/../d/./"
-    //val grid = arrayOf(intArrayOf(0,1,0,1,0), intArrayOf(2,1,0,1,2), intArrayOf(2,2,2,0,1), intArrayOf(2,2,2,2,2), intArrayOf(2,1,2,2,2))
-    val grid = arrayOf(intArrayOf(1,2,2), intArrayOf(1,1,0), intArrayOf(0,1,0))
-    // [[0,1,0,1,0],[2,1,0,1,2],[2,2,2,0,1],[2,2,2,2,2],[2,1,2,2,2]]
-    // [1,2,2],[1,1,0],[0,1,0]
-  //  println(capitalTest.minimumOperationsToWriteY(grid))
+    val grid = arrayOf(
+        intArrayOf(110,0,0,0,114),
+        intArrayOf(210,0,0,113,214),
+        intArrayOf(310,0,0,213,314),
+        intArrayOf(410,0,112,313,3),
+        intArrayOf(521,5,511,5,414),
+        intArrayOf(0,3,1,3,0),
+        intArrayOf(0,412,2,613,822),
+        intArrayOf(0,512,2,713,844),
+        intArrayOf(198,1,1,2,2),
+        intArrayOf(431,4,4,4,114)
+    )
+    println(capitalTest.dropBoard(grid))
 
 
 }
@@ -740,6 +837,47 @@ class Bank(balance: LongArray) {
             return false
         }
 
+    }
+
+}
+
+// 2502. Design Memory Allocator
+class Allocator(n: Int) {
+
+    // var minIndex || optimization = 0
+    // var maxSize  || optimization = n
+    var memory = IntArray(n)
+
+    fun allocate(size: Int, mID: Int): Int {
+        var i = 0
+        var j = 0
+
+        while (j < memory.size){
+            if (memory[j] == 0){
+                if (j - i + 1 >= size){
+                    for (l in i .. j){
+                        memory[l] = mID
+                    }
+                    return i
+                }
+                j++
+            } else {
+                j++
+                i=j
+            }
+        }
+        return -1
+    }
+
+    fun freeMemory(mID: Int): Int {
+        var freed = 0
+        for (i in 0 until memory.size){
+            if (memory[i] == mID){
+                memory[i] = 0
+                freed++
+            }
+        }
+        return freed
     }
 
 }
