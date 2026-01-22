@@ -1,6 +1,7 @@
 import java.util.Comparator
 import java.util.PriorityQueue
 import javax.print.DocFlavor.STRING
+import kotlin.math.acos
 import kotlin.math.max
 import kotlin.math.min
 
@@ -643,14 +644,23 @@ class Capital {
         return count
     }
 
+    // 723. Candy Crush
+    
+
+
 }
 
 fun main(args : Array<String>){
 
 
     val capitalTest = Capital()
-    val balance = longArrayOf(0)
+    val balance = longArrayOf(10, 100, 20, 50, 30)
     val testClass = Bank(balance)
+    println(testClass.withdraw(3,10))
+    println(testClass.transfer(5,1,20))
+    println(testClass.deposit(5,20))
+    println(testClass.transfer(3,4,15))
+    println(testClass.withdraw(10,50))
     val intervals = arrayOf(intArrayOf(1,2), intArrayOf(2,3), intArrayOf(3,4), intArrayOf(1,3))
     val queries = arrayOf(intArrayOf(0,2), intArrayOf(1,2), intArrayOf(3,1), intArrayOf(1,1), intArrayOf(2,1))
     val customers = intArrayOf(1,0,1,2,1,1,7,5)
@@ -669,98 +679,64 @@ fun main(args : Array<String>){
     val grid = arrayOf(intArrayOf(1,2,2), intArrayOf(1,1,0), intArrayOf(0,1,0))
     // [[0,1,0,1,0],[2,1,0,1,2],[2,2,2,0,1],[2,2,2,2,2],[2,1,2,2,2]]
     // [1,2,2],[1,1,0],[0,1,0]
-    println(capitalTest.minimumOperationsToWriteY(grid))
+  //  println(capitalTest.minimumOperationsToWriteY(grid))
+
 
 }
 
 // 2043. Simple Bank System
 class Bank(balance: LongArray) {
 
-    var mapBalances = HashMap<Int, Long>()
-    val default : Long = -1
+   // var accounts = HashMap<Int, Long>()
+    var accountsArray = LongArray(balance.size)
+
     init {
-        for (i in 0 .. balance.size-1){
-
-            if (!(mapBalances.containsKey(i+1))){
-                mapBalances[i+1] = balance[i]
-            }
+        for (i in 0 until balance.size){
+            accountsArray[i] = balance[i]
         }
+        // println("Balance: ${accounts}")
     }
 
-    fun printingBalanceByAccount(){
-
-        for ((key, value) in mapBalances){
-            println("Key: ${key} -> ${value}")
-        }
-    }
 
     fun transfer(account1: Int, account2: Int, money: Long): Boolean {
 
-        if ((mapBalances.containsKey(account1) && mapBalances.containsKey(account2))){
+        if ((account1-1) > accountsArray.size || account1-1 < 0 || (account2-1) > accountsArray.size || account2-1 <0 ) return false
+        var accountTotal1 = accountsArray[account1-1]
+        var accountTotal2 = accountsArray[account2-1]
 
-            if (account1 != account2){
-                var accountTotal1 = mapBalances.getValue(account1)
-                var accountTotal2 = mapBalances.getValue(account2)
+        if (account1 != account2) {
 
-                if (accountTotal1 >= money){
-
-                    accountTotal2 += money
-                    accountTotal1 -= money
-                    mapBalances.replace(account1, accountTotal1)
-                    mapBalances.replace(account2, accountTotal2)
-                    return true
-
-                }else{
-                    return false
-                }
-
-            } else {
-
-                var accountTotal1 = mapBalances.getValue(account1)
-                if (accountTotal1 >= money){
-                    return true
-                } else {
-                    return false
-                }
-
-            }
-
+            if (accountTotal1 < money) return false
+            accountTotal2 += money
+            accountTotal1 -= money
+            accountsArray[account1-1] = accountTotal1
+            accountsArray[account2-1] = accountTotal2
+            return true
 
         } else {
-            return false
+            if (accountTotal1 >= money) return true
+            else return false
         }
-
     }
 
     fun deposit(account: Int, money: Long): Boolean {
 
-        val existAccount = mapBalances.getOrDefault(account, -1)
-        if (existAccount != default){
-            var newValue = mapBalances.getValue(account)
-            newValue += money
-            mapBalances.replace(account, newValue)
-            return true
-        }
-        return false
+        if ((account-1) > accountsArray.size || account-1 < 0) return false
+
+        accountsArray[account-1] += money
+        return true
 
     }
 
     fun withdraw(account: Int, money: Long): Boolean {
 
-        val totalMoney = mapBalances.getOrDefault(account, -1)
-        if (totalMoney != default){
+        if ((account-1) > accountsArray.size || account-1 < 0) return false
 
-            if (totalMoney >= money){
-
-                var newValue = totalMoney - money
-                mapBalances.replace(account, newValue)
-                return true
-
-            }else{
-                return false
-            }
-
-        }else {
+        var availableBalance = accountsArray[account-1]
+        if (money <= availableBalance){
+            accountsArray[account-1] -= money
+            return true
+        } else {
             return false
         }
 
