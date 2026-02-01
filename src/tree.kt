@@ -70,25 +70,39 @@ class TreeLeetcode {
         if ((root?.left == null) && (root?.right == null)){
             return true
         }
-
         fun helper(root: TreeNode?, minValue: Double, maxValue: Double) : Boolean{
-
             if (root == null){
                 return true
             }
-
             if (!( (root.value > minValue) && (root.value < maxValue)) ){
                 return false
             }
-
             return helper(root.left, minValue, root.value.toDouble()) && helper(root.right, root.value.toDouble(), maxValue)
-
         }
-
         return helper(root, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)
-
     }
 
+    // 257. Binary Tree Paths
+    fun binaryTreePaths(root: TreeNode?): List<String> {
+
+        var result = ArrayList<String>()
+        var sb = StringBuilder()
+
+        fun helper(root: TreeNode?) {
+
+            if (root == null){
+                result.add(sb.toString())
+                return
+            }
+
+            sb.append(root.value.toString())
+            sb.append("->")
+            helper(root.left)
+            helper(root.right)
+        }
+        helper(root)
+        return result
+    }
 
 }
 
@@ -96,18 +110,16 @@ fun main(args : Array<String>){
 
     val testClass = TreeLeetcode()
 
-    var root = TreeNode(5)
-    root.left = TreeNode(4)
-    root.right = TreeNode(6)
+    var root = TreeNode(1)
+    root.left = TreeNode(2)
+    root.right = TreeNode(3)
     root.left!!.left = null
-    root.left!!.right = null
-    root.right!!.left = TreeNode(3)
-    root.right!!.right = TreeNode(7)
+    root.left!!.right = TreeNode(5)
 
     // [5,4,6,null,null,3,7]
 
     testClass.printingTre(root)
     println()
-    println(testClass.isValidBST(root))
+    println(testClass.binaryTreePaths(root))
 
 }

@@ -1,10 +1,6 @@
 import java.util.Comparator
 import java.util.PriorityQueue
-import javax.print.DocFlavor.STRING
-import kotlin.math.abs
-import kotlin.math.acos
-import kotlin.math.max
-import kotlin.math.min
+import kotlin.math.*
 
 class Capital {
 
@@ -194,47 +190,6 @@ class Capital {
         }
 
         return mArea
-    }
-
-    // 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
-    fun longestSubarray(nums: IntArray, limit: Int): Int {
-
-        // [1, 5, 6, 7, 8, 10, 6, 5, 6] p=4
-
-        var i = 0
-        var j = 0
-        /*
-            Pair<A, B>
-            // A: is the Max or Min value
-            // B: is the index
-
-         */
-        var comparedByValue: Comparator<Pair<Int, Int>> = compareBy { it.first }
-        var pqMax: PriorityQueue<Pair<Int, Int>> = PriorityQueue(comparedByValue.reversed())
-        var pqMin: PriorityQueue<Pair<Int, Int>> = PriorityQueue(comparedByValue)
-        var longest = 0
-
-        while (j < nums.size) {
-
-            pqMax.add(Pair(nums[j], j))
-            pqMin.add(Pair(nums[j], j))
-
-            if (Math.abs(pqMax.peek().first - pqMin.peek().first) <= limit) {
-                longest = max(longest, j - i + 1)
-            } else {
-                var valueInPq = i
-
-                // update my Priorities Queues
-                if (valueInPq == pqMax.peek().second) pqMax.poll()
-                if (valueInPq == pqMin.peek().second) pqMin.poll()
-
-                i++
-            }
-            j++
-
-        }
-
-        return longest
     }
 
     // 2021. Brightest Position on Street (my solution)
@@ -742,6 +697,158 @@ class Capital {
 
     }
 
+    // 68. Text Justification
+    fun fullJustify(words: Array<String>, maxWidth: Int): List<String> {
+        data class StringComponent(var part: String, var spaces: Int, var col: Int, var row: Int, var totalSize: Int)
+
+        var lineWords = ArrayList<StringComponent>()
+        var listOflistWords = ArrayList<ArrayList<StringComponent>>()
+        var tam = 0
+        for (word in words){
+
+            var wordSize = word.length
+            var totalSize = wordSize + tam
+            var col = lineWords.size
+            var row = listOflistWords.size
+            var aux = StringComponent(word, 0, col, row, totalSize)
+
+            if (totalSize <= maxWidth) {
+                if (totalSize < maxWidth){
+                    aux.spaces++
+                    lineWords.add(aux)
+                } else {
+                    lineWords.add(aux)
+                }
+
+            } else {
+
+                lineWords[lineWords.size-1].totalSize -= 1
+                lineWords[lineWords.size-1].spaces--
+                listOflistWords.add(ArrayList(lineWords))
+
+                lineWords.clear()
+                aux.totalSize = wordSize
+                tam = wordSize
+                aux.col=0
+                aux.row+=1
+                lineWords.add(aux)
+            }
+        }
+
+        if (lineWords.isNotEmpty()){
+            listOflistWords.add(ArrayList(lineWords))
+        }
+
+        for (wordsIn in listOflistWords){
+            println("${wordsIn}")
+        }
+
+        // at this point, let's justify all words
+        var result = ArrayList<String>()
+
+        for ( j in 0 until listOflistWords.size-1){
+
+            var currentList = listOflistWords[j]
+            var totalCols = currentList[currentList.size-1].totalSize
+            var spaceNeeded = maxWidth - totalCols // n of blank spaces to fill
+            var tamList = currentList.size - 1
+            println("for: ${currentList} -> need: ${spaceNeeded}")
+
+            if (tamList == 0){
+                // all spaceNeed for the unique word
+                currentList[0].spaces = spaceNeeded
+
+            } else if (tamList == spaceNeeded){
+                // one space from 0 to spaceNeed
+                for (i in 0 until currentList.size-1){
+                    currentList[i].spaces++
+                }
+
+            } else if (tamList > spaceNeeded ){
+                // one space from 0 to spaceNeeded
+                for (i in 0 ..  spaceNeeded){
+                    currentList[i].spaces++
+                }
+
+            } else if (tamList < spaceNeeded){
+                // need to make calculation
+                var countSpaces = (spaceNeeded / tamList).toInt()
+                for (i in 0 ..  tamList-1){
+                    currentList[i].spaces += countSpaces
+                }
+                var stillSpaces = (spaceNeeded % tamList)
+                for (l in 0 until  stillSpaces){
+                    currentList[l].spaces++
+                }
+            }
+
+            var sb = StringBuilder()
+            for (string in currentList){
+
+                var spaces = string.spaces
+                sb.append(string.part)
+                for (sp in 0 until spaces ){
+                    sb.append(" ")
+                }
+            }
+            result.add(sb.toString())
+        }
+        println("Result ==> ${result}")
+
+        // lastWord ...
+
+        var lastLine = listOflistWords.last()
+        var lastWord = lastLine.removeLast()
+        var lastString = StringBuilder()
+        while (lastLine.isNotEmpty()){
+            lastString.append(lastLine.removeFirst().part)
+            lastString.append(" ")
+        }
+
+        var nSpaces = maxWidth - lastWord.totalSize
+        lastString.append(lastWord.part)
+        for (it in 0 .. nSpaces){
+            lastString.append(" ")
+        }
+        result.add(lastString.toString())
+        return result
+    }
+
+    // 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
+    fun longestSubarray(nums: IntArray, limit: Int): Int {
+
+        var maxLength = 0
+        var start = 0
+        var minDeque = ArrayDeque<Int>()
+        var maxDeque = ArrayDeque<Int>()
+
+        for (end in nums.indices) {
+            while (minDeque.isNotEmpty() && nums[end] < nums[minDeque.last()]) {
+                minDeque.removeLast()
+            }
+            minDeque.addLast(end)
+
+            while (maxDeque.isNotEmpty() && nums[end] > nums[maxDeque.last()]) {
+                maxDeque.removeLast()
+            }
+            maxDeque.addLast(end)
+
+            while (nums[maxDeque.first()] - nums[minDeque.first()] > limit) {
+                start++
+                if (minDeque.first() < start) {
+                    minDeque.removeFirst()
+                }
+                if (maxDeque.first() < start) {
+                    maxDeque.removeFirst()
+                }
+            }
+
+            maxLength = maxOf(maxLength, end - start + 1)
+        }
+
+        return maxLength
+    }
+
 }
 
 fun main(args : Array<String>){
@@ -764,6 +871,8 @@ fun main(args : Array<String>){
     val arr2 = intArrayOf(1000)
     val timepoints = arrayListOf("00:00","23:59","00:10")
     val path = "/.../a/../b/c/../d/./"
+    var words = arrayOf("Science","is","what","we","understand","well","enough","to","explain","to","a","computer.","Art","is","everything","else","we","do")
+    var maxWidth = 20
     val grid = arrayOf(
         intArrayOf(110,0,0,0,114),
         intArrayOf(210,0,0,113,214),
@@ -776,8 +885,7 @@ fun main(args : Array<String>){
         intArrayOf(198,1,1,2,2),
         intArrayOf(431,4,4,4,114)
     )
-    println(capitalTest.dropBoard(grid))
-
+    println(capitalTest.fullJustify(words, maxWidth))
 
 }
 
